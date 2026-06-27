@@ -53,7 +53,7 @@ export function AuthDialog({ children }: { children: React.ReactNode }) {
             </DrawerTrigger>
             <DrawerContent>
                 <DrawerHeader className="text-left">
-                    <DrawerTitle className="text-2xl">{title}</DrawerTitle>
+                    <DrawerTitle>{title}</DrawerTitle>
                     <DrawerDescription>
                         {description}
                     </DrawerDescription>
