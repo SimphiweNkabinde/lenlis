@@ -1,5 +1,5 @@
 import Header from "@/components/header"
-import ListContainer from "@/components/list-container"
+import ListContainer from "@/components/list-containers/list-container"
 import ListHeader from "@/components/list-header"
 import ListItemInput from "@/components/list-item-input"
 
