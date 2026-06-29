@@ -1,6 +1,6 @@
-import { ListIcon } from "lucide-react";
+import { ListIcon } from 'lucide-react'
 
-export default function ListContainer() {
+export default function EmptyList() {
     return (
         <div className="flex items-center justify-center flex-1 px-4">
             <div className="text-current/75 flex gap-2 items-center">
