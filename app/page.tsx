@@ -1,15 +1,11 @@
+import NewListForm from "@/components/forms/new-list-form"
 import Header from "@/components/header"
-import ListContainer from "@/components/list-containers/list-container"
-import ListHeader from "@/components/list-header"
-import ListItemInput from "@/components/list-item-input"
 
 export default function Page() {
   return (
-    <div className="flex h-dvh relative flex flex-col overflow-hidden">
+    <div className="h-dvh relative flex flex-col overflow-hidden">
       <Header />
-      <ListHeader />
-      <ListContainer />
-      <ListItemInput />
+      <NewListForm />
     </div>
   )
 }
