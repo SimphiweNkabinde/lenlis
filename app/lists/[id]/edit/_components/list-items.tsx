@@ -1,23 +1,18 @@
 "use client"
 import { ListIcon } from "lucide-react"
-import { useState } from "react"
+import { useListStore } from "../_stores/use-list-store"
+import clsx from "clsx"
 
-type ListItemType = {
-    id: string
-    text: string,
-    is_checked?: boolean,
-    amount?: number
-}
-export default function ListContainer({ defaultList = [] }: { defaultList?: ListItemType[] }) {
+export default function ListItems() {
 
-    const [list, setList] = useState<ListItemType[]>(defaultList)
+    const list = useListStore(state => state.list)
 
     if (!list.length) return <EmptyList />
 
     return (
         <ul className="list-outside ml-6 h-full pl-4 pr-4 flex flex-col gap-3 overflow-y-scroll pt-5 pb-10">
             {list.map(item => (
-                <li key={item.id} className="text-[16px]">
+                <li key={item.id} className={clsx("text-[16px]", { "animate-pulse": item.isPending })}>
                     {item.text}
                 </li>
             ))}
