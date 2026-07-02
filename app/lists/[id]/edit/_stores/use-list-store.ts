@@ -3,7 +3,7 @@ import { ListItem } from "@/lib/definitions";
 import { toast } from "sonner";
 import { create } from "zustand";
 
-type ListItemState = ListItem & { isPending?: boolean }
+export type ListItemState = ListItem & { isPending?: boolean }
 type ListStoreState = {
     list: ListItemState[],
     listId: string
