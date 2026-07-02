@@ -7,6 +7,8 @@ import { updateListItem } from "@/lib/actions/update-list-item"
 import { useState } from "react"
 import { useDebouncedCallback } from "use-debounce"
 import { toast } from "sonner"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Textarea } from "@/components/ui/textarea"
 
 export default function ListItems() {
 
@@ -15,11 +17,13 @@ export default function ListItems() {
     if (!list.length) return <EmptyList />
 
     return (
-        <div className="ml-6 h-full pl-4 pr-4 flex flex-col gap-3 overflow-y-scroll pt-5 pb-10">
+        <ul className="list-outside ml-6 h-full pl-4 pr-4 flex flex-col gap-3 overflow-y-scroll pt-5 pb-10">
             {list.map(item => (
-                <ListItem key={item.id} item={item} />
+                <li key={item.id}>
+                    <ListItem item={item} />
+                </li>
             ))}
-        </div>
+        </ul>
     )
 }
 
@@ -39,8 +43,9 @@ function ListItem({ item }: { item: ListItemState }) {
     const updateItem = updateListItem.bind(null, listId, item.id)
 
     const [isPending, setIsPending] = useState<boolean>(false)
+    const [isChecked, setIsChecked] = useState<boolean>(item.is_checked || false)
 
-    const handleUpdate = useDebouncedCallback(async (text: string) => {
+    const handleTextUpdate = useDebouncedCallback(async (text: string) => {
         setIsPending(true)
         try {
             const response = await updateItem({ text })
@@ -55,11 +60,35 @@ function ListItem({ item }: { item: ListItemState }) {
         }
     }, 1000)
 
+    async function handleCheckedUpdate(checked: boolean) {
+        setIsChecked(checked)
+        try {
+            const response = await updateListItem(listId, item.id, { checked })
+            if (!response.success) {
+                toast.error("Couldn't update item", { description: response.message })
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error("Couldn't update item", { description: "Something went wrong" })
+            // revert
+            setIsChecked(!checked)
+        }
+    }
+
     return (
-        <>
-            <Input
-                onChange={(e) => handleUpdate(e.target.value)}
+        <div className="flex items-center gap-2">
+            <Checkbox
+                onCheckedChange={(checked) => handleCheckedUpdate(checked)}
+                checked={isChecked}
+                className="rounded-full size-5 border-black/50 dark:border-white/50 bg-transparent" />
+            <Textarea
+                onChange={(e) => handleTextUpdate(e.target.value)}
                 defaultValue={item.text}
-                className={clsx("!text-[16px] border-0 rounded-none bg-transparent focus-visible:ring-0 p-0 m-0", { "animate-pulse": item.isPending || isPending })} />
-        </>)
+                className={clsx(
+                    "!text-[16px] !min-h-6 border-0 rounded-none bg-transparent focus-visible:ring-0 p-0 m-0",
+                    { "animate-pulse": item.isPending || isPending },
+                    { "line-through decoration-1 text-current/60": isChecked }
+                )} />
+            <Input type="number" className="w-50" defaultValue={0} />
+        </div>)
 }
