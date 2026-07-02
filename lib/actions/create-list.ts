@@ -1,9 +1,10 @@
 "use server"
 import { redirect } from "next/navigation";
 import { createClient } from "../supabase/server";
+import { ServerActionResponse } from "../definitions";
 
 
-export async function createList({ name, item }: { name?: string | null, item: string }) {
+export async function createList({ name, item }: { name?: string | null, item: string }): Promise<ServerActionResponse> {
     let newListId
     try {
         const supabase = await createClient()
@@ -31,6 +32,7 @@ export async function createList({ name, item }: { name?: string | null, item: s
     } catch (error) {
         console.log(error)
         return {
+            success: false,
             message: 'Database Error: Failed to Create list.',
         };
     }

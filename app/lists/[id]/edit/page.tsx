@@ -3,8 +3,7 @@ import { createClient } from "@/lib/supabase/server"
 import { notFound } from "next/navigation"
 import ListName from "./_components/list-name"
 import { Toaster } from "sonner"
-import ListContainer from "./_components/list-container"
-import ListItemInput from "./_components/list-item-input"
+import ListWrapper from "./_components/list-wrapper"
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
 
@@ -28,8 +27,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <div className="border-b-1 py-4 px-5">
                 <ListName defaultName={data.name} listId={id} />
             </div>
-            <ListContainer defaultList={data.list_items} />
-            <ListItemInput />
+            <ListWrapper defaultList={data.list_items} listId={id} />
             <Toaster position="bottom-center" />
         </div>
     )
