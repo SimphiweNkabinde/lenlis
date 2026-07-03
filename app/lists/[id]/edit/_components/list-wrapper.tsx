@@ -5,25 +5,32 @@ import { ListItem } from '@/lib/definitions'
 import { useEffect } from 'react'
 import { useListStore } from '../_stores/use-list-store'
 import ListName from './list-name'
+import { CollaboratorAvatars } from './collaborator-avatars'
+import ListOptionToggles from './list-option-toggles'
+import ListAggregates from './list-aggregates'
 
 type ListDataType = {
     id: string,
     name: string,
-    createdAt: string,
+    hasAmounts?: boolean,
+    hasCheckd?: boolean
 }
 export default function ListWrapper({ defaultListItems, listData }: { defaultListItems: ListItem[], listData: ListDataType }) {
 
-    const setList = useListStore(state => state.setListItems)
-    const setListId = useListStore(state => state.setId)
+    const initializeStore = useListStore(state => state.initializeStore)
     useEffect(() => {
-        setListId(listData.id)
-        setList(defaultListItems)
+        initializeStore({ ...listData, listItems: defaultListItems })
     }, [])
 
     return (
         <>
-            <div className="border-b-1 py-4 px-5">
-                <ListName defaultName={listData.name} listId={listData.id} />
+            <div className="border-b-1 pt-4 pb-2 px-5 flex flex-col gap-3">
+                <ListName defaultName={listData.name} />
+                <div className='flex justify-between'>
+                    <CollaboratorAvatars />
+                    <ListOptionToggles />
+                </div>
+                <ListAggregates />
             </div>
             <ListItems />
             <ListItemInput />

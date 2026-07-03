@@ -15,13 +15,7 @@ const Schema = z.object({
 
 export async function updateListItem(listId: string, id: string, item: { text?: string, checked?: boolean, amount?: number }): Promise<ServerActionResponse> {
     // validate fields
-    const validatedFields = Schema.safeParse({
-        listId,
-        id,
-        text: item.text,
-        checked: item.checked,
-        amount: item.amount
-    })
+    const validatedFields = Schema.safeParse({ listId, id, ...item })
 
     if (!validatedFields.success) {
         return {
