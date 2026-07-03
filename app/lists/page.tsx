@@ -1,6 +1,7 @@
 import ListPageHeader from "@/components/list-page-header";
 import { ListTabs } from "@/app/lists/_components/list-tabs";
 import { createClient } from "@/lib/supabase/server";
+import { Toaster } from "sonner";
 
 export default async function Page() {
 
@@ -15,6 +16,7 @@ export default async function Page() {
             <ListPageHeader />
             <ListTabs
                 lists={data?.map(({ id, name, list_members, createdAt }) => ({ id, name, role: list_members.find(i => i.user_id == userData?.user?.id)?.role, members: list_members.length, createdAt }))!} />
+            <Toaster />
         </div>
     )
 }
