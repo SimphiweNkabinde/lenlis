@@ -9,7 +9,6 @@ import { useDebouncedCallback } from "use-debounce"
 import { toast } from "sonner"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Textarea } from "@/components/ui/textarea"
-import { Separator } from "@/components/ui/separator"
 
 export default function ListItems() {
 
