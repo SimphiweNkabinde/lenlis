@@ -10,7 +10,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const supabase = await createClient()
     const { data: userData } = await supabase.auth.getUser()
     const { data, error } = await supabase.from('lists')
-        .select("id, name, list_items (id, text, checked:is_checked, amount), list_members!inner(user_id, role) , createdAt:created_at")
+        .select("id, name, hasChecks:has_checks, hasAmounts:has_amounts, listItems:list_items (id, text, checked:is_checked, amount), list_members!inner(user_id, role) , createdAt:created_at")
         .order("created_at", { referencedTable: "list_items" })
         .eq("id", id)
         .eq("list_members.user_id", userData?.user?.id) // current user is a member
@@ -24,7 +24,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     return (
         <div className="flex h-dvh relative flex flex-col overflow-hidden">
             <Header />
-            <ListWrapper listData={{ ...data }} defaultListItems={data.list_items} />
+            <ListWrapper listData={{ ...data }} defaultListItems={data.listItems} />
             <Toaster position="bottom-center" />
         </div>
     )
