@@ -3,7 +3,7 @@ import EmptyList from "./empty-list";
 type ListItemType = {
     id: string
     text: string,
-    is_checked?: boolean,
+    checked?: boolean,
     amount?: number
 }
 export default function ListContainerReadonly({ list = [] }: { list: ListItemType[] }) {

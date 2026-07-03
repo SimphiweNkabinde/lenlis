@@ -6,7 +6,7 @@ import { useListStore } from '../_stores/use-list-store'
 
 export default function ListItemInput() {
 
-    const addItem = useListStore(state => state.addItemOptimistically)
+    const addItem = useListStore(state => state.addItem)
 
     const [value, setValue] = useState<string>("")
 

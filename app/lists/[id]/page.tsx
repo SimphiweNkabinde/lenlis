@@ -7,7 +7,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const { id } = await params
     const supabase = await createClient()
     const { data, error } = await supabase.from('lists')
-        .select("id, name, list_items (id, text, is_checked), created_at")
+        .select("id, name, list_items (id, text, checked:is_checked), created_at")
         .eq("id", id).single()
 
     return (
