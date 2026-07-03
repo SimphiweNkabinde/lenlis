@@ -15,8 +15,6 @@ type ListStoreState = {
 }
 
 type ListStoreActions = {
-    setListItems: (newList: ListStoreState['listItems']) => void
-    setId: (id: ListStoreState['id']) => void
     initializeStore: (storeState: ListStoreState) => void
     addItem: (newItem: Omit<ListItem, "id">) => void
     removeItem: (itemId: string) => void
@@ -28,8 +26,6 @@ export const useListStore = create<ListStore>()((set, get) => ({
     listItems: [],
     id: "",
     initializeStore: (storeState) => set((state) => ({ ...storeState })),
-    setId: (id) => set(() => ({ id })),
-    setListItems: (newList) => set(() => ({ listItems: newList })),
     updateListAttributes: async (listAttributes) => {
         // OPTIMISTIC UPDATE
         // Instantly update UI state
