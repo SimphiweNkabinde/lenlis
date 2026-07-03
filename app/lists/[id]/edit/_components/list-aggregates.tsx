@@ -9,7 +9,7 @@ export default function ListAggregates() {
     return (
         <div className='text-sm flex justify-between text-current/50'>
             <div>{hasChecks ? `${listItems.filter(i => i.checked).length}/` : ""}{listItems.length} items</div>
-            <div>{hasAmounts ? `${checkedSum} / ` : ""}{totalSum} total</div>
+            {hasAmounts && <div>{hasChecks ? `${checkedSum} / ` : ""}{totalSum} total</div>}
         </div>
     )
 }
