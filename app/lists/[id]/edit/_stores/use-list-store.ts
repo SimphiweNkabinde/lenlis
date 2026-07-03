@@ -5,12 +5,12 @@ import { create } from "zustand";
 
 export type ListItemState = ListItem & { isPending?: boolean }
 type ListStoreState = {
-    list: ListItemState[],
+    listItems: ListItemState[],
     listId: string
 }
 
 type ListStoreActions = {
-    setList: (newList: ListStoreState['list']) => void
+    setListItems: (newList: ListStoreState['listItems']) => void
     setListId: (id: ListStoreState['listId']) => void
     addItemOptimistically: (newItem: Omit<ListItem, "id">) => void
     removeItem: (itemId: string) => void
@@ -18,15 +18,15 @@ type ListStoreActions = {
 }
 type ListStore = ListStoreState & ListStoreActions
 export const useListStore = create<ListStore>()((set, get) => ({
-    list: [],
+    listItems: [],
     listId: "",
     setListId: (id) => set(() => ({ listId: id })),
-    setList: (newList) => set(() => ({ list: newList })),
+    setListItems: (newList) => set(() => ({ listItems: newList })),
     addItemOptimistically: async (newItem) => {
         // Create a unique temp ID for the UI
         const tempId = `temp-${Date.now()}`
         // Instantly push the item into the UI state
-        set((state) => ({ list: [...state.list, { ...newItem, id: tempId, isPending: true }] }))
+        set((state) => ({ listItems: [...state.listItems, { ...newItem, id: tempId, isPending: true }] }))
 
         // Send item to database
         try {
@@ -34,15 +34,15 @@ export const useListStore = create<ListStore>()((set, get) => ({
             if (!response.success) throw new Error(JSON.stringify(response))
 
             set(state => (
-                { list: state.list.map(item => item.id == tempId ? { ...item, id: response.data.id, isPending: false } : item) }
+                { listItems: state.listItems.map(item => item.id == tempId ? { ...item, id: response.data.id, isPending: false } : item) }
             ))
         } catch (error) {
             console.log(error)
             toast.error("Could'nt sync with database", { description: "Something went wrong" })
             // Rollback: Remove the item from the UI if the database write fails
-            set(state => ({ list: state.list.filter(item => item.id !== tempId) }))
+            set(state => ({ listItems: state.listItems.filter(item => item.id !== tempId) }))
         }
     },
-    removeItem: (itemId) => set((state) => ({ list: state.list.filter(item => item.id !== itemId) })),
-    updateItem: (updatedItem) => set((state) => ({ list: state.list.map((item) => item.id == updatedItem.id ? updatedItem : item) }))
+    removeItem: (itemId) => set((state) => ({ listItems: state.listItems.filter(item => item.id !== itemId) })),
+    updateItem: (updatedItem) => set((state) => ({ listItems: state.listItems.map((item) => item.id == updatedItem.id ? updatedItem : item) }))
 }))

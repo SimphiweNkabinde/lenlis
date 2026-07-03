@@ -9,21 +9,22 @@ import { useDebouncedCallback } from "use-debounce"
 import { toast } from "sonner"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Textarea } from "@/components/ui/textarea"
+import { Separator } from "@/components/ui/separator"
 
 export default function ListItems() {
 
-    const list = useListStore(state => state.list)
+    const list = useListStore(state => state.listItems)
 
     if (!list.length) return <EmptyList />
 
     return (
-        <div className="ml-6 h-full pl-4 pr-4 flex flex-col gap-3 overflow-y-scroll pt-5 pb-10">
+        <ul className="ml-6 h-full pl-4 pr-4 flex flex-col gap-3 overflow-y-scroll pt-5 pb-10">
             {list.map(item => (
                 <li key={item.id}>
                     <ListItem item={item} />
                 </li>
             ))}
-        </div>
+        </ul>
     )
 }
 
@@ -75,6 +76,18 @@ function ListItem({ item }: { item: ListItemState }) {
         }
     }
 
+    async function handleAmountUpdate(amount: number) {
+        try {
+            const response = await updateListItem(listId, item.id, { amount })
+            if (!response.success) {
+                toast.error("Couldn't update item", { description: response.message })
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error("Couldn't update item", { description: "Something went wrong" })
+        }
+    }
+
     return (
         <div className="flex items-center gap-2">
             <Checkbox
@@ -89,6 +102,10 @@ function ListItem({ item }: { item: ListItemState }) {
                     { "animate-pulse": item.isPending || isPending },
                     { "line-through decoration-1 text-current/60": isChecked }
                 )} />
-            <Input type="number" className="w-50" defaultValue={0} />
+            <Input
+                onChange={(e) => handleAmountUpdate(Number.parseFloat(e.target.value))}
+                type="number"
+                className="w-50 bg-transparent"
+                defaultValue={item.amount || 0} />
         </div>)
 }
