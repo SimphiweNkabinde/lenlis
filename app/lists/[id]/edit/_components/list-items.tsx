@@ -17,13 +17,13 @@ export default function ListItems() {
     if (!list.length) return <EmptyList />
 
     return (
-        <ul className="list-outside ml-6 h-full pl-4 pr-4 flex flex-col gap-3 overflow-y-scroll pt-5 pb-10">
+        <div className="ml-6 h-full pl-4 pr-4 flex flex-col gap-3 overflow-y-scroll pt-5 pb-10">
             {list.map(item => (
                 <li key={item.id}>
                     <ListItem item={item} />
                 </li>
             ))}
-        </ul>
+        </div>
     )
 }
 
