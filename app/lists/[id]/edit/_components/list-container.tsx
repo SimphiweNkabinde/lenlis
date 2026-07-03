@@ -5,7 +5,7 @@ import { useState } from "react"
 type ListItemType = {
     id: string
     text: string,
-    is_checked?: boolean,
+    checked?: boolean,
     amount?: number
 }
 export default function ListContainer({ defaultList = [] }: { defaultList?: ListItemType[] }) {

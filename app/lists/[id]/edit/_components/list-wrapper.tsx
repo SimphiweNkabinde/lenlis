@@ -14,7 +14,7 @@ type ListDataType = {
 export default function ListWrapper({ defaultListItems, listData }: { defaultListItems: ListItem[], listData: ListDataType }) {
 
     const setList = useListStore(state => state.setListItems)
-    const setListId = useListStore(state => state.setListId)
+    const setListId = useListStore(state => state.setId)
     useEffect(() => {
         setListId(listData.id)
         setList(defaultListItems)

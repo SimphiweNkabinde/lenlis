@@ -29,7 +29,7 @@ export function ListTabs({ lists }: { lists: { id: string, name: string, created
             </TabsContent>
             <TabsContent value="owned-by-you">
                 <ListCollectionContainer
-                    listCollection={lists.filter(i => i.role == "owner")}
+                    listCollection={lists?.filter(i => i.role == "owner")}
                     emptyTitle="No owned lists yet"
                     emptySubtitle="Lists Owned by you will appear here." />
             </TabsContent>
