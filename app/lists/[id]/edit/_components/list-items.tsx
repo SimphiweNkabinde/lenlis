@@ -29,7 +29,7 @@ function EmptyList() {
     return (
         <div className="flex items-center justify-center h-full px-4">
             <div className="text-current/75 flex gap-2 items-center">
-                <ListIcon className="w-4" /><span>List is empty</span>
+                <ListIcon className="w-4" /><span>Empty list</span>
             </div>
         </div>
     )

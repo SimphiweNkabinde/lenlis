@@ -7,6 +7,7 @@ import { useListStore } from '../_stores/use-list-store'
 export default function ListItemInput() {
 
     const addItem = useListStore(state => state.addItem)
+    const isEmpty = !useListStore(state => state.listItems).length
 
     const [value, setValue] = useState<string>("")
 
@@ -16,9 +17,9 @@ export default function ListItemInput() {
     }
 
     return (
-        <div className="sticky bottom-5 w-full px-4">
+        <div className={"sticky bottom-5 w-full px-4"}>
             <InputGroup className="h-12 rounded-full pl-2 pr-1" >
-                <InputGroupInput value={value} onChange={(event) => setValue(event.target.value)} placeholder="Add an item" />
+                <InputGroupInput value={value} onChange={(event) => setValue(event.target.value)} placeholder={isEmpty ? "Add the first item" : "Add an item"} />
                 <InputGroupAddon align="inline-end">
                     <InputGroupButton onClick={() => handleSubmit()} variant="default" className="rounded-full size-9">
                         <ArrowUpIcon className="size-5" />

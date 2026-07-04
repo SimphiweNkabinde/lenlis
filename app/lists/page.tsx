@@ -1,7 +1,7 @@
-import ListPageHeader from "@/components/list-page-header";
 import { ListTabs } from "@/app/lists/_components/list-tabs";
 import { createClient } from "@/lib/supabase/server";
 import { Toaster } from "sonner";
+import Header from "@/components/header";
 
 export default async function Page() {
 
@@ -13,7 +13,7 @@ export default async function Page() {
 
     return (
         <div className="flex h-dvh relative flex flex-col overflow-hidden">
-            <ListPageHeader />
+            <Header title="My Lists" />
             <ListTabs
                 lists={data?.map(({ id, name, list_members, createdAt }) => ({ id, name, role: list_members.find(i => i.user_id == userData?.user?.id)?.role, members: list_members.length, createdAt }))!} />
             <Toaster />

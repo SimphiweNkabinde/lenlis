@@ -4,13 +4,14 @@ import { createClient } from "../supabase/server";
 import { ServerActionResponse } from "../definitions";
 
 
-export async function createList({ name, item }: { name?: string | null, item: string }): Promise<ServerActionResponse> {
+export async function createList(name: string): Promise<ServerActionResponse> {
     let newListId
     try {
         const supabase = await createClient()
 
         const { data: sessionData, error: sessionError } = await supabase.auth.getSession()
 
+        // if no session, create sign in anonymously (and link to profile later)
         if (sessionData.session === null && sessionError === null) {
             const { data, error } = await supabase.auth.signInAnonymously()
         }
@@ -24,10 +25,7 @@ export async function createList({ name, item }: { name?: string | null, item: s
             .insert({ list_id: newListData.id, user_id: sessionData.session?.user.id, role: "owner" })
         if (ownershipError) throw ownershipError
 
-        // create first list item
-        const { error: listItemError } = await supabase.from("list_items").insert({ list_id: newListData?.id, text: item })
         newListId = newListData?.id
-        if (listItemError) throw listItemError
 
     } catch (error) {
         console.log(error)

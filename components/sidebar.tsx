@@ -23,7 +23,7 @@ export function Sidebar({ children }: { children: ReactNode }) {
                         lenlis
                     </SheetTitle>
                 </SheetHeader>
-                <div className="px-6 flex flex-col gap-5 text-lg">
+                <div className="px-6 pt-10 flex flex-col gap-7 text-lg">
                     <Link href="/lists/library" className="flex items-center gap-3 font-medium">
                         <LibraryBigIcon className="size-4" /><span>Library</span>
                     </Link>

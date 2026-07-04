@@ -1,70 +1,41 @@
 "use client"
-import { Input } from "@/components/ui/input"
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group"
 import { createList } from "@/lib/actions/create-list"
-import { ArrowUpIcon, ListIcon } from "lucide-react"
-import { useState } from "react"
+import clsx from "clsx"
+import { ArrowUpIcon } from "lucide-react"
 import { SubmitHandler, useForm } from "react-hook-form"
-
-type Inputs = {
-    name: string;
-    item: string;
-};
+import { toast } from "sonner"
+import { success } from "zod"
 
 export default function NewListForm() {
 
-    const { handleSubmit, reset, register, formState: { isSubmitting } } = useForm<Inputs>()
-    const [listItem, setListItem] = useState<string>("")
+    const { handleSubmit, register, formState: { isSubmitting, dirtyFields }, getValues } = useForm<{ name: string }>({ defaultValues: { name: "" } })
 
-    const onSubmit: SubmitHandler<Inputs> = async (data) => {
-        setListItem(data.item)
-        reset({ name: data.name, item: "" })
-        await createList(data)
+    const onSubmit: SubmitHandler<{ name: string }> = async (data) => {
+        if (!data.name.trim()) return
+        const { success } = await createList(data.name.trim())
+        if (!success) {
+            toast.error("Something went wrong", { description: "Please try again" })
+        }
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="h-full flex flex-col relative">
-            <div className="border-b-1 py-4 px-5">
-                <Input
-                    {...register("name")}
-                    autoFocus
-                    className="text-2xl rounded-none border-0 bg-transparent focus-visible:ring-0 px-0 mb-2"
-                    placeholder="New list" />
-            </div>
-            <ListContainer listItem={listItem} />
-            <div className="sticky bottom-5 w-full px-4">
-                <InputGroup className="h-12 rounded-full pl-2 pr-1" >
-                    <InputGroupInput {...register("item", { required: true })} placeholder="Add your first item" />
+        <form onSubmit={handleSubmit(onSubmit)} className="h-3/4 flex flex-col items-center justify-evenly gap-5">
+            <p className="text-current/50 text-sm text-center">
+                From groceries to travel plans. <br /> Every list starts here.
+            </p>
+            <div className="w-full px-4 flex flex-col items-center justify-evenly gap-5">
+                <h1 className="text-2xl">Start a new list</h1>
+                <InputGroup className={clsx("h-12 rounded-full pl-2 pr-1", { "animate-pulse": isSubmitting })} >
+                    <InputGroupInput disabled={isSubmitting} {...register("name", { required: true })} placeholder="Give it a name" />
                     <InputGroupAddon align="inline-end">
-                        <InputGroupButton type="submit" variant="default" className="rounded-full size-9">
-                            <ArrowUpIcon className="" />
+                        <InputGroupButton type="submit" disabled={!dirtyFields.name || isSubmitting} variant="default" className="rounded-full size-9">
+                            <ArrowUpIcon className="size-5" />
                         </InputGroupButton>
                     </InputGroupAddon>
                 </InputGroup>
             </div>
+            <p></p>
         </form>
-    )
-}
-
-function ListContainer({ listItem }: { listItem: string }) {
-
-    if (!listItem) return <EmptyList />
-
-    return (
-        <ul className="list-outside ml-6 h-full pl-4 pr-4 flex flex-col gap-3 overflow-y-scroll pt-5 pb-10">
-            <li className="text-[16px]">
-                {listItem}
-            </li>
-        </ul>
-    )
-}
-
-function EmptyList() {
-    return (
-        <div className="flex items-center justify-center h-full px-4">
-            <div className="text-current/75 flex gap-2 items-center">
-                <ListIcon className="w-4" /><span>Start a new list</span>
-            </div>
-        </div>
     )
 }
