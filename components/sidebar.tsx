@@ -7,7 +7,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
-import { ListIcon, SquarePenIcon } from "lucide-react"
+import { LibraryBigIcon, ListIcon, SquarePenIcon } from "lucide-react"
 import Link from "next/link"
 import { ReactNode } from "react"
 import { Separator } from "./ui/separator"
@@ -23,19 +23,16 @@ export function Sidebar({ children }: { children: ReactNode }) {
                         lenlis
                     </SheetTitle>
                 </SheetHeader>
-                <div className="px-6 flex flex-col gap-5">
+                <div className="px-6 flex flex-col gap-5 text-lg">
+                    <Link href="/lists/library" className="flex items-center gap-3 font-medium">
+                        <LibraryBigIcon className="size-4" /><span>Library</span>
+                    </Link>
                     <Link href="/" className="flex items-center gap-3 font-medium">
                         <SquarePenIcon className="size-4" /><span>New List</span>
                     </Link>
                     <Link href="/lists" className="flex items-center gap-3 font-medium">
                         <ListIcon className="size-4" /><span>My Lists</span>
                     </Link>
-                    <div>
-                        <div className="text-current/75">Pinned</div>
-                    </div>
-                    <div>
-                        <div className="text-current/75">Recent</div>
-                    </div>
                 </div>
                 <SheetFooter className="px-0">
                     <Separator />
