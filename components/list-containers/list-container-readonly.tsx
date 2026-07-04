@@ -8,7 +8,7 @@ export default function ListContainerReadonly({ list = [], showAmounts, showChec
     if (!list.length) return <EmptyList />
 
     return (
-        <ul className="list-outside ml-6 pl-4 pr-4 flex flex-col gap-3 overflow-y-scroll pt-5 pb-10">
+        <ul className="list-outside px-4 flex flex-col gap-3 overflow-y-scroll pt-5 pb-10">
             {list.map(item => (
                 <li key={item.id}>
                     <ListItem item={item} showAmounts={showAmounts} showChecks={showChecks} />
@@ -23,7 +23,7 @@ function ListItem({ item, showAmounts, showChecks }: { item: ListItemType, showC
     const { checked, text, amount } = item
 
     return (
-        <div className="flex items-center gap-2 justify-between h-8">
+        <div className="flex items-center gap-2 justify-between min-h-8">
             <div className="flex gap-2 items-center">
                 {showChecks &&
                     <Checkbox
