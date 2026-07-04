@@ -19,7 +19,7 @@ export default function ListItemInput({ onValueSubmit }: { onValueSubmit: (val: 
                 <InputGroupInput value={value} onChange={(event) => setValue(event.target.value)} placeholder="Add your first item" />
                 <InputGroupAddon align="inline-end">
                     <InputGroupButton onClick={() => handleSubmit()} variant="default" className="rounded-full size-9">
-                        <ArrowUpIcon className="" />
+                        <ArrowUpIcon className="size-5" />
                     </InputGroupButton>
                 </InputGroupAddon>
             </InputGroup>
