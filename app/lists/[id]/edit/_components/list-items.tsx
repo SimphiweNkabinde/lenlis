@@ -44,7 +44,7 @@ function ListItem({ item }: { item: ListItemState }) {
     }, 1000)
 
     return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 h-8">
             {hasChecks &&
                 <Checkbox
                     onCheckedChange={(checked) => updateItem(item.id, { checked })}
