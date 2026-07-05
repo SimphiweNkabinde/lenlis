@@ -1,9 +1,10 @@
-import { EllipsisVerticalIcon, TextAlignStartIcon } from "lucide-react";
+import { TextAlignStartIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import { AuthDialog } from "./auth-dialog";
 import { Sidebar } from "./sidebar";
+import { ReactNode } from "react";
 
-export default function Header({ title }: { title?: string }) {
+export default function Header({ title, rightDropdownMenu }: { title?: string, rightDropdownMenu?: ReactNode }) {
     return (
         <div className="pb-2 justify-between w-full flex items-center py-4 px-4">
             <Sidebar>
@@ -14,7 +15,7 @@ export default function Header({ title }: { title?: string }) {
                 <AuthDialog>
                     <Button size="lg" className="text-base h-11 rounded-full">Login</Button>
                 </AuthDialog>
-                <Button variant="secondary" className="rounded-full size-11"><EllipsisVerticalIcon className="size-5" /></Button>
+                {rightDropdownMenu}
             </div>
         </div>
     )

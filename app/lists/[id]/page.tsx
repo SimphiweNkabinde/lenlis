@@ -1,3 +1,4 @@
+import { ViewOnlyListDropdownMenu } from "@/components/dropdown-menus/viewonly-list-dropdown-menu"
 import Header from "@/components/header"
 import ListContainerReadonly from "@/components/list-containers/list-container-readonly"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -23,7 +24,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const checkedSum = listItems.filter(i => i.checked).map(i => i.amount || 0).reduce((accumulator, currentValue) => accumulator + currentValue, 0);
     return (
         <div className="flex h-dvh relative flex flex-col overflow-hidden">
-            <Header />
+            <Header rightDropdownMenu={<ViewOnlyListDropdownMenu />} />
             <div className="border-b-1 pt-4 pb-2 px-5 flex flex-col gap-3">
                 <div>
                     <h1 className="text-2xl rounded-none border-0 bg-transparent focus-visible:ring-0 px-0">{name}</h1>
