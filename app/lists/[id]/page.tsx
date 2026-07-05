@@ -38,8 +38,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     </div>
                     <DotIcon className="text-current/50" />
                     <div className="text-current/50 text-xs flex items-center gap-1">
-                        <HistoryIcon className="w-4" />
-                        <span> {moment(createdAt).fromNow()}</span>
+                        {/* <HistoryIcon className="w-4" /> */}
+                        <span>updated {moment(createdAt).fromNow()}</span>
                     </div>
                 </div>
                 <div className='text-sm flex justify-between text-current/50'>
