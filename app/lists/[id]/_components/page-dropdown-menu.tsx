@@ -22,13 +22,13 @@ const menuItems: { label: string, icon: ReactNode }[] = [
   { label: "Copy list", icon: <CopyIcon /> }
 ]
 
-export function ViewOnlyListDropdownMenu() {
+export function PageDropdownMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger render={<Button variant="secondary" className="rounded-full size-11"><EllipsisVerticalIcon className="size-5" /></Button>} />
       <DropdownMenuContent className="min-w-45">
         {menuItems.map(item => (
-          <DropdownMenuItem className="text-lg">
+          <DropdownMenuItem key={item.label} className="text-lg">
             {item.icon}
             {item.label}
           </DropdownMenuItem>

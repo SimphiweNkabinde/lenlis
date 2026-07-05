@@ -25,7 +25,7 @@ export function DeleteListAlertDialog({ listId }: { listId: string }) {
     async function handleDelete() {
         try {
             setDialogOpen(false)
-            const response = await deleteList(listId)
+            const response = await deleteList(listId, { redirect: "/lists" })
             if (!response.success) throw new Error(JSON.stringify(response))
 
             toast("list deleted")

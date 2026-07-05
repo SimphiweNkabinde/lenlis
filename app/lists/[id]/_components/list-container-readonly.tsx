@@ -1,5 +1,5 @@
 import { ListItem as ListItemType } from "@/lib/definitions";
-import { Checkbox } from "../ui/checkbox";
+import { Checkbox } from "../../../../components/ui/checkbox";
 import clsx from "clsx";
 import { ListIcon } from "lucide-react";
 

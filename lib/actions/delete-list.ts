@@ -5,9 +5,10 @@ import { createClient } from "../supabase/server";
 import { ServerActionResponse } from "../definitions";
 import { isListMemberWithRoles } from "./is-list-member-with-roles";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 
-export async function deleteList(id: string): Promise<ServerActionResponse> {
+export async function deleteList(id: string, options?: { revalidatePath?: string, redirect?: string },): Promise<ServerActionResponse> {
 
     // validate fields
     const validateId = z.uuid().safeParse(id)
@@ -33,11 +34,14 @@ export async function deleteList(id: string): Promise<ServerActionResponse> {
         const { error: deleteError } = await supabase.from("lists").delete().eq("id", validateId.data)
         if (deleteError) throw deleteError;
 
-        revalidatePath("/lists")
-        return {
-            success: true,
-            message: 'list deleted',
-        };
+        if (options?.revalidatePath) revalidatePath(options.revalidatePath)
+        if (!options?.redirect) {
+            return {
+                success: true,
+                message: 'list deleted',
+            };
+        }
+
     } catch (error) {
         console.log(error)
         return {
@@ -45,4 +49,6 @@ export async function deleteList(id: string): Promise<ServerActionResponse> {
             message: 'A database error occurred. Please try again.',
         };
     }
+
+    redirect(options.redirect)
 }

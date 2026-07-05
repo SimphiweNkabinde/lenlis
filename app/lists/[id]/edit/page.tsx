@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server"
 import { notFound } from "next/navigation"
 import { Toaster } from "sonner"
 import ListWrapper from "./_components/list-wrapper"
-import { EditListDropdownMenu } from "@/components/dropdown-menus/edit-list-dropdown-menu"
+import { PageDropdownMenu } from "@/app/lists/[id]/edit/_components/page-dropdown-menu"
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
 
@@ -24,7 +24,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
     return (
         <div className="flex h-dvh relative flex flex-col overflow-hidden">
-            <Header rightDropdownMenu={<EditListDropdownMenu />} />
+            <Header rightDropdownMenu={<PageDropdownMenu />} />
             <ListWrapper listData={{ ...data }} defaultListItems={data.listItems} />
             <Toaster position="bottom-center" />
         </div>

@@ -1,7 +1,8 @@
-import { DotIcon, ListIcon } from "lucide-react"
+import { DotIcon, ListIcon, Trash2Icon } from "lucide-react"
 import moment from "moment"
 import Link from "next/link"
 import { DeleteListAlertDialog } from "./delete-list-alert-dialog"
+import { Button } from "@/components/ui/button"
 
 type ListCollectionType = {
     id: string,
