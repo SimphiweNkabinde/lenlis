@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button"
 import {
     Sheet,
@@ -9,14 +10,16 @@ import {
 } from "@/components/ui/sheet"
 import { LibraryBigIcon, ListIcon, SquarePenIcon } from "lucide-react"
 import Link from "next/link"
-import { ReactNode } from "react"
+import { ReactNode, useState } from "react"
 import { Separator } from "./ui/separator"
 import { AuthDialog } from "./auth-dialog"
 
-export function Sidebar({ children }: { children: ReactNode }) {
+export function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (isOpen: boolean) => void }) {
+
+    const [isAuthDialogOpen, setIsAuthDialogOpen] = useState<boolean>(false)
+
     return (
-        <Sheet>
-            <SheetTrigger render={<>{children}</>} />
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetContent side="left">
                 <SheetHeader>
                     <SheetTitle className="font-semibold text-2xl">
@@ -41,9 +44,8 @@ export function Sidebar({ children }: { children: ReactNode }) {
                         <div className="text-current/50 font-medium">
                             Log in to access your lists on any device and collaborate with others.
                         </div>
-                        <AuthDialog>
-                            <Button variant="outline" className="text-base h-10">Login</Button>
-                        </AuthDialog>
+                        <Button onClick={() => setIsAuthDialogOpen(true)} variant="outline" className="text-base h-10">Login</Button>
+                        <AuthDialog isOpen={isAuthDialogOpen} setIsOpen={(isOpen) => setIsAuthDialogOpen(isOpen)} />
                     </div>
                 </SheetFooter>
             </SheetContent>

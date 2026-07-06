@@ -22,8 +22,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Separator } from "./ui/separator"
 
-export function AuthDialog({ children }: { children: React.ReactNode }) {
-    const [open, setOpen] = React.useState(false)
+export function AuthDialog({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (isOpen: boolean) => void }) {
     const isDesktop = false //useMediaQuery("(min-width: 768px)")
 
     const title = "Log in or Sign up"
@@ -31,8 +30,7 @@ export function AuthDialog({ children }: { children: React.ReactNode }) {
 
     if (isDesktop) {
         return (
-            <Dialog open={open} onOpenChange={setOpen}>
-                <DialogTrigger render={<>{children}</>} />
+            <Dialog open={isOpen} onOpenChange={setIsOpen}>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
                         <DialogTitle>{title}</DialogTitle>
@@ -47,10 +45,7 @@ export function AuthDialog({ children }: { children: React.ReactNode }) {
     }
 
     return (
-        <Drawer open={open} onOpenChange={setOpen}>
-            <DrawerTrigger asChild>
-                {children}
-            </DrawerTrigger>
+        <Drawer open={isOpen} onOpenChange={setIsOpen}>
             <DrawerContent>
                 <DrawerHeader className="text-left">
                     <DrawerTitle>{title}</DrawerTitle>

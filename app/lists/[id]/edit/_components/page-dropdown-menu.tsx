@@ -31,9 +31,11 @@ import { useState } from "react"
 import { useListStore } from "@/app/lists/[id]/edit/_stores/use-list-store"
 import { deleteList } from "@/lib/actions/delete-list"
 import { toast } from "sonner"
+import { AuthDialog } from "@/components/auth-dialog"
 
 export function PageDropdownMenu() {
 
+    const [isAuthDialogOpen, setIsAuthDialogOpen] = useState<boolean>(false)
     const { id: listId, name: listName } = useListStore(state => state)
     const [deleteDialgOpen, setDeleteDialgOpen] = useState(false)
 
@@ -61,12 +63,16 @@ export function PageDropdownMenu() {
         }
     }
 
+    function handleAddMembers() {
+        setIsAuthDialogOpen(true)
+    }
+
     return (
         <>
             <DropdownMenu>
                 <DropdownMenuTrigger render={<Button variant="secondary" className="rounded-full size-11"><EllipsisVerticalIcon className="size-5" /></Button>} />
                 <DropdownMenuContent className="min-w-45">
-                    <DropdownMenuItem className="text-lg">
+                    <DropdownMenuItem onClick={() => handleAddMembers()} className="text-lg">
                         <UserRoundPlusIcon className="size-5" />
                         Add members
                     </DropdownMenuItem>
@@ -106,6 +112,8 @@ export function PageDropdownMenu() {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
+
+            <AuthDialog isOpen={isAuthDialogOpen} setIsOpen={(isOpen) => setIsAuthDialogOpen(isOpen)} />
         </>
     )
 }
