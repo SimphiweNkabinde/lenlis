@@ -10,7 +10,7 @@ import { useListStore } from "../_stores/use-list-store";
 export default function ListName({ defaultName }: { defaultName: string }) {
 
     const [isPending, setIsPending] = useState<boolean>(false)
-    const listId = useListStore(state => state.id)
+    const { id: listId, setName: setStoreName } = useListStore(state => state)
 
     const handleUpdate = useDebouncedCallback(async (name) => {
         setIsPending(true)
@@ -19,6 +19,7 @@ export default function ListName({ defaultName }: { defaultName: string }) {
             if (!response.success) {
                 toast.error("Couldn't update list name", { description: response.message })
             }
+            setStoreName(name)
         } catch (error) {
             console.log(error)
             toast.error("Couldn't update list name", { description: "Something went wrong" })

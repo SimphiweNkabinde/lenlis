@@ -27,20 +27,14 @@ import {
     AlertDialogMedia,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { ReactNode, useState } from "react"
+import { useState } from "react"
 import { useListStore } from "@/app/lists/[id]/edit/_stores/use-list-store"
 import { deleteList } from "@/lib/actions/delete-list"
 import { toast } from "sonner"
 
-const menuItems: { label: string, icon: ReactNode, onclick?: Function }[] = [
-    { label: "Add members", icon: <UserRoundPlusIcon className="size-5" /> },
-    { label: "Share", icon: <Share2Icon className="size-5" /> },
-    { label: "Set visibility", icon: <EyeIcon className="size-5" /> }
-]
-
 export function PageDropdownMenu() {
 
-    const listId = useListStore(state => state.id)
+    const { id: listId, name: listName } = useListStore(state => state)
     const [deleteDialgOpen, setDeleteDialgOpen] = useState(false)
 
     async function handleDelete() {
@@ -52,30 +46,18 @@ export function PageDropdownMenu() {
 
     async function handleShare() {
         const shareData = {
-            title: 'Check out this article!',
-            text: 'Learn how to trigger native sharing sheets using JavaScript.',
-            url: `${window.location.origin}/${listId}`
+            title: listName,
+            text: 'Lenlis - Shared Lists, Simplified',
+            url: `${window.location.origin}/lists/${listId}`
         };
 
-        // native share menu
-        if (navigator.share) {
-            try {
-                await navigator.share(shareData);
-                toast.success('Content shared successfully!');
-            } catch (error) {
-                console.log(error)
-                toast.warning('Sharing failed or cancelled:');
-            }
-        } else {
-            try {
-                navigator.clipboard.writeText(shareData.url)
-                toast.info("copied to clipboard")
-            } catch (error) {
-                console.log(error)
-                toast.error("Native sharing not supported.")
-            }
-
-
+        if (navigator.share)
+            // native share menu
+            navigator.share(shareData).catch(err => { });
+        else {
+            navigator.clipboard.writeText(shareData.url)
+                .then(() => toast.info("Link copied to clipboard"))
+                .catch(() => { })
         }
     }
 

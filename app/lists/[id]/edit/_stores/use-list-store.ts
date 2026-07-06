@@ -10,12 +10,14 @@ export type ListItemState = ListItem & { isPending?: boolean }
 type ListStoreState = {
     listItems: ListItemState[],
     id: string,
+    name: string,
     hasChecks?: boolean,
     hasAmounts?: boolean
 }
 
 type ListStoreActions = {
     initializeStore: (storeState: ListStoreState) => void
+    setName: (name: string) => void
     addItem: (newItem: Omit<ListItem, "id">) => void
     removeItem: (itemId: string) => void
     updateItem: (id: string, updatedItem: { text?: string, checked?: boolean, amount?: number }) => void
@@ -25,7 +27,9 @@ type ListStore = ListStoreState & ListStoreActions
 export const useListStore = create<ListStore>()((set, get) => ({
     listItems: [],
     id: "",
+    name: "",
     initializeStore: (storeState) => set((state) => ({ ...storeState })),
+    setName: (name) => set(() => ({ name })),
     updateListAttributes: async (listAttributes) => {
         // OPTIMISTIC UPDATE
         // Instantly update UI state
