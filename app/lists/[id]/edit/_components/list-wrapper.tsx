@@ -9,12 +9,14 @@ import { CollaboratorAvatars } from './collaborator-avatars'
 import ListOptionToggles from './list-option-toggles'
 import ListAggregates from './list-aggregates'
 import ShareButton from './share-button'
+import VisibilityButton from './visibility-button'
 
 type ListDataType = {
     id: string,
     name: string,
     hasAmounts?: boolean,
-    hasCheckd?: boolean
+    hasCheckd?: boolean,
+    visibility: "private" | "public"
 }
 export default function ListWrapper({ defaultListItems, listData }: { defaultListItems: ListItem[], listData: ListDataType }) {
 
@@ -31,6 +33,7 @@ export default function ListWrapper({ defaultListItems, listData }: { defaultLis
                     <div className='flex items-center gap-3'>
                         <CollaboratorAvatars />
                         <ShareButton />
+                        <VisibilityButton />
                     </div>
                     <ListOptionToggles />
                 </div>

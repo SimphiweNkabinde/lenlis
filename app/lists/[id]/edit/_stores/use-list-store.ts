@@ -12,7 +12,8 @@ type ListStoreState = {
     id: string,
     name: string,
     hasChecks?: boolean,
-    hasAmounts?: boolean
+    hasAmounts?: boolean,
+    visibility: "public" | "private"
 }
 
 type ListStoreActions = {
@@ -21,25 +22,27 @@ type ListStoreActions = {
     addItem: (newItem: Omit<ListItem, "id">) => void
     removeItem: (itemId: string) => void
     updateItem: (id: string, updatedItem: { text?: string, checked?: boolean, amount?: number }) => void
-    updateListAttributes: (listAttributes: { hasChecks?: boolean, hasAmounts?: boolean }) => void
+    updateListAttributes: (listAttributes: { hasChecks?: boolean, hasAmounts?: boolean, visibility?: "public" | "private" }) => void
 }
 type ListStore = ListStoreState & ListStoreActions
 export const useListStore = create<ListStore>()((set, get) => ({
     listItems: [],
     id: "",
     name: "",
+    visibility: "public",
     initializeStore: (storeState) => set((state) => ({ ...storeState })),
     setName: (name) => set(() => ({ name })),
     updateListAttributes: async (listAttributes) => {
         // OPTIMISTIC UPDATE
         // Instantly update UI state
-        const previousAttributes = { hasAmounts: get().hasAmounts, hasChecks: get().hasChecks }
+        const previousAttributes = { hasAmounts: get().hasAmounts, hasChecks: get().hasChecks, visibility: get().visibility }
         set((state) => ({ ...listAttributes }))
 
         // Send update to database
         try {
             const response = await updateList(get().id, listAttributes)
             if (!response.success) throw new Error(JSON.stringify(response))
+            toast.success("Visibility changes saved")
 
         } catch (error) {
             console.log(error)

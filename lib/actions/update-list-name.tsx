@@ -9,10 +9,12 @@ const Schema = z.object({
     id: z.uuid(),
     name: z.string().min(1).optional(),
     hasChecks: z.boolean().optional(),
-    hasAmounts: z.boolean().optional()
+    hasAmounts: z.boolean().optional(),
+    visibility: z.enum(["public", "private"])
 })
 
-export async function updateList(id: string, listProps: { name?: string, hasChecks?: boolean, hasAmounts?: boolean }): Promise<ServerActionResponse> {
+type ListProps = { name?: string, hasChecks?: boolean, hasAmounts?: boolean, visibility?: "public" | "private" }
+export async function updateList(id: string, listProps: ListProps): Promise<ServerActionResponse> {
 
     // validate fields
     const validatedFields = Schema.safeParse({ id, ...listProps })
@@ -33,8 +35,8 @@ export async function updateList(id: string, listProps: { name?: string, hasChec
     })
 
     // update list item
-    const { hasChecks: has_checks, hasAmounts: has_amounts, name } = validatedFields.data
-    const payload = { name, has_checks, has_amounts }
+    const { hasChecks: has_checks, hasAmounts: has_amounts, name, visibility } = validatedFields.data
+    const payload = { name, has_checks, has_amounts, visibility }
 
     try {
         const supabase = await createClient()

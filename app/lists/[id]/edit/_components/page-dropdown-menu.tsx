@@ -34,12 +34,16 @@ import { useListStore } from "@/app/lists/[id]/edit/_stores/use-list-store"
 import { deleteList } from "@/lib/actions/delete-list"
 import { toast } from "sonner"
 import { AuthDialog } from "@/components/auth-dialog"
+import { VisibilitySettingsDialog } from "./visibility-settings-dialog"
 
 export function PageDropdownMenu() {
 
+    // dialog open states
     const [isAuthDialogOpen, setIsAuthDialogOpen] = useState<boolean>(false)
-    const { id: listId, name: listName, hasChecks, hasAmounts, updateListAttributes } = useListStore(state => state)
+    const [isVisibilityDialogOpen, setIsVisibilityDialogOpen] = useState<boolean>(false)
     const [deleteDialgOpen, setDeleteDialgOpen] = useState(false)
+
+    const { id: listId, name: listName, hasChecks, hasAmounts, updateListAttributes } = useListStore(state => state)
 
     async function handleDelete() {
         setDeleteDialgOpen(false)
@@ -82,7 +86,9 @@ export function PageDropdownMenu() {
                         <Share2Icon className="size-5" />
                         Share
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="text-lg">
+                    <DropdownMenuItem
+                        onClick={() => setIsVisibilityDialogOpen(true)}
+                        className="text-lg">
                         <EyeIcon className="size-5" />
                         Set visibility
                     </DropdownMenuItem>
@@ -128,6 +134,7 @@ export function PageDropdownMenu() {
             </AlertDialog>
 
             <AuthDialog isOpen={isAuthDialogOpen} setIsOpen={(isOpen) => setIsAuthDialogOpen(isOpen)} />
+            <VisibilitySettingsDialog isOpen={isVisibilityDialogOpen} setIsOpen={(isOpen) => setIsVisibilityDialogOpen(isOpen)} />
         </>
     )
 }
