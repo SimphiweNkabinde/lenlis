@@ -8,6 +8,7 @@ import ListName from './list-name'
 import { CollaboratorAvatars } from './collaborator-avatars'
 import ListOptionToggles from './list-option-toggles'
 import ListAggregates from './list-aggregates'
+import ShareButton from './share-button'
 
 type ListDataType = {
     id: string,
@@ -27,7 +28,10 @@ export default function ListWrapper({ defaultListItems, listData }: { defaultLis
             <div className="border-b-1 pt-4 pb-2 px-5 flex flex-col gap-3">
                 <ListName defaultName={listData.name} />
                 <div className='flex justify-between'>
-                    <CollaboratorAvatars />
+                    <div className='flex items-center gap-3'>
+                        <CollaboratorAvatars />
+                        <ShareButton />
+                    </div>
                     <ListOptionToggles />
                 </div>
                 <ListAggregates />

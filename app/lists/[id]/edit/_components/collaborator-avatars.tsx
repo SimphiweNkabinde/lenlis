@@ -1,32 +1,29 @@
-import { PlusIcon } from "lucide-react"
+"use client"
+import { PlusIcon, UserRoundIcon } from "lucide-react"
 
 import {
     Avatar,
     AvatarFallback,
     AvatarGroup,
-    AvatarGroupCount,
-    AvatarImage,
+    AvatarGroupCount
 } from "@/components/ui/avatar"
-
-const users = [
-    { src: "https://github.com/shadcn.png", fallback: "CN", alt: "@shadcn" },
-    { src: "https://github.com/maxleiter.png", fallback: "LR", alt: "@maxleiter" },
-    { src: "https://github.com/evilrabbit.png", fallback: "ER", alt: "@evilrabbit" }
-]
+import { useState } from "react"
+import { AuthDialog } from "@/components/auth-dialog"
 
 export function CollaboratorAvatars() {
+    const [isAuthDialogOpen, setIsAuthDialogOpen] = useState<boolean>(false)
 
     return (
-        <AvatarGroup className="">
-            {users.map(u => (
-                <Avatar key={u.src} size="sm">
-                    <AvatarImage src={u.src} alt={u.alt} />
-                    <AvatarFallback>{u.fallback}</AvatarFallback>
+        <>
+            <AvatarGroup className="" onClick={() => setIsAuthDialogOpen(true)}>
+                <Avatar size="default">
+                    <AvatarFallback><UserRoundIcon className="size-5" /></AvatarFallback>
                 </Avatar>
-            ))}
-            <AvatarGroupCount>
-                <PlusIcon />
-            </AvatarGroupCount>
-        </AvatarGroup>
+                <AvatarGroupCount>
+                    <PlusIcon />
+                </AvatarGroupCount>
+            </AvatarGroup>
+            <AuthDialog isOpen={isAuthDialogOpen} setIsOpen={(isOpen) => setIsAuthDialogOpen(isOpen)} />
+        </>
     )
 }

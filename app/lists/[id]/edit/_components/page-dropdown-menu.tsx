@@ -1,11 +1,13 @@
 "use client"
 
 import {
+    CircleCheckIcon,
     EllipsisVerticalIcon,
     EyeIcon,
     Share2Icon,
     Trash2Icon,
     UserRoundPlusIcon,
+    UsersRoundIcon,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -36,7 +38,7 @@ import { AuthDialog } from "@/components/auth-dialog"
 export function PageDropdownMenu() {
 
     const [isAuthDialogOpen, setIsAuthDialogOpen] = useState<boolean>(false)
-    const { id: listId, name: listName } = useListStore(state => state)
+    const { id: listId, name: listName, hasChecks, hasAmounts, updateListAttributes } = useListStore(state => state)
     const [deleteDialgOpen, setDeleteDialgOpen] = useState(false)
 
     async function handleDelete() {
@@ -71,10 +73,10 @@ export function PageDropdownMenu() {
         <>
             <DropdownMenu>
                 <DropdownMenuTrigger render={<Button variant="secondary" className="rounded-full size-11"><EllipsisVerticalIcon className="size-5" /></Button>} />
-                <DropdownMenuContent className="min-w-45">
+                <DropdownMenuContent className="min-w-55">
                     <DropdownMenuItem onClick={() => handleAddMembers()} className="text-lg">
-                        <UserRoundPlusIcon className="size-5" />
-                        Add members
+                        <UsersRoundIcon className="size-5" />
+                        Members
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleShare()} className="text-lg">
                         <Share2Icon className="size-5" />
@@ -83,6 +85,18 @@ export function PageDropdownMenu() {
                     <DropdownMenuItem className="text-lg">
                         <EyeIcon className="size-5" />
                         Set visibility
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                        onClick={() => updateListAttributes({ hasChecks: !hasChecks })}
+                        className="text-lg">
+                        <CircleCheckIcon className="size-5" />
+                        {hasChecks ? "Hide" : "Show"} Checkboxes
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                        onClick={() => updateListAttributes({ hasAmounts: !hasAmounts })}
+                        className="text-lg">
+                        <div className="text-[8px] border-[1.5px] border-black dark:border-white flex font-bold items-center justify-center text-black dark:text-white rounded h-4 px-0.5">1.23</div>
+                        {hasAmounts ? "Hide" : "Show"} Amounts
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
