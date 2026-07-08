@@ -42,7 +42,8 @@ export const useListStore = create<ListStore>()((set, get) => ({
         try {
             const response = await updateList(get().id, listAttributes)
             if (!response.success) throw new Error(JSON.stringify(response))
-            toast.success("Visibility changes saved")
+
+            if (Object.hasOwn(listAttributes, "visibility")) toast.success("Visibility changes saved")
 
         } catch (error) {
             console.log(error)
