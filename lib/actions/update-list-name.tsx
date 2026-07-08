@@ -10,7 +10,7 @@ const Schema = z.object({
     name: z.string().min(1).optional(),
     hasChecks: z.boolean().optional(),
     hasAmounts: z.boolean().optional(),
-    visibility: z.enum(["public", "private"])
+    visibility: z.enum(["public", "private"]).optional()
 })
 
 type ListProps = { name?: string, hasChecks?: boolean, hasAmounts?: boolean, visibility?: "public" | "private" }
