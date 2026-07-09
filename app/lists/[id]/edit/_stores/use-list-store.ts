@@ -15,14 +15,15 @@ type ListStoreState = {
     hasAmounts?: boolean,
     visibility: "public" | "private"
 }
-
+type ReorderedListData = { newList: ListItemState[], movedItemId?: string }
 type ListStoreActions = {
     initializeStore: (storeState: ListStoreState) => void
     setName: (name: string) => void
-    addItem: (newItem: Omit<ListItem, "id">) => void
+    addItem: (newItem: Omit<ListItem, "id" | "position">) => void
     removeItem: (itemId: string) => void
     updateItem: (id: string, updatedItem: { text?: string, checked?: boolean, amount?: number }) => void
     updateListAttributes: (listAttributes: { hasChecks?: boolean, hasAmounts?: boolean, visibility?: "public" | "private" }) => void
+    setListItems: (setStateCb: (listItems: ListItemState[]) => ReorderedListData) => void
 }
 type ListStore = ListStoreState & ListStoreActions
 export const useListStore = create<ListStore>()((set, get) => ({
@@ -56,12 +57,20 @@ export const useListStore = create<ListStore>()((set, get) => ({
         // OPTIMISTIC UPDATE
         // Create a unique temp ID for the UI
         const tempId = `temp-${Date.now()}`
+
+        // SET POSITION
+        const list = get().listItems
+        let position = calculateItemNewPosition(null, null)
+        if (list.length > 0) {
+            const maxPosition = Math.max(...list.map(i => i.position || 0))
+            position = calculateItemNewPosition(maxPosition, null)
+        }
         // Instantly push the item into the UI state
-        set((state) => ({ listItems: [...state.listItems, { ...newItem, id: tempId, isPending: true }] }))
+        set((state) => ({ listItems: [...state.listItems, { ...newItem, id: tempId, isPending: true, position }] }))
 
         // Send item to database
         try {
-            const response = await addListItem(get().id, newItem)
+            const response = await addListItem(get().id, { ...newItem, position })
             if (!response.success) throw new Error(JSON.stringify(response))
 
             set(state => (
@@ -115,5 +124,39 @@ export const useListStore = create<ListStore>()((set, get) => ({
             set(state => ({ listItems: state.listItems.toSpliced(itemPreviousIndex, 0, itemToBeDeleted) }))
         }
     },
+    setListItems: (setStateCb) => {
+        const { newList, movedItemId } = setStateCb(get().listItems)
+        set(() => ({ listItems: newList }))
 
+        // update list item order in db
+        if (movedItemId) {
+            const newIndex = newList.findIndex(items => items.id == movedItemId)
+            const prevPosition = newList[newIndex - 1] ? newList[newIndex - 1].position : null
+            const nextPosition = newList[newIndex + 1] ? newList[newIndex + 1].position : null
+            const position = calculateItemNewPosition(prevPosition, nextPosition)
+
+            updateListItem(get().id, movedItemId, { position })
+        }
+    }
 }))
+
+export function calculateItemNewPosition(prevPosition: number | null, nextPosition: number | null): number {
+    const prev = prevPosition ? parseFloat(`${prevPosition}`) : null;
+    const next = nextPosition ? parseFloat(`${nextPosition}`) : null;
+
+    // Moving to the absolute top (no item above)
+    if (prev === null && next !== null) {
+        return next / 2;
+    }
+    // Moving to the absolute bottom (no item below)
+    if (prev !== null && next === null) {
+        // next thousand
+        return Math.floor(prev / 1000 + 1) * 1000;
+    }
+    // Moving between two items
+    if (prev !== null && next !== null) {
+        return (prev + next) / 2;
+    }
+    // first item item on the list
+    return 1000;
+}

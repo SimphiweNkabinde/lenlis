@@ -10,10 +10,11 @@ const Schema = z.object({
     id: z.uuid(),
     text: z.string().min(1).optional(),
     checked: z.boolean().optional(),
-    amount: z.number().optional()
+    amount: z.number().optional(),
+    position: z.number().optional()
 })
 
-export async function updateListItem(listId: string, id: string, item: { text?: string, checked?: boolean, amount?: number }): Promise<ServerActionResponse> {
+export async function updateListItem(listId: string, id: string, item: { text?: string, checked?: boolean, amount?: number, position?: number }): Promise<ServerActionResponse> {
     // validate fields
     const validatedFields = Schema.safeParse({ listId, id, ...item })
 
@@ -38,8 +39,8 @@ export async function updateListItem(listId: string, id: string, item: { text?: 
     }
 
     // update list item
-    const { checked: is_checked, text, amount, id: itemId } = validatedFields.data
-    const payload = { is_checked, text, amount }
+    const { checked: is_checked, text, amount, id: itemId, position } = validatedFields.data
+    const payload = { is_checked, text, amount, position }
 
     try {
         const supabase = await createClient()

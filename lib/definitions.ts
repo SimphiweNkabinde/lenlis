@@ -12,4 +12,5 @@ export interface ListItem {
     text: string,
     checked?: boolean,
     amount?: number
+    position: number | null
 }

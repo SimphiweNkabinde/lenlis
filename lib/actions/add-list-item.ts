@@ -8,16 +8,20 @@ const Schema = z.object({
     listId: z.uuid(),
     text: z.string().min(1),
     checked: z.boolean().optional(),
-    amount: z.number().optional()
+    amount: z.number().optional(),
+    position: z.number()
 })
 
-export async function addListItem(listId: string, listItem: { text: string, checked?: boolean, amount?: number }): Promise<ServerActionResponse & { data?: { id: string } }> {
+type listItemProps = { text: string, checked?: boolean, amount?: number, position?: number }
+
+export async function addListItem(listId: string, listItem: listItemProps): Promise<ServerActionResponse & { data?: { id: string } }> {
     // validate fields
     const validatedFields = Schema.safeParse({
         listId,
         text: listItem.text,
         checked: listItem.checked,
-        amount: listItem.amount
+        amount: listItem.amount,
+        position: listItem.position
     })
 
     if (!validatedFields.success) {
@@ -50,7 +54,8 @@ export async function addListItem(listId: string, listItem: { text: string, chec
                 list_id: validatedData.listId,
                 text: validatedData.text,
                 is_checked: validatedData.checked,
-                amount: validatedData.amount
+                amount: validatedData.amount,
+                position: validatedData.position
             }).select("id").single()
         if (error) throw error
 
