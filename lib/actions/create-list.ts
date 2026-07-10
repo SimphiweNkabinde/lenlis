@@ -8,12 +8,16 @@ export async function createList(name: string): Promise<ServerActionResponse> {
     let newListId
     try {
         const supabase = await createClient()
+        let session
 
         const { data: sessionData, error: sessionError } = await supabase.auth.getSession()
+        if (sessionError) throw sessionError
+        session = sessionData.session
 
-        // if no session, create sign in anonymously (and link to profile later)
-        if (sessionData.session === null && sessionError === null) {
+        if (session === null) {
             const { data, error } = await supabase.auth.signInAnonymously()
+            if (error) throw error
+            session = data.session
         }
 
         // create list
