@@ -14,7 +14,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const supabase = await createClient()
     const { data: userData } = await supabase.auth.getUser()
     const { data, error } = await supabase.from('lists')
-        .select("id, name, listItems:list_items (id, text, checked:is_checked, amount), hasChecks:has_checks, hasAmounts:has_amounts, visibility, list_members(user_id), createdAt:created_at")
+        .select("id, name, listItems:list_items (id, text, checked:is_checked, amount, position), hasChecks:has_checks, hasAmounts:has_amounts, visibility, list_members(user_id), createdAt:created_at")
+        .order("position", { referencedTable: "list_items" })
         .eq("id", id).single()
 
     if (!data) {
