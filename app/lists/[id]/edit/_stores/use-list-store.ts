@@ -124,9 +124,10 @@ export const useListStore = create<ListStore>()((set, get) => ({
             set(state => ({ listItems: state.listItems.toSpliced(itemPreviousIndex, 0, itemToBeDeleted) }))
         }
     },
-    setListItems: (setStateCb) => {
+    setListItems: async (setStateCb) => {
+        const previousListItemsState = get().listItems
         const { newList, movedItemId } = setStateCb(get().listItems)
-        set(() => ({ listItems: newList }))
+        set((state) => ({ listItems: newList.map((item) => item.id === movedItemId ? { ...item, isPending: true } : item) }))
 
         // update list item order in db
         if (movedItemId) {
@@ -135,7 +136,19 @@ export const useListStore = create<ListStore>()((set, get) => ({
             const nextPosition = newList[newIndex + 1] ? newList[newIndex + 1].position : null
             const position = calculateItemNewPosition(prevPosition, nextPosition)
 
-            updateListItem(get().id, movedItemId, { position })
+            try {
+                const response = await updateListItem(get().id, movedItemId, { position })
+                if (!response.success) throw new Error(JSON.stringify(response))
+            } catch (error) {
+                console.log(error)
+                toast.error("Could'nt sync with database", { description: "Something went wrong" })
+                // Rollback if the database write fails
+                set((state) => ({ listItems: previousListItemsState }))
+
+            } finally {
+                // revert pending satus
+                set((state) => ({ listItems: state.listItems.map((item) => item.id == movedItemId ? { ...item, isPending: false } : item) }))
+            }
         }
     }
 }))
