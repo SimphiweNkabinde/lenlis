@@ -76,7 +76,7 @@ function ListItem({ item, index }: { item: ListItemState, index: number }) {
                 <Input
                     onChange={(e) => handleDebouncedUpdate({ amount: Number.parseFloat(e.target.value) })}
                     type="number"
-                    className={clsx("w-40 text-right bg-transparent", { "line-through decoration-1 text-current/60": item.checked && hasChecks })}
+                    className={clsx("w-32 text-right bg-transparent", { "line-through decoration-1 text-current/60": item.checked && hasChecks })}
                     defaultValue={item.amount || 0} />
             }
             <Button onClick={() => removeItem(item.id)} variant="ghost" className="text-current/50"><XIcon /></Button>
