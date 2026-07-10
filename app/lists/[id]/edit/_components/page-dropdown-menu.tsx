@@ -35,6 +35,7 @@ import { deleteList } from "@/lib/actions/delete-list"
 import { toast } from "sonner"
 import { AuthDialog } from "@/components/auth-dialog"
 import { VisibilitySettingsDialog } from "./visibility-settings-dialog"
+import { copyToClipboard, nativeShare } from "@/lib/utils"
 
 export function PageDropdownMenu() {
 
@@ -53,20 +54,10 @@ export function PageDropdownMenu() {
     }
 
     async function handleShare() {
-        const shareData = {
-            title: listName,
-            text: 'Lenlis - Shared Lists, Simplified',
-            url: `${window.location.origin}/lists/${listId}`
-        };
-
-        if (navigator.share)
-            // native share menu
-            navigator.share(shareData).catch(err => { });
-        else {
-            navigator.clipboard.writeText(shareData.url)
-                .then(() => toast.info("Link copied to clipboard"))
-                .catch(() => { })
-        }
+        nativeShare({ title: listName, url: `${window.location.origin}/lists/${listId}` })
+            .then(res => {
+                if (!res.success) copyToClipboard(`${window.location.origin}/lists/${listId}`)
+            })
     }
 
     function handleAddMembers() {
