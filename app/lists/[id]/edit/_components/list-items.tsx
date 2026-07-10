@@ -55,7 +55,7 @@ function ListItem({ item, index }: { item: ListItemState, index: number }) {
     }, 1000)
 
     return (
-        <li ref={setElement} data-shadow={isDragging || undefined} className="flex items-center gap-2 min-h-8" >
+        <li ref={setElement} data-shadow={isDragging || undefined} className="flex items-center gap-2" >
             {hasChecks &&
                 <Checkbox
                     onCheckedChange={(checked) => updateItem(item.id, { checked })}
