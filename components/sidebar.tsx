@@ -6,11 +6,10 @@ import {
     SheetFooter,
     SheetHeader,
     SheetTitle,
-    SheetTrigger,
 } from "@/components/ui/sheet"
-import { LibraryBigIcon, ListIcon, SquarePenIcon } from "lucide-react"
+import { BookmarkIcon, LibraryBigIcon, ListIcon, SquarePenIcon, UserRoundIcon, UsersRoundIcon } from "lucide-react"
 import Link from "next/link"
-import { ReactNode, useState } from "react"
+import { useState } from "react"
 import { Separator } from "./ui/separator"
 import { AuthDialog } from "./auth-dialog"
 
@@ -33,9 +32,22 @@ export function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (is
                     <Link href="/" className="flex items-center gap-3 font-medium">
                         <SquarePenIcon className="size-4" /><span>New List</span>
                     </Link>
-                    <Link href="/lists" className="flex items-center gap-3 font-medium">
-                        <ListIcon className="size-4" /><span>My Lists</span>
-                    </Link>
+                    <div>
+                        <Link href="/lists" className="flex items-center gap-3 font-medium mb-3">
+                            <ListIcon className="size-4" /><span>Lists</span>
+                        </Link>
+                        <div className="pl-4 text-base flex flex-col gap-2">
+                            <Link href="/lists?tab=saved" className="flex items-center gap-4 font-medium">
+                                <BookmarkIcon className="size-4" /><span>Saved Lists</span>
+                            </Link>
+                            <Link href="/lists?tab=owned" className="flex items-center gap-3 font-medium">
+                                <UserRoundIcon className="size-4" /><span>Owned Lists</span>
+                            </Link>
+                            <Link href="/lists?tab=shared" className="flex items-center gap-3 font-medium">
+                                <UsersRoundIcon className="size-4" /><span>Shared Lists</span>
+                            </Link>
+                        </div>
+                    </div>
                 </div>
                 <SheetFooter className="px-0">
                     <Separator />

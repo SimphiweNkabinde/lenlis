@@ -23,12 +23,18 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         notFound()
     }
 
+    const { count: isSaved } = await supabase.from("saved_lists")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", userData?.user?.id)
+        .eq("list_id", id)
+        .limit(1)
+
     if (data?.visibility === "private") {
         const memberIds = data.list_members.map(i => i.user_id)
         if (!userData?.user?.id || !memberIds.includes(userData?.user.id)) {
             return (
                 <div className="flex h-dvh relative flex flex-col overflow-hidden">
-                    <Header rightDropdownMenu={<PageDropdownMenu listId={data.id} />} />
+                    <Header rightDropdownMenu={<PageDropdownMenu listId={data.id} isSaved={!!isSaved} />} />
                     <div className="h-full grid grid-rows-3 grid-cols-1 items-center justify-center gap-5 text-muted-foreground">
                         <div className="flex flex-col items-center justify-center gap-5">
                             <LockIcon className="size-15" />
@@ -51,7 +57,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     return (
         <>
             <div className="flex h-dvh relative flex flex-col overflow-hidden">
-                <Header rightDropdownMenu={<PageDropdownMenu listId={data.id} />} />
+                <Header rightDropdownMenu={<PageDropdownMenu listId={data.id} isSaved={!!isSaved} />} />
                 <div className="border-b-1 pt-4 pb-2 px-5 flex flex-col gap-3">
                     <div>
                         <h1 className="text-2xl rounded-none border-0 bg-transparent focus-visible:ring-0 px-0">{name}</h1>

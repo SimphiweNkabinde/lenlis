@@ -1,6 +1,7 @@
 "use client"
 import {
-  BookmarkIcon,
+  BookmarkOffIcon,
+  BookmarkPlusIcon,
   CopyIcon,
   EllipsisVerticalIcon,
   Share2Icon,
@@ -16,8 +17,10 @@ import {
 import { cloneList } from "@/lib/actions/clone-list"
 import { toast } from "sonner"
 import { copyToClipboard, nativeShare } from "@/lib/utils"
+import { unsaveList } from "@/lib/actions/unsave-list"
+import { saveList } from "@/lib/actions/save-list"
 
-export function PageDropdownMenu({ listId }: { listId: string }) {
+export function PageDropdownMenu({ listId, isSaved }: { listId: string, isSaved: boolean }) {
 
   async function handleCopy() {
     toast.info("Copying list...")
@@ -36,13 +39,29 @@ export function PageDropdownMenu({ listId }: { listId: string }) {
       })
   }
 
+  async function handleSave() {
+    const revalidatePath = `/lists/${listId}`
+
+    if (isSaved) {
+      // unsave
+      const response = await unsaveList(listId, { revalidatePath })
+      if (!response.success) toast.error("Couldn't unsave list", { description: response.message })
+      else toast.success("Removed from Saved Lists")
+    } else {
+      // save
+      const response = await saveList(listId, { revalidatePath })
+      if (!response.success) toast.error("Couldn't save list", { description: response.message })
+      else toast.success("Saved to Saved Lists")
+    }
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger render={<Button variant="secondary" className="rounded-full size-11"><EllipsisVerticalIcon className="size-5" /></Button>} />
       <DropdownMenuContent className="min-w-45">
-        <DropdownMenuItem className="text-lg">
-          <BookmarkIcon />
-          Bookmark
+        <DropdownMenuItem onClick={() => handleSave()} className="text-lg">
+          {isSaved ? <BookmarkOffIcon /> : <BookmarkPlusIcon />}
+          {isSaved ? "Unsave" : "Save"} list
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => handleShare()} className="text-lg">
           <Share2Icon />

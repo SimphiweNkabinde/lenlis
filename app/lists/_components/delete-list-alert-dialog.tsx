@@ -23,16 +23,12 @@ export function DeleteListAlertDialog({ listId }: { listId: string }) {
     const [dialgOpen, setDialogOpen] = useState(false)
 
     async function handleDelete() {
-        try {
-            setDialogOpen(false)
-            const response = await deleteList(listId, { redirect: "/lists" })
-            if (!response.success) throw new Error(JSON.stringify(response))
-
-            toast("list deleted")
-        } catch (error) {
-            console.log(error)
+        setDialogOpen(false)
+        const response = await deleteList(listId, { redirect: "/lists" })
+        if (!response.success) {
             toast.error("Couldn't delete list", { description: "Something went wrong" })
         }
+        toast("list deleted")
     }
 
     return (
