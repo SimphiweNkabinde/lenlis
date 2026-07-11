@@ -23,7 +23,7 @@ export default async function Page() {
 
     return (
         <div className="flex h-dvh relative flex flex-col overflow-hidden">
-            <Header title="My Lists" />
+            <Header />
             <ListTabs owned={ownedLists || []} saved={savedLists?.map(i => i.lists) || []} member={memberLists || []} />
             <Toaster />
         </div>

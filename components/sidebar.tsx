@@ -7,15 +7,17 @@ import {
     SheetHeader,
     SheetTitle,
 } from "@/components/ui/sheet"
-import { BookmarkIcon, LibraryBigIcon, ListIcon, SquarePenIcon, UserRoundIcon, UsersRoundIcon } from "lucide-react"
+import { LibraryBigIcon, ListIcon, SquarePenIcon } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { Separator } from "./ui/separator"
 import { AuthDialog } from "./auth-dialog"
+import { usePathname } from "next/navigation";
 
 export function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (isOpen: boolean) => void }) {
 
     const [isAuthDialogOpen, setIsAuthDialogOpen] = useState<boolean>(false)
+    const pathname = usePathname();
 
     return (
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -26,25 +28,25 @@ export function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (is
                     </SheetTitle>
                 </SheetHeader>
                 <div className="px-6 pt-10 flex flex-col gap-7 text-lg">
-                    <Link href="/lists/library" className="flex items-center gap-3 font-medium">
+                    <Link href="/lists/library" onClick={() => pathname === "/lists/library" && setIsOpen(false)} className="flex items-center gap-3 font-medium">
                         <LibraryBigIcon className="size-4" /><span>Library</span>
                     </Link>
-                    <Link href="/" className="flex items-center gap-3 font-medium">
+                    <Link href="/" onClick={() => pathname === "/" && setIsOpen(false)} className="flex items-center gap-3 font-medium">
                         <SquarePenIcon className="size-4" /><span>New List</span>
                     </Link>
                     <div>
-                        <Link href="/lists" className="flex items-center gap-3 font-medium mb-3">
+                        <Link href="/lists" onClick={() => pathname === "/lists" && setIsOpen(false)} className="flex items-center gap-3 font-medium mb-3">
                             <ListIcon className="size-4" /><span>Lists</span>
                         </Link>
-                        <div className="pl-4 text-base flex flex-col gap-2">
-                            <Link href="/lists?tab=saved" className="flex items-center gap-4 font-medium">
-                                <BookmarkIcon className="size-4" /><span>Saved Lists</span>
+                        <div className="text-base pl-7 flex flex-col gap-2">
+                            <Link href="/lists?tab=owned" onClick={() => pathname === "/lists" && setIsOpen(false)} className="flex items-center gap-3">
+                                My lists
                             </Link>
-                            <Link href="/lists?tab=owned" className="flex items-center gap-3 font-medium">
-                                <UserRoundIcon className="size-4" /><span>Owned Lists</span>
+                            <Link href="/lists?tab=saved" onClick={() => pathname === "/lists" && setIsOpen(false)} className="flex items-center gap-4">
+                                Saved
                             </Link>
-                            <Link href="/lists?tab=shared" className="flex items-center gap-3 font-medium">
-                                <UsersRoundIcon className="size-4" /><span>Shared Lists</span>
+                            <Link href="/lists?tab=shared" onClick={() => pathname === "/lists" && setIsOpen(false)} className="flex items-center gap-3">
+                                Shared with me
                             </Link>
                         </div>
                     </div>
