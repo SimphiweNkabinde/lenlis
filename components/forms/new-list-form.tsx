@@ -1,13 +1,20 @@
 "use client"
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group"
 import { createList } from "@/lib/actions/create-list"
+import { listPairs } from "@/lib/data"
 import clsx from "clsx"
 import { ArrowUpIcon } from "lucide-react"
+import { useMemo } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { success } from "zod"
 
 export default function NewListForm() {
+
+    // Select a random pair on mount
+    const selectedPair = useMemo(() => {
+        const randomIndex = Math.floor(Math.random() * listPairs.length);
+        return listPairs[randomIndex];
+    }, []);
 
     const { handleSubmit, register, formState: { isSubmitting, dirtyFields }, getValues } = useForm<{ name: string }>({ defaultValues: { name: "" } })
 
@@ -22,7 +29,7 @@ export default function NewListForm() {
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="h-3/4 flex flex-col items-center justify-evenly gap-5">
             <p className="text-current/50 text-sm text-center">
-                From groceries to travel plans. <br /> Every list starts here.
+                From {selectedPair[0]} to {selectedPair[1]}. <br /> Every list starts here.
             </p>
             <div className="w-full px-4 flex flex-col items-center justify-evenly gap-5">
                 <h1 className="text-2xl">Start a new list</h1>
