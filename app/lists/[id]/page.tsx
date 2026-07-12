@@ -58,7 +58,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <>
             <div className="flex h-dvh relative flex flex-col overflow-hidden">
                 <Header rightDropdownMenu={<PageDropdownMenu listId={data.id} isSaved={!!isSaved} />} />
-                <div className="border-b-1 pt-4 pb-2 px-5 flex flex-col gap-3">
+                <div className="border-b-1 pt-4 pb-2 px-5 flex flex-col gap-3 h-32">
                     <div>
                         <h1 className="text-2xl rounded-none border-0 bg-transparent focus-visible:ring-0 px-0">{name}</h1>
                     </div>

@@ -27,7 +27,7 @@ export default function ListWrapper({ defaultListItems, listData }: { defaultLis
 
     return (
         <>
-            <div className="border-b-1 pt-4 pb-2 px-5 flex flex-col gap-3">
+            <div className="border-b-1 pt-4 pb-2 px-5 flex flex-col gap-3 h-33">
                 <ListName defaultName={listData.name} />
                 <div className='flex justify-between'>
                     <div className='flex items-center gap-3'>

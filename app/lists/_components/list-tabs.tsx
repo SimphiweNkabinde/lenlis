@@ -17,8 +17,8 @@ export function ListTabs({ saved, owned, member }: { saved: ListType[], owned: L
     const searchParams = useSearchParams();
 
     return (
-        <Tabs defaultValue={searchParams.get("tab") || "saved"} className="py-4 h-full">
-            <TabsList className="bg-transparent justify-between w-full px-4 overflow-x-scroll scrollbar-none mb-5 rounded-none">
+        <Tabs defaultValue={searchParams.get("tab") || "owned"} className="py-4 h-full">
+            <TabsList className="bg-transparent justify-between w-full px-4 overflow-x-scroll scrollbar-none !h-12 rounded-none">
                 <TabsTrigger className="flex-0 text-current/75 data-active:bg-muted rounded-full p-4" value="owned">My lists</TabsTrigger>
                 <TabsTrigger className="flex-0 text-current/75 data-active:bg-muted rounded-full p-4" value="saved">Saved</TabsTrigger>
                 <TabsTrigger className="flex-0 text-current/75 data-active:bg-muted rounded-full p-4" value="shared">Shared with me</TabsTrigger>
