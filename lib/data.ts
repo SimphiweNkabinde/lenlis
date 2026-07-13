@@ -13,6 +13,7 @@ export const listPairs = [
     ["book clubs", "movie nights"],
     ["event planning", "guest lists"],
     ["game nights", "shared expenses"],
+    ["dinner party prep", "group trip expenses"],
 
     // Work & Productivity
     ["project tasks", "meeting notes"],
@@ -22,6 +23,6 @@ export const listPairs = [
     ["workout routines", "healthy habits"],
     ["packing lists", "bucket lists"],
     ["gardening goals", "plant watering"],
-    ["recipe testing", "baking ideas"],
+    ["recipe ingredients", "baking ideas"],
     ["gear checklists", "camping plans"]
 ];

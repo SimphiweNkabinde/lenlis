@@ -3,7 +3,7 @@ import Header from "@/components/header"
 import ListContainerReadonly from "@/app/lists/[id]/_components/list-container-readonly"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { createClient } from "@/lib/supabase/server"
-import { DotIcon, LockIcon, SquarePenIcon } from "lucide-react"
+import { DotIcon, LockIcon, SquarePenIcon, UserRoundIcon } from "lucide-react"
 import moment from "moment"
 import { notFound } from "next/navigation"
 import { buttonVariants } from "@/components/ui/button"
@@ -65,10 +65,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     <div className="flex items-center">
                         <div className="text-current/50 text-sm flex items-center gap-1">
                             <Avatar size="sm">
-                                <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                                <AvatarFallback></AvatarFallback>
+                                <AvatarFallback><UserRoundIcon className="size-4" /></AvatarFallback>
                             </Avatar>
-                            <span className="font-medium">User</span>
                         </div>
                         <DotIcon className="text-current/50" />
                         <div className="text-current/50 text-xs flex items-center gap-1">
