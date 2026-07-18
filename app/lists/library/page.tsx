@@ -12,7 +12,7 @@ export default async function Page() {
     return (
         <>
             <ul className="flex flex-col gap-4 overflow-y-scroll py-4">
-                {data?.map(list => (
+                {data?.map((list: { id: string, name: string, createdAt: string }) => (
                     <li key={list.id} className="px-4 py-1 hover:bg-muted/50">
                         <div className="flex items-center justify-between gap-3">
                             <Link href={`/lists/${list.id}`} className="flex items-center gap-3">

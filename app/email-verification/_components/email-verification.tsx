@@ -18,7 +18,7 @@ export default function EmailVerification() {
 
     const verifyOtpValue = async (state: { success: boolean, message: string }, formData: FormData) => {
         const response = await verifyOtp(formData.get("otp") as string, email, isAnon === "true")
-        if (response.success) router.push("/")
+        if (response.success) window.location.href = "/"
         return response
     }
     const [state, formAction, isPending] = useActionState(verifyOtpValue, { success: false, message: "" })

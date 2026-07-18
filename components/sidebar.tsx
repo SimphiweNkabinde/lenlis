@@ -13,8 +13,11 @@ import { useState } from "react"
 import { Separator } from "./ui/separator"
 import { AuthDialog } from "./auth-dialog"
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/context/auth-provider";
 
 export function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (isOpen: boolean) => void }) {
+
+    const { user, loading } = useAuth()
 
     const [isAuthDialogOpen, setIsAuthDialogOpen] = useState<boolean>(false)
     const pathname = usePathname();
@@ -53,14 +56,14 @@ export function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (is
                 </div>
                 <SheetFooter className="px-0">
                     <Separator />
-                    <div className="flex flex-col gap-4 p-6">
+                    {!user && <div className="flex flex-col gap-4 p-6">
                         <div className="font-semibold">Get the most out of your lists</div>
                         <div className="text-current/50 font-medium">
                             Log in to access your lists on any device and collaborate with others.
                         </div>
                         <Button onClick={() => setIsAuthDialogOpen(true)} variant="outline" className="text-base h-10">Login</Button>
                         <AuthDialog isOpen={isAuthDialogOpen} setIsOpen={(isOpen) => setIsAuthDialogOpen(isOpen)} />
-                    </div>
+                    </div>}
                 </SheetFooter>
             </SheetContent>
         </Sheet>

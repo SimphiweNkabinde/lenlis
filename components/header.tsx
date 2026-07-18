@@ -1,6 +1,6 @@
 "use client";
 import { TextAlignStartIcon } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button, buttonVariants } from "./ui/button";
 import { AuthDialog } from "./auth-dialog";
 import { Sidebar } from "./sidebar";
 import { ReactNode, useEffect, useState } from "react";
@@ -8,6 +8,8 @@ import { useAuth } from "@/context/auth-provider";
 import { useParams, usePathname } from "next/navigation";
 import { ReadOnlyListPageDropdownMenu } from "./page-dropdown-menus/read-only-list-page-dropdown-menu";
 import { EditListPageDropdownMenu } from "@/app/lists/[id]/edit/_components/edit-list-page-dropdown-menu";
+import Link from "next/link";
+import clsx from "clsx";
 
 export default function Header() {
     const pathname = usePathname()
@@ -34,15 +36,22 @@ export default function Header() {
             <Sidebar isOpen={isSidebarOpen} setIsOpen={(isOpen) => setIsSidebarOpen(isOpen)} />
             <div className="font-semibold text-xl">lenlis</div>
             <div className="flex items-center gap-3">
+                {/* login button */}
                 {(!user && !loading) && <>
                     <Button onClick={() => setIsAuthDialogOpen(true)} size="lg" className="text-base h-11 rounded-full">Login</Button>
                     <AuthDialog isOpen={isAuthDialogOpen} setIsOpen={(isOpen) => setIsAuthDialogOpen(isOpen)} />
                 </>}
-                {user && <Button onClick={() => setIsSidebarOpen(true)} variant="secondary" className="rounded-full size-11">
-                    {user.email?.charAt(0)}
-                </Button>}
-                {loading && <Button onClick={() => setIsSidebarOpen(true)} variant="secondary" className="rounded-full size-11 animate-pulse">
-                </Button>}
+
+                {/* loading state view */}
+                {loading && <Button onClick={() => setIsSidebarOpen(true)} variant="secondary" className="rounded-full size-11 animate-pulse"></Button>}
+
+                {/* user icon*/}
+                {user &&
+                    <Link href="/settings" className={clsx(buttonVariants({ variant: "secondary" }), "rounded-full w-11 h-11 text-xl font-normal")}>
+                        {user.email?.charAt(0)}
+                    </Link>}
+
+                {/* dropdown option menu */}
                 {DropDownMenu}
             </div>
         </div>

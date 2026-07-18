@@ -1,5 +1,5 @@
 import ListContainerReadonly from "@/app/lists/[id]/_components/list-container-readonly"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { createClient } from "@/lib/supabase/server"
 import { DotIcon, LockIcon, SquarePenIcon, UserRoundIcon } from "lucide-react"
 import moment from "moment"
@@ -22,7 +22,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     }
 
     if (data?.visibility === "private") {
-        const memberIds = data.list_members.map(i => i.user_id)
+        const memberIds = data.list_members.map((i: { user_id: string }) => i.user_id)
         if (!userData?.user?.id || !memberIds.includes(userData?.user.id)) {
             return (
                 <>
