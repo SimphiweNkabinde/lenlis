@@ -1,7 +1,6 @@
 import { ListTabs } from "@/app/lists/_components/list-tabs";
 import { createClient } from "@/lib/supabase/server";
 import { Toaster } from "sonner";
-import Header from "@/components/header";
 
 export default async function Page() {
 
@@ -22,10 +21,9 @@ export default async function Page() {
     const savedLists = _savedLists as unknown as { lists: { id: string, name: string, updatedAt: string } }[]
 
     return (
-        <div className="flex h-dvh relative flex flex-col overflow-hidden">
-            <Header />
+        <>
             <ListTabs owned={ownedLists || []} saved={savedLists?.map(i => i.lists) || []} member={memberLists || []} />
             <Toaster />
-        </div>
+        </>
     )
 }

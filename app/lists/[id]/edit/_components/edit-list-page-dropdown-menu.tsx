@@ -37,7 +37,7 @@ import { AuthDialog } from "@/components/auth-dialog"
 import { VisibilitySettingsDialog } from "./visibility-settings-dialog"
 import { copyToClipboard, nativeShare } from "@/lib/utils"
 
-export function PageDropdownMenu() {
+export function EditListPageDropdownMenu() {
 
     // dialog open states
     const [isAuthDialogOpen, setIsAuthDialogOpen] = useState<boolean>(false)

@@ -8,16 +8,16 @@ export async function createList(name: string): Promise<ServerActionResponse> {
     let newListId
     try {
         const supabase = await createClient()
-        let session
+        let userId
 
         const { data: sessionData, error: sessionError } = await supabase.auth.getSession()
         if (sessionError) throw sessionError
-        session = sessionData.session
+        userId = sessionData.session?.user.id
 
-        if (session === null) {
-            const { data, error } = await supabase.auth.signInAnonymously()
-            if (error) throw error
-            session = data.session
+        if (!userId) {
+            const { data: anonSignInData, error: anonSignInError } = await supabase.auth.signInAnonymously()
+            if (anonSignInError) throw anonSignInError
+            userId = anonSignInData.user?.id
         }
 
         // create list
@@ -26,7 +26,7 @@ export async function createList(name: string): Promise<ServerActionResponse> {
 
         // set list ownership
         const { error: ownershipError, data: ownershipData } = await supabase.from("list_members")
-            .insert({ list_id: newListData.id, user_id: sessionData.session?.user.id, role: "owner" })
+            .insert({ list_id: newListData.id, user_id: userId, role: "owner" })
         if (ownershipError) throw ownershipError
 
         newListId = newListData?.id

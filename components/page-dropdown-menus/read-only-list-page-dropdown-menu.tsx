@@ -19,8 +19,30 @@ import { toast } from "sonner"
 import { copyToClipboard, nativeShare } from "@/lib/utils"
 import { unsaveList } from "@/lib/actions/unsave-list"
 import { saveList } from "@/lib/actions/save-list"
+import { useEffect, useState } from "react"
+import { createClient } from "@/lib/supabase/client"
+import { useAuth } from "@/context/auth-provider"
 
-export function PageDropdownMenu({ listId, isSaved }: { listId: string, isSaved: boolean }) {
+export function ReadOnlyListPageDropdownMenu({ listId }: { listId: string }) {
+  const { user, loading } = useAuth()
+  const [isSaved, setIsSaved] = useState<boolean>()
+
+  useEffect(() => {
+    async function getSavedStatus() {
+      if (user?.id) {
+        const supabase = await createClient()
+        const { count: isSaved } = await supabase.from("saved_lists")
+          .select("*", { count: "exact", head: true })
+          .eq("user_id", user?.id)
+          .eq("list_id", listId)
+          .limit(1)
+
+        setIsSaved(!!isSaved)
+      }
+    }
+    getSavedStatus()
+
+  }, [user])
 
   async function handleCopy() {
     toast.info("Copying list...")
@@ -46,12 +68,18 @@ export function PageDropdownMenu({ listId, isSaved }: { listId: string, isSaved:
       // unsave
       const response = await unsaveList(listId, { revalidatePath })
       if (!response.success) toast.error("Couldn't unsave list", { description: response.message })
-      else toast.success("Removed from Saved Lists")
+      else {
+        toast.success("Removed from Saved Lists")
+        setIsSaved(false)
+      }
     } else {
       // save
       const response = await saveList(listId, { revalidatePath })
       if (!response.success) toast.error("Couldn't save list", { description: response.message })
-      else toast.success("Saved to Saved Lists")
+      else {
+        toast.success("Saved to Saved Lists")
+        setIsSaved(true)
+      }
     }
   }
 

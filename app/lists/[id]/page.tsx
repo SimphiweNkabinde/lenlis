@@ -1,5 +1,3 @@
-import { PageDropdownMenu } from "@/app/lists/[id]/_components/page-dropdown-menu"
-import Header from "@/components/header"
 import ListContainerReadonly from "@/app/lists/[id]/_components/list-container-readonly"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { createClient } from "@/lib/supabase/server"
@@ -23,18 +21,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         notFound()
     }
 
-    const { count: isSaved } = await supabase.from("saved_lists")
-        .select("*", { count: "exact", head: true })
-        .eq("user_id", userData?.user?.id)
-        .eq("list_id", id)
-        .limit(1)
-
     if (data?.visibility === "private") {
         const memberIds = data.list_members.map(i => i.user_id)
         if (!userData?.user?.id || !memberIds.includes(userData?.user.id)) {
             return (
-                <div className="flex h-dvh relative flex flex-col overflow-hidden">
-                    <Header rightDropdownMenu={<PageDropdownMenu listId={data.id} isSaved={!!isSaved} />} />
+                <>
                     <div className="h-full grid grid-rows-3 grid-cols-1 items-center justify-center gap-5 text-muted-foreground">
                         <div className="flex flex-col items-center justify-center gap-5">
                             <LockIcon className="size-15" />
@@ -46,41 +37,38 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                         </div>
 
                     </div>
-                </div>)
+                </>)
         }
     }
 
     const { name, listItems, hasAmounts, hasChecks, createdAt } = data
-
-    const totalSum = listItems.map(i => i.amount || 0).reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-    const checkedSum = listItems.filter(i => i.checked).map(i => i.amount || 0).reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    const typedListItem = listItems as { amount: number, checked: boolean }[]
+    const totalSum = typedListItem.map(i => i.amount || 0).reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    const checkedSum = typedListItem.filter(i => i.checked).map(i => i.amount || 0).reduce((accumulator, currentValue) => accumulator + currentValue, 0);
     return (
         <>
-            <div className="flex h-dvh relative flex flex-col overflow-hidden">
-                <Header rightDropdownMenu={<PageDropdownMenu listId={data.id} isSaved={!!isSaved} />} />
-                <div className="border-b-1 pt-4 pb-2 px-5 flex flex-col gap-3 h-32">
-                    <div>
-                        <h1 className="text-2xl rounded-none border-0 bg-transparent focus-visible:ring-0 px-0">{name}</h1>
+            <div className="border-b-1 pt-4 pb-2 px-5 flex flex-col gap-3 h-32">
+                <div>
+                    <h1 className="text-2xl rounded-none border-0 bg-transparent focus-visible:ring-0 px-0">{name}</h1>
+                </div>
+                <div className="flex items-center">
+                    <div className="text-current/50 text-sm flex items-center gap-1">
+                        <Avatar size="sm">
+                            <AvatarFallback><UserRoundIcon className="size-4" /></AvatarFallback>
+                        </Avatar>
                     </div>
-                    <div className="flex items-center">
-                        <div className="text-current/50 text-sm flex items-center gap-1">
-                            <Avatar size="sm">
-                                <AvatarFallback><UserRoundIcon className="size-4" /></AvatarFallback>
-                            </Avatar>
-                        </div>
-                        <DotIcon className="text-current/50" />
-                        <div className="text-current/50 text-xs flex items-center gap-1">
-                            {/* <HistoryIcon className="w-4" /> */}
-                            <span>updated {moment(createdAt).fromNow()}</span>
-                        </div>
-                    </div>
-                    <div className='text-sm flex justify-between text-current/50'>
-                        <div>{hasChecks ? `${listItems.filter(i => i.checked).length}/` : ""}{listItems.length} items</div>
-                        {hasAmounts && <div>{hasChecks ? `${checkedSum} / ` : ""}{totalSum} total</div>}
+                    <DotIcon className="text-current/50" />
+                    <div className="text-current/50 text-xs flex items-center gap-1">
+                        {/* <HistoryIcon className="w-4" /> */}
+                        <span>updated {moment(createdAt).fromNow()}</span>
                     </div>
                 </div>
-                <ListContainerReadonly list={listItems || []} showAmounts={hasAmounts} showChecks={hasChecks} />
+                <div className='text-sm flex justify-between text-current/50'>
+                    <div>{hasChecks ? `${typedListItem.filter(i => i.checked).length}/` : ""}{listItems.length} items</div>
+                    {hasAmounts && <div>{hasChecks ? `${checkedSum} / ` : ""}{totalSum} total</div>}
+                </div>
             </div>
+            <ListContainerReadonly list={listItems || []} showAmounts={hasAmounts} showChecks={hasChecks} />
             <Toaster />
         </>
     )

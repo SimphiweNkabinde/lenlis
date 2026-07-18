@@ -2,7 +2,6 @@ import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { ListIcon } from "lucide-react";
 import moment from "moment";
-import Header from "@/components/header";
 
 export default async function Page() {
 
@@ -11,8 +10,7 @@ export default async function Page() {
         .select("id, name, createdAt:created_at")
 
     return (
-        <div className="flex h-dvh relative flex flex-col overflow-hidden">
-            <Header title="Library" />
+        <>
             <ul className="flex flex-col gap-4 overflow-y-scroll py-4">
                 {data?.map(list => (
                     <li key={list.id} className="px-4 py-1 hover:bg-muted/50">
@@ -32,6 +30,6 @@ export default async function Page() {
                     </li>
                 ))}
             </ul>
-        </div>
+        </>
     )
 }
