@@ -68,7 +68,7 @@ export async function signInWithEmail(email: string): Promise<ServerActionRespon
             message: 'Database Error: Failed to sign in.'
         }
     }
-    isAnonymous === true ? "&isanon=true" : ""
-    redirect(`/email-verification?email=${encodeURIComponent(validatedEmail.data)}${isAnonymous}`)
+    const isAnonParam = isAnonymous === true ? "&isanon=true" : ""
+    redirect(`/email-verification?email=${encodeURIComponent(validatedEmail.data)}${isAnonParam}`)
 
 }
