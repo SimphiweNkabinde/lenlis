@@ -25,7 +25,7 @@ export default function Header() {
             setDropDownMenu(<ReadOnlyListPageDropdownMenu listId={params.id} />)
         }
 
-    }, [])
+    }, [pathname])
 
 
     return (
