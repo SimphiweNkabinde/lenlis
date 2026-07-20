@@ -9,7 +9,7 @@ import { useParams, usePathname } from "next/navigation";
 import { ReadOnlyListPageDropdownMenu } from "./page-dropdown-menus/read-only-list-page-dropdown-menu";
 import { EditListPageDropdownMenu } from "@/app/lists/[id]/edit/_components/edit-list-page-dropdown-menu";
 import Link from "next/link";
-import clsx from "clsx";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export default function Header() {
     const pathname = usePathname()
@@ -26,7 +26,6 @@ export default function Header() {
         } else if (pathname.includes("/lists/") && typeof params.id == "string") {
             setDropDownMenu(<ReadOnlyListPageDropdownMenu listId={params.id} />)
         }
-
     }, [pathname])
 
 
@@ -47,8 +46,11 @@ export default function Header() {
 
                 {/* user icon*/}
                 {user &&
-                    <Link href="/settings" className={clsx(buttonVariants({ variant: "secondary" }), "rounded-full w-11 h-11 text-xl font-normal")}>
-                        {user.email?.charAt(0)}
+                    <Link href="/settings">
+                        <Avatar className="size-11">
+                            <AvatarImage src={user?.avatarUrl} alt="@shadcn" />
+                            <AvatarFallback className="text-xl">{user?.username?.charAt(0)}</AvatarFallback>
+                        </Avatar>
                     </Link>}
 
                 {/* dropdown option menu */}

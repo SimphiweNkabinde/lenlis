@@ -1,9 +1,14 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState } from 'react'
-import { User, Session, AuthChangeEvent } from '@supabase/supabase-js'
+import { User as user, Session, AuthChangeEvent } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/client'
 
+interface User extends user {
+    username?: string,
+    avatarUrl?: string,
+    name?: string,
+}
 type AuthContextType = {
     user: User | null
     session: Session | null
@@ -21,6 +26,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [session, setSession] = useState<Session | null>(null)
     const [loading, setLoading] = useState(true)
     const supabase = createClient()
+
+    useEffect(() => {
+        if (user?.id) {
+            supabase.from("profiles").select("name, username, avatarUrl:avatar_url").eq("id", user.id).single()
+                .then(({ data, error }) => setUser(
+                    (currVal) => currVal ? ({ ...currVal, username: data?.username, avatarUrl: data?.avatarUrl, name: data?.name }) : currVal)
+                )
+        }
+    }, [user?.id])
 
     useEffect(() => {
         // Get initial session safely on the client
