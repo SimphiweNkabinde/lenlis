@@ -16,13 +16,21 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         .in("list_members.role", ["owner", "editor"]) // current user is an owner or editor
         .single()
 
+    const members = data?.list_members || []
+    const { data: membersProfileData } = await supabase.from("profiles").select("id, username, avatarUrl:avatar_url").in("id", members.map(i => i.user_id))
+    const memberProfiles = members.map(member => ({
+        role: member.role,
+        username: membersProfileData?.find(item => item.id == member.user_id)?.username,
+        avatarUrl: membersProfileData?.find(item => item.id == member.user_id)?.avatarUrl
+    }))
+
     if (!data) {
         notFound()
     }
 
     return (
         <>
-            <ListWrapper listData={{ ...data }} defaultListItems={data.listItems} />
+            <ListWrapper listData={{ ...data }} defaultListItems={data.listItems} members={memberProfiles} />
             <Toaster position="bottom-center" />
         </>
     )

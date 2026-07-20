@@ -1,5 +1,5 @@
 import ListContainerReadonly from "@/app/lists/[id]/_components/list-container-readonly"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { createClient } from "@/lib/supabase/server"
 import { DotIcon, LockIcon, SquarePenIcon, UserRoundIcon } from "lucide-react"
 import moment from "moment"
@@ -17,7 +17,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         .order("position", { referencedTable: "list_items" })
         .eq("id", id).single()
     const ownerId = data?.listMembers.filter((i) => i.role == "owner").map(i => i.user_id) || []
-    const { data: ownerProfile } = ownerId.length ? await supabase.from("profiles").select("username").eq("id", ownerId[0]).single() : {}
+    const { data: ownerProfile } = ownerId.length ? await supabase.from("profiles").select("username, avatarUrl:avatar_url").eq("id", ownerId[0]).single() : {}
 
     const updateDates = [...data?.listItems.map((i: { updated_at: string }) => i.updated_at)!, data?.updated_at]
     const latestUpdateTimestamp = Math.max(...updateDates.map(date => Date.parse(date)));
@@ -58,7 +58,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <div className="flex items-center gap-1">
                     <div className="text-current/50 text-sm flex items-center gap-1">
                         <Avatar size="sm">
-                            <AvatarFallback><UserRoundIcon className="size-4" /></AvatarFallback>
+                            <AvatarImage src={ownerProfile?.avatarUrl} alt={`@${ownerProfile?.username}`} />
+                            <AvatarFallback>
+                                {ownerProfile ? ownerProfile?.username?.charAt(0) : <UserRoundIcon className="size-4" />}
+                            </AvatarFallback>
                         </Avatar>
                     </div>
                     {ownerProfile && <div>{ownerProfile.username}</div>}

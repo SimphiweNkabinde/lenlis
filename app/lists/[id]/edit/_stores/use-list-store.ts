@@ -13,7 +13,8 @@ type ListStoreState = {
     name: string,
     hasChecks?: boolean,
     hasAmounts?: boolean,
-    visibility: "public" | "private"
+    visibility: "public" | "private",
+    members: { username: string, avatarUrl: string, role: "owner" | "editor" | "viewer" }[]
 }
 type ReorderedListData = { newList: ListItemState[], movedItemId?: string }
 type ListStoreActions = {
@@ -31,6 +32,7 @@ export const useListStore = create<ListStore>()((set, get) => ({
     id: "",
     name: "",
     visibility: "public",
+    members: [],
     initializeStore: (storeState) => set((state) => ({ ...storeState })),
     setName: (name) => set(() => ({ name })),
     updateListAttributes: async (listAttributes) => {

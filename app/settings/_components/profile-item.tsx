@@ -14,7 +14,7 @@ export default function ProfileItem() {
             <Link href="/settings/profile">
                 <ItemMedia className="h-full">
                     <Avatar className={clsx("size-10", { "animate-pulse": loading })}>
-                        <AvatarImage src={user?.avatarUrl} alt="@shadcn" />
+                        <AvatarImage src={user?.avatarUrl} alt={`@${user?.username}`} />
                         <AvatarFallback className="text-xl">{user?.username?.charAt(0)}</AvatarFallback>
                     </Avatar>
                 </ItemMedia>
