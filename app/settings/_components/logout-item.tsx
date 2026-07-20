@@ -20,7 +20,7 @@ export default function LogoutItem() {
 
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
     return (
-        <Item onClick={() => setIsDialogOpen(true)} variant="muted" size="default" className="hover:bg-muted">
+        <Item onClick={() => setIsDialogOpen(true)} variant="muted" size="default" className="hover:bg-muted mt-5">
             <ItemMedia>
                 <LogOutIcon className="size-5 text-destructive" />
             </ItemMedia>

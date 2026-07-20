@@ -1,7 +1,7 @@
 import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { buttonVariants } from "@/components/ui/button"
 import { Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item"
-import { ArrowLeftIcon, BellIcon, ChevronRightIcon, CircleDollarSignIcon, CircleQuestionMarkIcon, FileTextIcon, GemIcon, LogOutIcon, PencilIcon, ShapesIcon, ShieldAlertIcon } from "lucide-react"
+import { ArrowLeftIcon, BellIcon, ChevronRightIcon, CircleQuestionMarkIcon, FileTextIcon, GemIcon, LogOutIcon, PencilIcon, ShapesIcon, ShieldAlertIcon } from "lucide-react"
 import Link from "next/link"
 import LogoutItem from "./_components/logout-item"
 import EmailItem from "./_components/email-item"
@@ -18,22 +18,26 @@ export default async function Page() {
         <div className="h-dvh relative flex flex-col overflow-scroll p-4">
             <div className="justify-between w-full flex items-center mb-5">
                 <Link href="/" className={clsx(buttonVariants({ variant: "secondary" }), "rounded-full w-11 h-11")}><ArrowLeftIcon strokeWidth={2} /></Link>
-                <h1 className="text-2xl">Settings</h1>
-                <div className="w-11"></div>
             </div>
-            <div className="text-center mb-10">
-                <Avatar className="size-20 mx-auto mb-5">
-                    <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                    <AvatarFallback>CN</AvatarFallback>
-                    <AvatarBadge className="!size-7">
-                        <PencilIcon />
-                    </AvatarBadge>
-                </Avatar>
-                <div className="font-semibold text-xl">{profile?.name}</div>
-                <div className="text-base text-muted-foreground">@{profile?.username}</div>
-            </div>
+            <h1 className="text-3xl mb-10 font-bold text-center">Settings</h1>
 
             <div className="flex w-full flex-col gap-3">
+                <Item variant="muted" size="default" className="mb-5" render={
+                    <Link href="/settings/profile">
+                        <ItemMedia className="h-full">
+                            <Avatar className="size-10">
+                                <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                                <AvatarFallback>CN</AvatarFallback>
+                            </Avatar>
+                        </ItemMedia>
+                        <ItemContent>
+                            <ItemTitle>{profile?.name}</ItemTitle>
+                            <ItemDescription>@{profile?.username}</ItemDescription>
+                        </ItemContent>
+                        <ItemActions>
+                            <ChevronRightIcon className="size-4" />
+                        </ItemActions>
+                    </Link>} />
                 <EmailItem />
                 <Item variant="muted" size="default" className="" render={
                     <Link href="/settings/notifications">
