@@ -13,16 +13,18 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const supabase = await createClient()
     const { data: userData } = await supabase.auth.getUser()
     const { data, error } = await supabase.from('lists')
-        .select("id, name, listItems:list_items (id, text, checked:is_checked, amount, position), hasChecks:has_checks, hasAmounts:has_amounts, visibility, list_members(user_id), createdAt:created_at")
+        .select("id, name, listItems:list_items (id, text, checked:is_checked, amount, position), hasChecks:has_checks, hasAmounts:has_amounts, visibility, listMembers:list_members(user_id, role), createdAt:created_at")
         .order("position", { referencedTable: "list_items" })
         .eq("id", id).single()
+    const ownerId = data?.listMembers.filter((i) => i.role == "owner").map(i => i.user_id) || []
+    const { data: ownerProfile } = ownerId.length ? await supabase.from("profiles").select("username").eq("id", ownerId[0]).single() : {}
 
     if (!data) {
         notFound()
     }
 
     if (data?.visibility === "private") {
-        const memberIds = data.list_members.map((i: { user_id: string }) => i.user_id)
+        const memberIds = data.listMembers.map((i: { user_id: string }) => i.user_id)
         if (!userData?.user?.id || !memberIds.includes(userData?.user.id)) {
             return (
                 <>
@@ -51,12 +53,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <div>
                     <h1 className="text-2xl rounded-none border-0 bg-transparent focus-visible:ring-0 px-0">{name}</h1>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center gap-1">
                     <div className="text-current/50 text-sm flex items-center gap-1">
                         <Avatar size="sm">
                             <AvatarFallback><UserRoundIcon className="size-4" /></AvatarFallback>
                         </Avatar>
                     </div>
+                    {ownerProfile && <div>{ownerProfile.username}</div>}
                     <DotIcon className="text-current/50" />
                     <div className="text-current/50 text-xs flex items-center gap-1">
                         {/* <HistoryIcon className="w-4" /> */}
