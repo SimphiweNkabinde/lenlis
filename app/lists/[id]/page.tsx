@@ -13,12 +13,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const supabase = await createClient()
     const { data: userData } = await supabase.auth.getUser()
     const { data, error } = await supabase.from('lists')
-        .select("id, name, listItems:list_items (id, text, checked:is_checked, amount, position), hasChecks:has_checks, hasAmounts:has_amounts, visibility, listMembers:list_members(user_id, role), createdAt:created_at")
+        .select("id, name, listItems:list_items (id, text, checked:is_checked, amount, position, updated_at), hasChecks:has_checks, hasAmounts:has_amounts, visibility, listMembers:list_members(user_id, role), updated_at")
         .order("position", { referencedTable: "list_items" })
         .eq("id", id).single()
     const ownerId = data?.listMembers.filter((i) => i.role == "owner").map(i => i.user_id) || []
     const { data: ownerProfile } = ownerId.length ? await supabase.from("profiles").select("username").eq("id", ownerId[0]).single() : {}
 
+    const updateDates = [...data?.listItems.map((i: { updated_at: string }) => i.updated_at)!, data?.updated_at]
+    const latestUpdateTimestamp = Math.max(...updateDates.map(date => Date.parse(date)));
     if (!data) {
         notFound()
     }
@@ -43,7 +45,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         }
     }
 
-    const { name, listItems, hasAmounts, hasChecks, createdAt } = data
+    const { name, listItems, hasAmounts, hasChecks } = data
     const typedListItem = listItems as { amount: number, checked: boolean }[]
     const totalSum = typedListItem.map(i => i.amount || 0).reduce((accumulator, currentValue) => accumulator + currentValue, 0);
     const checkedSum = typedListItem.filter(i => i.checked).map(i => i.amount || 0).reduce((accumulator, currentValue) => accumulator + currentValue, 0);
@@ -63,7 +65,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     <DotIcon className="text-current/50" />
                     <div className="text-current/50 text-xs flex items-center gap-1">
                         {/* <HistoryIcon className="w-4" /> */}
-                        <span>updated {moment(createdAt).fromNow()}</span>
+                        <span>updated {moment(latestUpdateTimestamp).fromNow()}</span>
                     </div>
                 </div>
                 <div className='text-sm flex justify-between text-current/50'>
