@@ -10,18 +10,9 @@ export default function Loading() {
             <div className="justify-between w-full flex items-center mb-5">
                 <Link href="/" className={clsx(buttonVariants({ variant: "secondary" }), "rounded-full w-11 h-11")}><ArrowLeftIcon strokeWidth={2} /></Link>
             </div>
-            <h1 className="text-3xl mb-10 font-bold text-center">Settings</h1>
 
             <div className="flex w-full flex-col gap-3 animate-pulse">
-                <Item variant="muted" size="default" className="h-18 mb-5">
-                    <ItemMedia className="h-full">
-                        <div className="size-5 rounded bg-muted"></div>
-                    </ItemMedia>
-                    <ItemContent>
-                        <ItemTitle className="w-25 h-4 bg-muted rounded mb-1"></ItemTitle>
-                        <ItemDescription className="w-40 h-4 bg-muted rounded"></ItemDescription>
-                    </ItemContent>
-                </Item>
+                <div className="text-muted-foreground">Account</div>
                 <Item variant="muted" size="default" className="h-18">
                     <ItemMedia className="h-full">
                         <div className="size-5 rounded bg-muted"></div>
@@ -40,6 +31,7 @@ export default function Loading() {
                         <ItemDescription className="w-40 h-4 bg-muted rounded"></ItemDescription>
                     </ItemContent>
                 </Item>
+                <div className="text-muted-foreground mt-5">Help & Support</div>
                 <Item variant="muted" size="default" className="h-18">
                     <ItemMedia className="h-full">
                         <div className="size-5 rounded bg-muted"></div>
@@ -56,6 +48,14 @@ export default function Loading() {
                     <ItemContent>
                         <ItemTitle className="w-25 h-4 bg-muted rounded mb-1"></ItemTitle>
                         <ItemDescription className="w-40 h-4 bg-muted rounded"></ItemDescription>
+                    </ItemContent>
+                </Item>
+                <Item variant="muted" size="default" className="h-18 mt-5">
+                    <ItemMedia className="h-full">
+                        <div className="size-5 rounded bg-muted"></div>
+                    </ItemMedia>
+                    <ItemContent>
+                        <ItemTitle className="w-25 h-4 bg-muted rounded mb-1"></ItemTitle>
                     </ItemContent>
                 </Item>
             </div>

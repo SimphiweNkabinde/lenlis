@@ -10,7 +10,7 @@ export default function ProfileItem() {
     const { user, loading } = useAuth()
     return (
 
-        <Item variant="muted" size="default" className="mb-5" render={
+        <Item variant="muted" size="default" render={
             <Link href="/settings/profile">
                 <ItemMedia className="h-full">
                     <Avatar className={clsx("size-10", { "animate-pulse": loading })}>
