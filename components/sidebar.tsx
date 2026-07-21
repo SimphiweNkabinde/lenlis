@@ -7,7 +7,7 @@ import {
     SheetHeader,
     SheetTitle,
 } from "@/components/ui/sheet"
-import { LibraryBigIcon, ListIcon, SquarePenIcon } from "lucide-react"
+import { ListIcon, SquarePenIcon } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { Separator } from "./ui/separator"
@@ -31,9 +31,6 @@ export function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (is
                     </SheetTitle>
                 </SheetHeader>
                 <div className="px-6 pt-10 flex flex-col gap-7 text-lg">
-                    <Link href="/lists/library" onClick={() => pathname === "/lists/library" && setIsOpen(false)} className="flex items-center gap-3 font-medium">
-                        <LibraryBigIcon className="size-4" /><span>Library</span>
-                    </Link>
                     <Link href="/" onClick={() => pathname === "/" && setIsOpen(false)} className="flex items-center gap-3 font-medium">
                         <SquarePenIcon className="size-4" /><span>New List</span>
                     </Link>

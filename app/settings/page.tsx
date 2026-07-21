@@ -1,6 +1,6 @@
 import { buttonVariants } from "@/components/ui/button"
 import { Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item"
-import { ArrowLeftIcon, BellIcon, ChevronRightIcon, CircleQuestionMarkIcon, GemIcon } from "lucide-react"
+import { ArrowLeftIcon, BellIcon, BugIcon, ChevronRightIcon, CircleQuestionMarkIcon, GemIcon, InfoIcon } from "lucide-react"
 import Link from "next/link"
 import LogoutItem from "./_components/logout-item"
 import EmailItem from "./_components/email-item"
@@ -21,37 +21,24 @@ export default async function Page() {
                 <Item variant="muted" size="default" className="" render={
                     <Link href="/settings/notifications">
                         <ItemMedia className="h-full">
-                            <GemIcon className="size-5" />
+                            <BugIcon className="size-5" />
                         </ItemMedia>
                         <ItemContent>
-                            <ItemTitle>Subscriptions</ItemTitle>
-                            <ItemDescription>Explore premium benefits</ItemDescription>
+                            <ItemTitle>Send feedback</ItemTitle>
+                            <ItemDescription>Report technical issues</ItemDescription>
                         </ItemContent>
                         <ItemActions>
                             <ChevronRightIcon className="size-4" />
                         </ItemActions>
                     </Link>} />
                 <Item variant="muted" size="default" className="" render={
-                    <Link href="/settings/notifications">
+                    <Link href="/settings/about">
                         <ItemMedia className="h-full">
-                            <BellIcon className="size-5" />
+                            <InfoIcon className="size-5" />
                         </ItemMedia>
                         <ItemContent>
-                            <ItemTitle>Notifications</ItemTitle>
-                            <ItemDescription>Email and push notifications</ItemDescription>
-                        </ItemContent>
-                        <ItemActions>
-                            <ChevronRightIcon className="size-4" />
-                        </ItemActions>
-                    </Link>} />
-                <Item variant="muted" size="default" className="" render={
-                    <Link href="/settings/notifications">
-                        <ItemMedia className="h-full">
-                            <CircleQuestionMarkIcon className="size-5" />
-                        </ItemMedia>
-                        <ItemContent>
-                            <ItemTitle>Help and feedback</ItemTitle>
-                            <ItemDescription>Contact us, issues, Terms & privacy</ItemDescription>
+                            <ItemTitle>About</ItemTitle>
+                            <ItemDescription>Terms & privacy policy</ItemDescription>
                         </ItemContent>
                         <ItemActions>
                             <ChevronRightIcon className="size-4" />
