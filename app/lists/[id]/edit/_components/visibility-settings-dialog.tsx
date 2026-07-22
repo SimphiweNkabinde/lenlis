@@ -1,52 +1,40 @@
-import { EyeIcon, GlobeIcon, UsersRoundIcon } from "lucide-react"
+import { EyeIcon, GlobeIcon } from "lucide-react"
 import {
-    Field,
     FieldContent,
     FieldDescription,
     FieldLabel,
     FieldTitle,
 } from "@/components/ui/field"
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogMedia,
-    AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Button } from "@/components/ui/button"
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@/components/ui/dialog"
+import { Field } from "@/components/ui/field"
+import { UsersRoundIcon } from "lucide-react"
 import { useListStore } from "../_stores/use-list-store"
-import { useEffect, useState } from "react"
 
 export function VisibilitySettingsDialog({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (isOpen: boolean) => void }) {
 
-    const { visibility: defaultVisibility, updateListAttributes } = useListStore(state => state)
-    const [visibility, setVisibility] = useState(defaultVisibility)
-
-    useEffect(() => {
-        setVisibility(defaultVisibility)
-    }, [defaultVisibility])
-
-    function handleSave() {
-        updateListAttributes({ visibility })
-        setIsOpen(false)
+    const { visibility, updateListAttributes } = useListStore(state => state)
+    function setVisibility(value: "public" | "private") {
+        updateListAttributes({ visibility: value })
     }
-
     return (
-        <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
-            <AlertDialogContent size="sm">
-                <AlertDialogHeader>
-                    <AlertDialogMedia className="size-10 p-2">
-                        <EyeIcon />
-                    </AlertDialogMedia>
-                    <AlertDialogTitle>Visibility Settings</AlertDialogTitle>
-                    <AlertDialogDescription>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+            <DialogContent className="sm:max-w-sm">
+                <DialogHeader>
+                    <DialogTitle className="flex items-center gap-2"> <EyeIcon className="size-4" /> Visibility Settings</DialogTitle>
+                    <DialogDescription>
                         Choose who can see your list.
-                    </AlertDialogDescription>
-                </AlertDialogHeader>
+                    </DialogDescription>
+                </DialogHeader>
                 <RadioGroup onValueChange={(value) => setVisibility(value)} value={visibility} className="max-w-sm">
                     <FieldLabel htmlFor="public-visibility" className="!rounded-lg">
                         <Field orientation="horizontal" className="!items-center !p-3">
@@ -69,12 +57,12 @@ export function VisibilitySettingsDialog({ isOpen, setIsOpen }: { isOpen: boolea
                         </Field>
                     </FieldLabel>
                 </RadioGroup>
-                <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => handleSave()}>Save</AlertDialogAction>
-                </AlertDialogFooter>
-            </AlertDialogContent>
-        </AlertDialog>
+                <DialogFooter>
+                    <DialogClose className="ml-auto" render={<Button>Done</Button>}></DialogClose>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     )
 }
+
 

@@ -68,7 +68,7 @@ export function MemberSettingsDiaolog({ isOpen, setIsOpen }: { isOpen: boolean, 
                     <div>
                         <div className="text-muted-foreground">Who has access</div>
                         {members.map(member => (
-                            <Item className="px-0">
+                            <Item key={member.username} className="px-0">
                                 <ItemMedia>
                                     <Avatar>
                                         <AvatarImage src={member.avatarUrl} />
