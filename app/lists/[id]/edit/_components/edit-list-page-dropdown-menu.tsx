@@ -36,13 +36,16 @@ import { toast } from "sonner"
 import { AuthDialog } from "@/components/auth-dialog"
 import { VisibilitySettingsDialog } from "./visibility-settings-dialog"
 import { copyToClipboard, nativeShare } from "@/lib/utils"
+import { useAuth } from "@/context/auth-provider"
+import { MemberSettingsDiaolog } from "./members-settings-dialog"
 
 export function EditListPageDropdownMenu() {
 
     // dialog open states
-    const [isAuthDialogOpen, setIsAuthDialogOpen] = useState<boolean>(false)
+    const [isMembersDialogOpen, setIsMembersDialogOpen] = useState<boolean>(false)
     const [isVisibilityDialogOpen, setIsVisibilityDialogOpen] = useState<boolean>(false)
     const [deleteDialgOpen, setDeleteDialgOpen] = useState(false)
+    const { user } = useAuth()
 
     const { id: listId, name: listName, hasChecks, hasAmounts, updateListAttributes } = useListStore(state => state)
 
@@ -60,18 +63,14 @@ export function EditListPageDropdownMenu() {
             })
     }
 
-    function handleAddMembers() {
-        setIsAuthDialogOpen(true)
-    }
-
     return (
         <>
             <DropdownMenu>
                 <DropdownMenuTrigger render={<Button variant="secondary" className="rounded-full size-11"><EllipsisVerticalIcon className="size-5" /></Button>} />
                 <DropdownMenuContent className="min-w-55">
-                    <DropdownMenuItem onClick={() => handleAddMembers()} className="text-lg">
+                    <DropdownMenuItem onClick={() => setIsMembersDialogOpen(true)} className="text-lg">
                         <UsersRoundIcon className="size-5" />
-                        Members
+                        Add members
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleShare()} className="text-lg">
                         <Share2Icon className="size-5" />
@@ -124,7 +123,10 @@ export function EditListPageDropdownMenu() {
                 </AlertDialogContent>
             </AlertDialog>
 
-            <AuthDialog isOpen={isAuthDialogOpen} setIsOpen={(isOpen) => setIsAuthDialogOpen(isOpen)} />
+            {user?.is_anonymous ?
+                <AuthDialog isOpen={isMembersDialogOpen} setIsOpen={(isOpen) => setIsMembersDialogOpen(isOpen)} /> :
+                <MemberSettingsDiaolog isOpen={isMembersDialogOpen} setIsOpen={(isOpen) => setIsMembersDialogOpen(isOpen)} />
+            }
             <VisibilitySettingsDialog isOpen={isVisibilityDialogOpen} setIsOpen={(isOpen) => setIsVisibilityDialogOpen(isOpen)} />
         </>
     )

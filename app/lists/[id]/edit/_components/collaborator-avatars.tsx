@@ -11,14 +11,17 @@ import {
 import { useState } from "react"
 import { AuthDialog } from "@/components/auth-dialog"
 import { useListStore } from "../_stores/use-list-store"
+import { MemberSettingsDiaolog } from "./members-settings-dialog"
+import { useAuth } from "@/context/auth-provider"
 
 export function CollaboratorAvatars() {
     const { members } = useListStore(state => state)
-    const [isAuthDialogOpen, setIsAuthDialogOpen] = useState<boolean>(false)
+    const { session, user } = useAuth()
+    const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
 
     return (
         <>
-            <AvatarGroup className="" onClick={() => setIsAuthDialogOpen(true)}>
+            <AvatarGroup className="" onClick={() => setIsDialogOpen(true)}>
                 {members.map(member => (
                     <Avatar size="default">
                         <AvatarImage src={member.avatarUrl} alt={`@${member.username}`} />
@@ -30,7 +33,10 @@ export function CollaboratorAvatars() {
                     <PlusIcon />
                 </AvatarGroupCount>
             </AvatarGroup>
-            <AuthDialog isOpen={isAuthDialogOpen} setIsOpen={(isOpen) => setIsAuthDialogOpen(isOpen)} />
+            {user?.is_anonymous ?
+                <AuthDialog isOpen={isDialogOpen} setIsOpen={(isOpen) => setIsDialogOpen(isOpen)} /> :
+                <MemberSettingsDiaolog isOpen={isDialogOpen} setIsOpen={(isOpen) => setIsDialogOpen(isOpen)} />
+            }
         </>
     )
 }
