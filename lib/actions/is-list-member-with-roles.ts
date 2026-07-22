@@ -25,6 +25,13 @@ export async function isListMemberWithRoles(listId: string, roles: ListMemberRol
     try {
         const supabase = await createClient()
         const { data: userData } = await supabase.auth.getUser()
+        if (!userData?.user) {
+            return {
+                success: true,
+                data: false,
+                message: 'success',
+            }
+        }
 
 
         const { count, error } = await supabase
