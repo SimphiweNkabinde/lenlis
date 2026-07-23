@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import {
     Sheet,
     SheetContent,
@@ -11,9 +11,9 @@ import { ListIcon, SquarePenIcon } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { Separator } from "./ui/separator"
-import { AuthDialog } from "./auth-dialog"
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/auth-provider";
+import { twMerge } from "tailwind-merge";
 
 export function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (isOpen: boolean) => void }) {
 
@@ -58,8 +58,7 @@ export function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (is
                         <div className="text-current/50 font-medium">
                             Log in to access your lists on any device and collaborate with others.
                         </div>
-                        <Button onClick={() => setIsAuthDialogOpen(true)} variant="outline" className="text-base h-10">Login</Button>
-                        <AuthDialog isOpen={isAuthDialogOpen} setIsOpen={(isOpen) => setIsAuthDialogOpen(isOpen)} />
+                        <Link href="/auth/login" className={twMerge(buttonVariants({ variant: "outline" }), "text-base h-10")}>Login</Link>
                     </div>}
                 </SheetFooter>
             </SheetContent>

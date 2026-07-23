@@ -9,7 +9,7 @@ const Schema = z.object({
     otp: z.string().length(6),
     email: z.email(),
 })
-export async function verifyOtp(otp: string, email: string, isAnonymous = false): Promise<ServerActionResponse> {
+export async function verifyOtp(otp: string, email: string, convertAnonToEmail = false): Promise<ServerActionResponse> {
     const validatedFields = Schema.safeParse({ otp, email })
 
     if (!validatedFields.success) {
@@ -25,7 +25,7 @@ export async function verifyOtp(otp: string, email: string, isAnonymous = false)
         const { data: { session }, error: OtpError } = await supabase.auth.verifyOtp({
             email: validatedFields.data.email,
             token: validatedFields.data.otp,
-            type: isAnonymous === true ? "email_change" : "email",
+            type: convertAnonToEmail === true ? "email_change" : "email",
         })
 
         if (OtpError) throw OtpError

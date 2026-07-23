@@ -1,7 +1,6 @@
 "use client";
 import { TextAlignStartIcon } from "lucide-react";
 import { Button, buttonVariants } from "./ui/button";
-import { AuthDialog } from "./auth-dialog";
 import { Sidebar } from "./sidebar";
 import { ReactNode, useEffect, useState } from "react";
 import { useAuth } from "@/context/auth-provider";
@@ -10,13 +9,13 @@ import { ReadOnlyListPageDropdownMenu } from "./page-dropdown-menus/read-only-li
 import { EditListPageDropdownMenu } from "@/app/lists/[id]/edit/_components/edit-list-page-dropdown-menu";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { twMerge } from "tailwind-merge";
 
 export default function Header() {
     const pathname = usePathname()
     const params = useParams()
 
     const { user, loading } = useAuth()
-    const [isAuthDialogOpen, setIsAuthDialogOpen] = useState<boolean>(false)
     const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false)
     const [DropDownMenu, setDropDownMenu] = useState<ReactNode | null>(null)
 
@@ -36,16 +35,15 @@ export default function Header() {
             <div className="font-semibold text-xl">lenlis</div>
             <div className="flex items-center gap-3">
                 {/* login button */}
-                {(!user && !loading) && <>
-                    <Button onClick={() => setIsAuthDialogOpen(true)} size="lg" className="text-base h-11 rounded-full">Login</Button>
-                    <AuthDialog isOpen={isAuthDialogOpen} setIsOpen={(isOpen) => setIsAuthDialogOpen(isOpen)} />
-                </>}
+                {((!user || user.is_anonymous) && !loading) &&
+                    <Link href="/auth/login" className={twMerge(buttonVariants({ variant: "default" }), "text-base h-11 rounded-full")}>Login</Link>
+                }
 
                 {/* loading state view */}
                 {loading && <Button onClick={() => setIsSidebarOpen(true)} variant="secondary" className="rounded-full size-11 animate-pulse"></Button>}
 
                 {/* user icon*/}
-                {user &&
+                {(user && !user.is_anonymous) &&
                     <Link href="/settings">
                         <Avatar className="size-11">
                             <AvatarImage src={user?.avatarUrl} alt="@shadcn" />

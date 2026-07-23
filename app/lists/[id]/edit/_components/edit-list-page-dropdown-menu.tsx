@@ -33,7 +33,7 @@ import { useState } from "react"
 import { useListStore } from "@/app/lists/[id]/edit/_stores/use-list-store"
 import { deleteList } from "@/lib/actions/delete-list"
 import { toast } from "sonner"
-import { AuthDialog } from "@/components/auth-dialog"
+import { LoginDialog } from "@/components/login-dialog"
 import { VisibilitySettingsDialog } from "./visibility-settings-dialog"
 import { copyToClipboard, nativeShare } from "@/lib/utils"
 import { useAuth } from "@/context/auth-provider"
@@ -124,7 +124,7 @@ export function EditListPageDropdownMenu() {
             </AlertDialog>
 
             {user?.is_anonymous ?
-                <AuthDialog isOpen={isMembersDialogOpen} setIsOpen={(isOpen) => setIsMembersDialogOpen(isOpen)} /> :
+                <LoginDialog isOpen={isMembersDialogOpen} setIsOpen={(isOpen) => setIsMembersDialogOpen(isOpen)} /> :
                 <MemberSettingsDiaolog isOpen={isMembersDialogOpen} setIsOpen={(isOpen) => setIsMembersDialogOpen(isOpen)} />
             }
             <VisibilitySettingsDialog isOpen={isVisibilityDialogOpen} setIsOpen={(isOpen) => setIsVisibilityDialogOpen(isOpen)} />
