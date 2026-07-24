@@ -5,10 +5,10 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp
 import { verifyOtp } from "@/lib/actions/verify-otp";
 import { useActionState } from "react";
 
-export default function OtpVerificationForm({ email }: { email: string, convertAnonToEmail: boolean }) {
+export default function OtpVerificationForm({ email, convertAnonToEmail }: { email: string, convertAnonToEmail: boolean }) {
 
     const verifyOtpValue = async (state: { success: boolean, message: string }, formData: FormData) => {
-        const response = await verifyOtp(formData.get("otp") as string, email)
+        const response = await verifyOtp(formData.get("otp") as string, email, convertAnonToEmail)
         if (response.success) window.location.href = "/"
         return response
     }
