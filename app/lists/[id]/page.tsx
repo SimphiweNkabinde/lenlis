@@ -73,7 +73,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 </div>
                 <div className='text-sm flex justify-between text-current/50'>
                     <div>{hasChecks ? `${typedListItem.filter(i => i.checked).length}/` : ""}{listItems.length} items</div>
-                    {hasAmounts && <div>{hasChecks ? `${checkedSum} / ` : ""}{totalSum} total</div>}
+                    {hasAmounts && <div>{hasChecks ? `${checkedSum} / ` : ""}{totalSum.toLocaleString()} total</div>}
                 </div>
             </div>
             <ListContainerReadonly list={listItems || []} showAmounts={hasAmounts} showChecks={hasChecks} />
