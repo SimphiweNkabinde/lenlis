@@ -27,8 +27,8 @@ export function CollaboratorAvatars() {
                 </Avatar>}
                 {!user?.is_anonymous && members.map(member => (
                     <Avatar size="default">
-                        <AvatarImage src={member.avatarUrl} alt={`@${member.username}`} />
-                        <AvatarFallback className="text-lg">{member.username.charAt(0)}</AvatarFallback>
+                        <AvatarImage src={member.avatarUrl} alt={`@${member.name}`} />
+                        <AvatarFallback className="text-lg">{member.name.charAt(0)}</AvatarFallback>
                     </Avatar>
                 ))}
                 <AvatarGroupCount>

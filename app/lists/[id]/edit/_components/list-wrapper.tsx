@@ -18,11 +18,11 @@ type ListDataType = {
     hasCheckd?: boolean,
     visibility: "private" | "public"
 }
-export default function ListWrapper({ defaultListItems, listData, members }: { defaultListItems: ListItem[], listData: ListDataType, members: { username: string, role: "owner" | "viewer" | "editor", avatarUrl: string }[] }) {
+export default function ListWrapper({ defaultListItems, listData, members, pendingInvites }: { defaultListItems: ListItem[], listData: ListDataType, members: { name: string, role: "owner" | "viewer" | "editor", avatarUrl: string }[], pendingInvites: { id: string, email: string, role: "editor" | "viewer" }[] }) {
 
     const initializeStore = useListStore(state => state.initializeStore)
     useEffect(() => {
-        initializeStore({ ...listData, listItems: defaultListItems, members: members })
+        initializeStore({ ...listData, listItems: defaultListItems, members: members, pendingInvites })
     }, [])
 
     return (

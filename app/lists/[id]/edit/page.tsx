@@ -18,11 +18,15 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         .eq("id", id)
         .single()
 
+    const { data: pendingInvites, error: invitesError } = await supabase.from("invites").select("id, email:invitee_email, role:invitee_role")
+        .eq("list_id", id)
+        .eq("status", "pending")
+
     const members = data?.list_members || []
-    const { data: membersProfileData } = await supabase.from("profiles").select("id, username, avatarUrl:avatar_url").in("id", members.map(i => i.user_id))
+    const { data: membersProfileData } = await supabase.from("profiles").select("id, name, avatarUrl:avatar_url").in("id", members.map(i => i.user_id))
     const memberProfiles = members.map(member => ({
         role: member.role,
-        username: membersProfileData?.find(item => item.id == member.user_id)?.username,
+        name: membersProfileData?.find(item => item.id == member.user_id)?.name,
         avatarUrl: membersProfileData?.find(item => item.id == member.user_id)?.avatarUrl
     }))
 
@@ -32,7 +36,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
     return (
         <>
-            <ListWrapper listData={{ ...data }} defaultListItems={data.listItems} members={memberProfiles} />
+            <ListWrapper listData={{ ...data }} defaultListItems={data.listItems} members={memberProfiles} pendingInvites={pendingInvites || []} />
             <Toaster position="bottom-center" />
         </>
     )

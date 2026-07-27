@@ -19,14 +19,25 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Field, FieldGroup } from "@/components/ui/field"
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
-import { SearchIcon, UsersRoundIcon } from "lucide-react"
+import { Share2Icon, UsersRoundIcon } from "lucide-react"
 import { useListStore } from "../_stores/use-list-store"
 import { Item, ItemActions, ItemContent, ItemMedia, ItemTitle } from "@/components/ui/item"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { UserSearchCombobox } from "./user-search-combobox"
+import { copyToClipboard, nativeShare } from "@/lib/utils"
+import { removeInvite } from "@/lib/actions/remove-invite"
+import { toast } from "sonner"
 
 export function MemberSettingsDiaolog({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (isOpen: boolean) => void }) {
-    const { members } = useListStore(state => state)
+    const { members, pendingInvites, id, removeInvite } = useListStore(state => state)
+
+    async function handleShare() {
+        nativeShare({ title: "Lenlis - invite link", url: `${window.location.origin}/lists/${id}/invites/accept` })
+            .then(res => {
+                if (!res.success) copyToClipboard(`${window.location.origin}/lists/${id}/invites/accept`)
+            })
+    }
+
     const roles: { label: string, value: string }[] = [{ label: "Editor", value: "editor" }, { label: "Viewer", value: "viewer" }, { label: "Owner", value: "owner" }]
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -38,45 +49,23 @@ export function MemberSettingsDiaolog({ isOpen, setIsOpen }: { isOpen: boolean, 
                     </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-5">
-                    <FieldGroup className="flex-row gap-1">
+                    <FieldGroup className="">
                         <Field>
-                            <InputGroup className="rounded-xl">
-                                <InputGroupInput placeholder="username or email" />
-                                <InputGroupAddon align="inline-start">
-                                    <SearchIcon />
-                                </InputGroupAddon>
-                            </InputGroup>
-                        </Field>
-                        <Field className="w-auto">
-                            <Select items={roles.filter(i => i.value !== "owner")} defaultValue="editor">
-                                <SelectTrigger className="w-full">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <SelectLabel>Role</SelectLabel>
-                                        {roles.filter(i => i.value !== "owner").map((item) => (
-                                            <SelectItem key={item.value} value={item.value}>
-                                                {item.label}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
+                            <UserSearchCombobox />
                         </Field>
                     </FieldGroup>
                     <div>
                         <div className="text-muted-foreground">Who has access</div>
                         {members.map(member => (
-                            <Item key={member.username} className="px-0">
+                            <Item key={member.name} className="px-0">
                                 <ItemMedia>
                                     <Avatar>
                                         <AvatarImage src={member.avatarUrl} />
-                                        <AvatarFallback>{member.username.charAt(0)}</AvatarFallback>
+                                        <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
                                     </Avatar>
                                 </ItemMedia>
                                 <ItemContent>
-                                    <ItemTitle>{member.username}</ItemTitle>
+                                    <ItemTitle>{member.name}</ItemTitle>
                                 </ItemContent>
                                 <ItemActions>
                                     <Select items={roles} disabled={member.role == "owner"} defaultValue={member.role}>
@@ -97,10 +86,25 @@ export function MemberSettingsDiaolog({ isOpen, setIsOpen }: { isOpen: boolean, 
                                 </ItemActions>
                             </Item>
                         ))}
+                        {pendingInvites.map(invitee => (
+                            <Item key={invitee.email} className="px-0 flex-nowrap">
+                                <ItemMedia>
+                                    <Avatar>
+                                        <AvatarFallback>{invitee.email.charAt(0)}</AvatarFallback>
+                                    </Avatar>
+                                </ItemMedia>
+                                <ItemContent>
+                                    <ItemTitle className="break-all text-muted-foreground">{invitee.email}</ItemTitle>
+                                </ItemContent>
+                                <ItemActions onClick={() => removeInvite(invitee.id)}>
+                                    <Button variant="destructive">remove</Button>
+                                </ItemActions>
+                            </Item>
+                        ))}
                     </div>
                 </div>
                 <DialogFooter>
-                    <DialogClose className="ml-auto" render={<Button>Done</Button>}></DialogClose>
+                    <Button onClick={() => handleShare()}><Share2Icon /> Share link</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
