@@ -5,7 +5,6 @@ import { User as user, Session, AuthChangeEvent } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/client'
 
 interface User extends user {
-    username?: string,
     avatarUrl?: string,
     name?: string,
 }
@@ -29,9 +28,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         if (user?.id) {
-            supabase.from("profiles").select("name, username, avatarUrl:avatar_url").eq("id", user.id).single()
+            supabase.from("profiles").select("name, avatarUrl:avatar_url").eq("id", user.id).single()
                 .then(({ data, error }) => setUser(
-                    (currVal) => currVal ? ({ ...currVal, username: data?.username, avatarUrl: data?.avatarUrl, name: data?.name }) : currVal)
+                    (currVal) => currVal ? ({ ...currVal, avatarUrl: data?.avatarUrl, name: data?.name }) : currVal)
                 )
         }
     }, [user?.id])

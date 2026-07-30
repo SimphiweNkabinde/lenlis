@@ -14,13 +14,13 @@ export default function ProfileItem() {
             <Link href="/settings/profile">
                 <ItemMedia className="h-full">
                     <Avatar className={clsx("size-10", { "animate-pulse": loading })}>
-                        <AvatarImage src={user?.avatarUrl} alt={`@${user?.username}`} />
-                        <AvatarFallback className="text-xl">{user?.username?.charAt(0)}</AvatarFallback>
+                        <AvatarImage src={user?.avatarUrl} alt={user?.name} />
+                        <AvatarFallback className="text-xl">{user?.name?.charAt(0)}</AvatarFallback>
                     </Avatar>
                 </ItemMedia>
                 <ItemContent>
                     <ItemTitle className={clsx({ "w-25 h-4 bg-muted rounded mb-1": loading })}>{user?.name}</ItemTitle>
-                    <ItemDescription className={clsx({ "w-40 h-4 bg-muted rounded": loading })}>{user?.username && `@${user?.username}`}</ItemDescription>
+                    <ItemDescription className={clsx({ "w-40 h-4 bg-muted rounded": loading })}>{user?.email && user?.email}</ItemDescription>
                 </ItemContent>
                 <ItemActions>
                     <ChevronRightIcon className="size-4" />

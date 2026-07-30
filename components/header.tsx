@@ -1,5 +1,5 @@
 "use client";
-import { ArrowLeftIcon, TextAlignStartIcon } from "lucide-react";
+import { ArrowLeftIcon } from "lucide-react";
 import { Button, buttonVariants } from "./ui/button";
 import { Sidebar } from "./sidebar";
 import { ReactNode, useEffect, useState } from "react";
@@ -51,7 +51,7 @@ export default function Header({ backToHomeBtn = false }: { backToHomeBtn?: bool
                     <Link href="/settings">
                         <Avatar className="size-11">
                             <AvatarImage src={user?.avatarUrl} alt="@shadcn" />
-                            <AvatarFallback className="text-xl">{user?.username?.charAt(0)}</AvatarFallback>
+                            <AvatarFallback className="text-xl">{user?.name?.charAt(0)}</AvatarFallback>
                         </Avatar>
                     </Link>}
 

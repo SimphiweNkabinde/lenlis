@@ -61,13 +61,13 @@ export async function sendInvite(listId: string, inviteeEmail: string): Promise<
         const { data: listName, error: listError } = await supabase.from("lists").select("name").eq("id", validatedData.listId).single()
         if (listError) throw listError
         // get user profile
-        const { data: profileData, error: profileError } = await supabase.from("profiles").select("username").eq("id", userData.user?.id).single()
+        const { data: profileData, error: profileError } = await supabase.from("profiles").select("name").eq("id", userData.user?.id).single()
         if (profileError) throw profileError
 
         const emailContent = InviteEmailTemplate({
             inviteUrl: `${origin}/lists/${validatedData.listId}/edit`,
             listName: listName?.name,
-            senderName: profileData?.username
+            senderName: profileData?.name
         })
 
         const { data: emailData, error: emailError } = await resend.emails.send({

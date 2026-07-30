@@ -8,13 +8,12 @@ import { notFound } from "next/navigation"
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
     const supabase = await createClient()
-    const { data: userData } = await supabase.auth.getUser()
     const { data, error } = await supabase.from('lists')
         .select("id, name, listItems:list_items (id, text, checked:is_checked, amount, position, updated_at), hasChecks:has_checks, hasAmounts:has_amounts, listMembers:list_members(user_id, role), updated_at")
         .order("position", { referencedTable: "list_items" })
         .eq("id", id).single()
     const ownerId = data?.listMembers.filter((i) => i.role == "owner").map(i => i.user_id) || []
-    const { data: ownerProfile } = ownerId.length ? await supabase.from("profiles").select("username, avatarUrl:avatar_url").eq("id", ownerId[0]).single() : {}
+    const { data: ownerProfile } = ownerId.length ? await supabase.from("profiles").select("name, avatarUrl:avatar_url").eq("id", ownerId[0]).single() : {}
 
     const updateDates = [...data?.listItems.map((i: { updated_at: string }) => i.updated_at)!, data?.updated_at]
     const latestUpdateTimestamp = Math.max(...updateDates.map(date => Date.parse(date)));
@@ -35,13 +34,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <div className="flex items-center gap-1">
                     <div className="text-current/50 text-sm flex items-center gap-1">
                         <Avatar size="sm">
-                            <AvatarImage src={ownerProfile?.avatarUrl} alt={`@${ownerProfile?.username}`} />
+                            <AvatarImage src={ownerProfile?.avatarUrl} alt={`@${ownerProfile?.name}`} />
                             <AvatarFallback>
-                                {ownerProfile ? ownerProfile?.username?.charAt(0) : <UserRoundIcon className="size-4" />}
+                                {ownerProfile ? ownerProfile?.name?.charAt(0) : <UserRoundIcon className="size-4" />}
                             </AvatarFallback>
                         </Avatar>
                     </div>
-                    {ownerProfile && <div>{ownerProfile.username}</div>}
+                    {ownerProfile && <div>{ownerProfile.name}</div>}
                     <DotIcon className="text-current/50" />
                     <div className="text-current/50 text-xs flex items-center gap-1">
                         {/* <HistoryIcon className="w-4" /> */}
