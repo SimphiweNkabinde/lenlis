@@ -31,25 +31,23 @@ export default async function Page() {
   return (
     <div className="flex h-dvh relative flex flex-col overflow-hidden">
       <Header />
-      <div className="py-4 h-full">
-        <ul className="mt-10">
-          {lists.map(list => (
-            <div key={list.id} className="px-4 py-1 hover:bg-muted/50">
-              <Link href={`/lists/${list.id}/edit`} className="flex items-center gap-3">
-                <div className="bg-muted rounded-lg size-10 flex justify-center items-center">
-                  <ListIcon className="size-4" />
+      <ul className="flex flex-col gap-3 overflow-y-scroll mt-10 pt-5 pb-10">
+        {lists.map(list => (
+          <li key={list.id} className="px-4 py-1 hover:bg-muted/50">
+            <Link href={`/lists/${list.id}/edit`} className="flex items-center gap-3">
+              <div className="bg-muted rounded-lg size-10 flex justify-center items-center">
+                <ListIcon className="size-4" />
+              </div>
+              <div className="flex flex-col">
+                <div className="text-base"> {list.name}</div>
+                <div className="flex items-center gap-1 text-current/60 text-xs">
+                  <span>created {moment(list.updatedAt).format("MMM D")}</span>
                 </div>
-                <div className="flex flex-col">
-                  <div className="text-base"> {list.name}</div>
-                  <div className="flex items-center gap-1 text-current/60 text-xs">
-                    <span>created {moment(list.updatedAt).format("MMM D")}</span>
-                  </div>
-                </div>
-              </Link>
-            </div>
-          ))}
-        </ul>
-      </div>
+              </div>
+            </Link>
+          </li>
+        ))}
+      </ul>
       <Link href="/new" className={twMerge(buttonVariants({ variant: "default" }), "rounded-full mx-auto sticky p-5 left-4/6 bottom-10 text-lg")}><SquarePenIcon className="size-5" /> New</Link>
     </div>
   )

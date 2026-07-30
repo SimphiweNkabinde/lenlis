@@ -30,9 +30,7 @@ export async function sendInvite(listId: string, inviteeEmail: string): Promise<
 
     // validate list membership
     const { data: hasPermission, success, message, errors } = await isListMemberWithRoles(validatedData.listId, ["owner"])
-    if (!success) {
-        return { success, message, errors }
-    }
+    if (!success) throw { success, message, errors }
     if (!hasPermission) {
         return {
             success: false,

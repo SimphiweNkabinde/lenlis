@@ -34,12 +34,12 @@ export function UserSearchCombobox() {
 
     return (
         <>
-            <Combobox
+            <Combobox autoComplete="off"
                 onValueChange={(value) => typeof value == "string" ? addInvite(value) : {}}
                 items={validEmail ? [validEmail] : []}
             >
                 <ComboboxInput autoFocus={false} autoComplete="off" onChange={(event) => handleChange(event.target.value)} placeholder="email">
-                    <InputGroupAddon>
+                    <InputGroupAddon autoFocus={false}>
                         <UserRoundPlusIcon />
                     </InputGroupAddon>
                 </ComboboxInput>
@@ -55,7 +55,7 @@ export function UserSearchCombobox() {
                                         </Avatar>
                                     </ItemMedia>
                                     <ItemContent>
-                                        <ItemTitle className="whitespace-nowrap">
+                                        <ItemTitle className="break-all">
                                             {email}
                                         </ItemTitle>
                                     </ItemContent>

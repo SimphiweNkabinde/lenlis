@@ -21,7 +21,7 @@ export default function NewListForm() {
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="w-full">
             <InputGroup className={clsx("h-12 rounded-full pl-2 pr-1", { "animate-pulse": isSubmitting })} >
-                <InputGroupInput disabled={isSubmitting} {...register("name", { required: true })} placeholder="Give it a name" />
+                <InputGroupInput autoFocus disabled={isSubmitting} {...register("name", { required: true })} placeholder="Give it a name" />
                 <InputGroupAddon align="inline-end">
                     <InputGroupButton type="submit" disabled={!dirtyFields.name || isSubmitting} variant="default" className="rounded-full size-9">
                         <ArrowUpIcon className="size-5" />

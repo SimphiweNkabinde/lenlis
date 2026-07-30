@@ -157,10 +157,6 @@ export const useListStore = create<ListStore>()((set, get) => ({
         }
     },
     addInvite: async (email) => {
-
-        // Create a unique temp ID for the UI
-        const tempId = `temp-${Date.now()}`
-
         // Instantly push the item into the UI state
         set((state) => ({ pendingInvites: [...state.pendingInvites, { id: "string", email, role: "editor" }] }))
 

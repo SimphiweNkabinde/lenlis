@@ -4,7 +4,7 @@ export default function LoadingPage() {
     return (
         <div className="flex h-dvh relative flex flex-col overflow-hidden">
             <Header />
-            <div className="py-4 h-full">
+            <div className="py-4 mt-10 h-full">
                 <ul className="flex flex-col gap-4 animate-pulse">
                     <li className="px-4 py-1 flex items-center gap-3">
                         <div className="bg-muted rounded-lg size-10"></div>
