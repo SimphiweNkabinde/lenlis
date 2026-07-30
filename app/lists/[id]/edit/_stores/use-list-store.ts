@@ -15,7 +15,6 @@ type ListStoreState = {
     name: string,
     hasChecks?: boolean,
     hasAmounts?: boolean,
-    visibility: "public" | "private",
     members: { name: string, avatarUrl: string, role: "owner" | "editor" | "viewer" }[]
     pendingInvites: { email: string, role: "editor" | "viewer" }[]
     userRole: "owner" | "editor" | null
@@ -27,7 +26,7 @@ type ListStoreActions = {
     addItem: (newItem: Omit<ListItem, "id" | "position">) => void
     removeItem: (itemId: string) => void
     updateItem: (id: string, updatedItem: { text?: string, checked?: boolean, amount?: number }) => void
-    updateListAttributes: (listAttributes: { hasChecks?: boolean, hasAmounts?: boolean, visibility?: "public" | "private" }) => void
+    updateListAttributes: (listAttributes: { hasChecks?: boolean, hasAmounts?: boolean }) => void
     setListItems: (setStateCb: (listItems: ListItemState[]) => ReorderedListData) => void
     addInvite: (inviteeEmail: string) => void
     removeInvite: (email: string) => void
@@ -37,7 +36,6 @@ export const useListStore = create<ListStore>()((set, get) => ({
     listItems: [],
     id: "",
     name: "",
-    visibility: "public",
     members: [],
     pendingInvites: [],
     userRole: null,
@@ -46,16 +44,13 @@ export const useListStore = create<ListStore>()((set, get) => ({
     updateListAttributes: async (listAttributes) => {
         // OPTIMISTIC UPDATE
         // Instantly update UI state
-        const previousAttributes = { hasAmounts: get().hasAmounts, hasChecks: get().hasChecks, visibility: get().visibility }
+        const previousAttributes = { hasAmounts: get().hasAmounts, hasChecks: get().hasChecks }
         set((state) => ({ ...listAttributes }))
 
         // Send update to database
         try {
             const response = await updateList(get().id, listAttributes)
             if (!response.success) throw new Error(JSON.stringify(response))
-
-            if (Object.hasOwn(listAttributes, "visibility")) toast.success("Visibility changes saved")
-
         } catch (error) {
             console.log(error)
             toast.error("Could'nt sync with database", { description: "Something went wrong" })

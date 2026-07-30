@@ -16,31 +16,6 @@ export async function cloneList(id: string): Promise<ServerActionResponse> {
         };
     }
 
-    // check that the list is public
-    try {
-        const supabase = await createClient()
-        const { error, data } = await supabase.from("lists").select("visibility").eq("id", id).single()
-        if (error) throw error
-        if (data === null) {
-            return {
-                success: false,
-                message: 'List not found',
-            };
-        }
-        if (data?.visibility !== 'public') {
-            return {
-                success: false,
-                message: 'This list is not public. It cannot be copied',
-            };
-        }
-    } catch (error) {
-        console.log(error)
-        return {
-            success: false,
-            message: 'Database Error: Failed to Copy list.',
-        }
-    }
-
     // clone list 
     try {
         const supabase = await createClient()

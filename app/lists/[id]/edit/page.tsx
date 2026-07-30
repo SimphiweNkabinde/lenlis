@@ -39,7 +39,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     }
 
     const { data, error } = await supabase.from('lists')
-        .select("id, name, hasChecks:has_checks, hasAmounts:has_amounts, visibility, listItems:list_items (id, text, checked:is_checked, amount, position), list_members(user_id, role) , createdAt:created_at")
+        .select("id, name, hasChecks:has_checks, hasAmounts:has_amounts, listItems:list_items (id, text, checked:is_checked, amount, position), list_members(user_id, role) , createdAt:created_at")
         .order("position", { referencedTable: "list_items" })
         .eq("id", id)
         .single()

@@ -3,10 +3,8 @@
 import {
     CircleCheckIcon,
     EllipsisVerticalIcon,
-    EyeIcon,
     Share2Icon,
     Trash2Icon,
-    UserRoundPlusIcon,
     UsersRoundIcon,
 } from "lucide-react"
 
@@ -34,7 +32,6 @@ import { useListStore } from "@/app/lists/[id]/edit/_stores/use-list-store"
 import { deleteList } from "@/lib/actions/delete-list"
 import { toast } from "sonner"
 import { LoginDialog } from "@/components/login-dialog"
-import { VisibilitySettingsDialog } from "./visibility-settings-dialog"
 import { copyToClipboard, nativeShare } from "@/lib/utils"
 import { useAuth } from "@/context/auth-provider"
 import { MemberSettingsDiaolog } from "./members-settings-dialog"
@@ -43,7 +40,6 @@ export function EditListPageDropdownMenu() {
 
     // dialog open states
     const [isMembersDialogOpen, setIsMembersDialogOpen] = useState<boolean>(false)
-    const [isVisibilityDialogOpen, setIsVisibilityDialogOpen] = useState<boolean>(false)
     const [deleteDialgOpen, setDeleteDialgOpen] = useState(false)
     const { user } = useAuth()
 
@@ -75,12 +71,6 @@ export function EditListPageDropdownMenu() {
                     <DropdownMenuItem onClick={() => handleShare()} className="text-lg">
                         <Share2Icon className="size-5" />
                         Share
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                        onClick={() => setIsVisibilityDialogOpen(true)}
-                        className="text-lg">
-                        <EyeIcon className="size-5" />
-                        Set visibility
                     </DropdownMenuItem>
                     <DropdownMenuItem
                         onClick={() => updateListAttributes({ hasChecks: !hasChecks })}
@@ -127,7 +117,6 @@ export function EditListPageDropdownMenu() {
                 <LoginDialog isOpen={isMembersDialogOpen} setIsOpen={(isOpen) => setIsMembersDialogOpen(isOpen)} /> :
                 <MemberSettingsDiaolog isOpen={isMembersDialogOpen} setIsOpen={(isOpen) => setIsMembersDialogOpen(isOpen)} />
             }
-            <VisibilitySettingsDialog isOpen={isVisibilityDialogOpen} setIsOpen={(isOpen) => setIsVisibilityDialogOpen(isOpen)} />
         </>
     )
 }

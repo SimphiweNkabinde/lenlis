@@ -1,18 +1,16 @@
 import ListContainerReadonly from "@/app/lists/[id]/_components/list-container-readonly"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { createClient } from "@/lib/supabase/server"
-import { DotIcon, LockIcon, SquarePenIcon, UserRoundIcon } from "lucide-react"
+import { DotIcon, UserRoundIcon } from "lucide-react"
 import moment from "moment"
 import { notFound } from "next/navigation"
-import { buttonVariants } from "@/components/ui/button"
-import Link from "next/link"
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
     const supabase = await createClient()
     const { data: userData } = await supabase.auth.getUser()
     const { data, error } = await supabase.from('lists')
-        .select("id, name, listItems:list_items (id, text, checked:is_checked, amount, position, updated_at), hasChecks:has_checks, hasAmounts:has_amounts, visibility, listMembers:list_members(user_id, role), updated_at")
+        .select("id, name, listItems:list_items (id, text, checked:is_checked, amount, position, updated_at), hasChecks:has_checks, hasAmounts:has_amounts, listMembers:list_members(user_id, role), updated_at")
         .order("position", { referencedTable: "list_items" })
         .eq("id", id).single()
     const ownerId = data?.listMembers.filter((i) => i.role == "owner").map(i => i.user_id) || []
@@ -22,26 +20,6 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const latestUpdateTimestamp = Math.max(...updateDates.map(date => Date.parse(date)));
     if (!data) {
         notFound()
-    }
-
-    if (data?.visibility === "private") {
-        const memberIds = data.listMembers.map((i: { user_id: string }) => i.user_id)
-        if (!userData?.user?.id || !memberIds.includes(userData?.user.id)) {
-            return (
-                <>
-                    <div className="h-full grid grid-rows-3 grid-cols-1 items-center justify-center gap-5 text-muted-foreground">
-                        <div className="flex flex-col items-center justify-center gap-5">
-                            <LockIcon className="size-15" />
-                            <div className="font-semibold">This is a private List</div>
-                            <p className="text-center">Only logged in list members can view it</p>
-                        </div>
-                        <div className="text-center">
-                            <Link href="/" className={buttonVariants({ variant: "default" })}><SquarePenIcon /> Create your own list</Link>
-                        </div>
-
-                    </div>
-                </>)
-        }
     }
 
     const { name, listItems, hasAmounts, hasChecks } = data

@@ -9,14 +9,12 @@ import { CollaboratorAvatars } from './collaborator-avatars'
 import ListOptionToggles from './list-option-toggles'
 import ListAggregates from './list-aggregates'
 import ShareButton from './share-button'
-import VisibilityButton from './visibility-button'
 
 type ListDataType = {
     id: string,
     name: string,
     hasAmounts?: boolean,
-    hasCheckd?: boolean,
-    visibility: "private" | "public"
+    hasCheckd?: boolean
 }
 export default function ListWrapper({ defaultListItems, listData, members, pendingInvites, userRole }: { defaultListItems: ListItem[], listData: ListDataType, members: { name: string, role: "owner" | "viewer" | "editor", avatarUrl: string }[], pendingInvites: { email: string, role: "editor" | "viewer" }[], userRole: "owner" | "editor" }) {
 
@@ -33,7 +31,6 @@ export default function ListWrapper({ defaultListItems, listData, members, pendi
                     <div className='flex items-center gap-3'>
                         <CollaboratorAvatars />
                         <ShareButton />
-                        <VisibilityButton />
                     </div>
                     <ListOptionToggles />
                 </div>

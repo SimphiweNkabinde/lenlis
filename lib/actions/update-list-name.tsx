@@ -9,11 +9,10 @@ const Schema = z.object({
     id: z.uuid(),
     name: z.string().min(1).optional(),
     hasChecks: z.boolean().optional(),
-    hasAmounts: z.boolean().optional(),
-    visibility: z.enum(["public", "private"]).optional()
+    hasAmounts: z.boolean().optional()
 })
 
-type ListProps = { name?: string, hasChecks?: boolean, hasAmounts?: boolean, visibility?: "public" | "private" }
+type ListProps = { name?: string, hasChecks?: boolean, hasAmounts?: boolean }
 export async function updateList(id: string, listProps: ListProps): Promise<ServerActionResponse> {
 
     // validate fields
@@ -35,8 +34,8 @@ export async function updateList(id: string, listProps: ListProps): Promise<Serv
     })
 
     // update list item
-    const { hasChecks: has_checks, hasAmounts: has_amounts, name, visibility } = validatedFields.data
-    const payload = { name, has_checks, has_amounts, visibility }
+    const { hasChecks: has_checks, hasAmounts: has_amounts, name } = validatedFields.data
+    const payload = { name, has_checks, has_amounts }
 
     try {
         const supabase = await createClient()
