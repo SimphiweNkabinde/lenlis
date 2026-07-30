@@ -1,23 +1,18 @@
 "use server"
-import z, { boolean } from "zod"
+import z from "zod"
 import { createClient } from "../supabase/server"
-import { ListMemberRole, ServerActionResponse } from "../definitions"
-
-const Schema = z.object({
-    listId: z.uuid(),
-    roles: z.array(z.enum(["owner", "editor", "viewer"]))
-})
+import { ServerActionResponse } from "../definitions"
 
 type ResponseType = Omit<ServerActionResponse, "data"> & { data?: boolean }
-export async function isListMemberWithRoles(listId: string, roles: ListMemberRole[]): Promise<ResponseType> {
+export async function hasPendingListInvite(listId: string): Promise<ResponseType> {
 
-    // validate fields
-    const validatedFields = Schema.safeParse({ listId, roles })
-    if (!validatedFields.success) {
+    const validateId = z.uuid().safeParse(listId)
+    // validate id
+    if (!validateId.success) {
         return {
             success: false,
             message: 'Validation Error',
-            errors: validatedFields.error.flatten().fieldErrors,
+            errors: { [validateId.error.name]: [validateId.error.message] },
         };
     }
 
@@ -25,7 +20,7 @@ export async function isListMemberWithRoles(listId: string, roles: ListMemberRol
     try {
         const supabase = await createClient()
         const { data: userData } = await supabase.auth.getUser()
-        if (!userData?.user) {
+        if (!userData?.user?.email) {
             return {
                 success: true,
                 data: false,
@@ -33,26 +28,27 @@ export async function isListMemberWithRoles(listId: string, roles: ListMemberRol
             }
         }
 
-
         const { count, error } = await supabase
-            .from("list_members")
+            .from("invites")
             .select("*", { count: "exact", head: true })
-            .eq("list_id", validatedFields.data.listId) // current list
-            .eq("user_id", userData?.user?.id) // current user is a member
-            .in("role", validatedFields.data.roles) // current user has role
+            .eq("list_id", validateId.data) // current list
+            .eq("invitee_email", userData?.user?.email)
+            .eq("status", "pending")
             .limit(1)
+
+        console.log({ listId: validateId.data, inviteeEmail: userData?.user?.email, count })
 
         if (error) throw error
 
         if (!count) {
-            // user is NOT member with roles
+            // user has no pending invite
             return {
                 success: true,
                 data: false,
                 message: 'success',
             }
         } else {
-            // user IS member with roles
+            // user has pending invite
             return {
                 success: true,
                 data: true,

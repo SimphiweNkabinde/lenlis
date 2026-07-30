@@ -1,16 +1,41 @@
 import { createClient } from "@/lib/supabase/server"
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { Toaster } from "sonner"
 import ListWrapper from "./_components/list-wrapper"
 import { isListMemberWithRoles } from "@/lib/actions/is-list-member-with-roles"
+import { hasPendingListInvite } from "@/lib/actions/has-pending-list-invite"
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
 
     const { id } = await params
     const supabase = await createClient()
 
-    const { data: hasRole } = await isListMemberWithRoles(id, ["owner", "editor"])
-    if (!hasRole) return notFound()
+    // does list exist
+    const { count: exists, error: existsError } = await supabase
+        .from("lists")
+        .select("id", { count: "exact", head: true })
+        .eq("id", id).limit(1)
+    if (!exists) {
+        notFound()
+    }
+
+    const { data: isMember } = await isListMemberWithRoles(id, ["owner", "editor"])
+
+    if (!isMember) {
+        // check if invited
+        const { data: hasInvite } = await hasPendingListInvite(id)
+        console.log({ hasInvite })
+        if (!hasInvite) redirect("/?message=You don't have access to this list. Make sure you're logged in to the right account.")
+
+        const { data: rpcData, error: rpcError } = await supabase.rpc("accept_list_invite", { input_list_id: id })
+        console.log({ rpcError, rpcData })
+        if (rpcError || !rpcData.success) {
+            console.error({ rpcError, rpcData });
+            redirect("/?message=Something went wrong. We couldn't verify your access to this list")
+        }
+        // const { success } = await acceptPendingListInvite(id)
+        // if (!success) redirect("/?message=Something went wrong. We couldn't verify your access to this list")
+    }
 
     const { data, error } = await supabase.from('lists')
         .select("id, name, hasChecks:has_checks, hasAmounts:has_amounts, visibility, listItems:list_items (id, text, checked:is_checked, amount, position), list_members(user_id, role) , createdAt:created_at")
@@ -18,7 +43,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         .eq("id", id)
         .single()
 
-    const { data: pendingInvites, error: invitesError } = await supabase.from("invites").select("id, email:invitee_email, role:invitee_role")
+    const { data: pendingInvites, error: invitesError } = await supabase.from("invites").select("email:invitee_email, role:invitee_role")
         .eq("list_id", id)
         .eq("status", "pending")
 
@@ -30,13 +55,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         avatarUrl: membersProfileData?.find(item => item.id == member.user_id)?.avatarUrl
     }))
 
-    if (!data) {
-        notFound()
-    }
-
     return (
         <>
-            <ListWrapper listData={{ ...data }} defaultListItems={data.listItems} members={memberProfiles} pendingInvites={pendingInvites || []} />
+            <ListWrapper listData={{ ...data! }} defaultListItems={data?.listItems || []} members={memberProfiles} pendingInvites={pendingInvites || []} />
             <Toaster position="bottom-center" />
         </>
     )

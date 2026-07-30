@@ -17,7 +17,7 @@ type ListStoreState = {
     hasAmounts?: boolean,
     visibility: "public" | "private",
     members: { name: string, avatarUrl: string, role: "owner" | "editor" | "viewer" }[]
-    pendingInvites: { id: string, email: string, role: "editor" | "viewer" }[]
+    pendingInvites: { email: string, role: "editor" | "viewer" }[]
 }
 type ReorderedListData = { newList: ListItemState[], movedItemId?: string }
 type ListStoreActions = {
@@ -29,7 +29,7 @@ type ListStoreActions = {
     updateListAttributes: (listAttributes: { hasChecks?: boolean, hasAmounts?: boolean, visibility?: "public" | "private" }) => void
     setListItems: (setStateCb: (listItems: ListItemState[]) => ReorderedListData) => void
     addInvite: (inviteeEmail: string) => void
-    removeInvite: (id: string) => void
+    removeInvite: (listId: string, email: string) => void
 }
 type ListStore = ListStoreState & ListStoreActions
 export const useListStore = create<ListStore>()((set, get) => ({
@@ -171,26 +171,23 @@ export const useListStore = create<ListStore>()((set, get) => ({
             const { id: listId } = get()
             const response = await sendInvite(listId, email)
             if (!response.success) throw response
-            set(state => (
-                { pendingInvites: state.pendingInvites.map(item => item.id == tempId ? { ...item, id: response.data.id } : item) }
-            ))
         } catch (error) {
             console.log(error)
             toast.error("Could'nt sync with database", { description: "Something went wrong" })
             // Rollback: Remove the item from the UI if the database write fails
-            set(state => ({ pendingInvites: state.pendingInvites.filter(item => item.id !== tempId) }))
+            set(state => ({ pendingInvites: state.pendingInvites.filter(item => item.email !== email) }))
         }
     },
-    removeInvite: async (id) => {
+    removeInvite: async (email) => {
         // OPTIMISTIC UPDATE
 
-        const itemToBeDeleted = get().pendingInvites.find(i => i.id == id)!
+        const itemToBeDeleted = get().pendingInvites.find(i => i.email == email)!
         // Instantly remove item from the UI state
-        set((state) => ({ pendingInvites: state.pendingInvites.filter(item => item.id !== id) }))
+        set((state) => ({ pendingInvites: state.pendingInvites.filter(item => item.email !== email) }))
 
         // remove item from database
         try {
-            const response = await removeInvite(id)
+            const response = await removeInvite(get().id, email)
             if (!response.success) throw new Error(JSON.stringify(response))
 
         } catch (error) {

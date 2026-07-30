@@ -1,6 +1,5 @@
 import { ListTabs } from "@/app/lists/_components/list-tabs";
 import { createClient } from "@/lib/supabase/server";
-import { Toaster } from "sonner";
 
 export default async function Page() {
 
@@ -23,7 +22,6 @@ export default async function Page() {
     return (
         <>
             <ListTabs owned={ownedLists || []} saved={savedLists?.map(i => i.lists) || []} member={memberLists || []} />
-            <Toaster />
         </>
     )
 }

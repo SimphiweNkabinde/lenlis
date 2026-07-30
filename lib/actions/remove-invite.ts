@@ -5,26 +5,27 @@ import { createClient } from "../supabase/server"
 import { isListMemberWithRoles } from "./is-list-member-with-roles"
 import { revalidatePath } from "next/cache"
 
-export async function removeInvite(inviteId: string): Promise<ServerActionResponse & { data?: { id: string } }> {
-    // validate id
-    const validatedId = z.uuid().safeParse(inviteId)
+const Schema = z.object({
+    listId: z.uuid(),
+    email: z.email()
+})
 
-    if (!validatedId.success) {
+export async function removeInvite(listId: string, email: string): Promise<ServerActionResponse & { data?: { id: string } }> {
+    // validate id
+    const validatedFields = Schema.safeParse({ listId, email })
+
+    if (!validatedFields.success) {
         return {
             success: false,
             message: 'Validation Error',
-            errors: { [validatedId.error.name]: [validatedId.error.message] },
+            errors: validatedFields.error.flatten().fieldErrors,
         };
     }
 
 
     // validate list membership
-    let listId;
     try {
-        const supabase = await createClient()
-        const { data: listData, error: listError } = await supabase.from("invites").select("listId:list_id").eq("id", inviteId).single()
-        if (listError) throw listError
-        const { data: hasPermission, success, message, errors } = await isListMemberWithRoles(listData.listId, ["owner"])
+        const { data: hasPermission, success, message, errors } = await isListMemberWithRoles(validatedFields.data.listId, ["owner"])
         if (!success) throw { success, message, errors }
         if (!hasPermission) {
             return {
@@ -32,7 +33,6 @@ export async function removeInvite(inviteId: string): Promise<ServerActionRespon
                 message: 'Permission Denied'
             }
         }
-        listId = listData.listId
     } catch (error) {
         console.log(error)
         return {
@@ -46,10 +46,8 @@ export async function removeInvite(inviteId: string): Promise<ServerActionRespon
 
         // DELETE INVITE
         const { error: deleteError, } = await supabase.from("invites")
-            .delete().eq("id", validatedId.data)
+            .delete().eq("list_id", validatedFields.data.listId).eq("invitee_email", email)
         if (deleteError) throw deleteError
-
-        revalidatePath(`/lists/${listId}/edit`)
 
         return {
             success: true,

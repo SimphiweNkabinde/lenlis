@@ -4,6 +4,8 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils";
 import { AuthProvider } from "@/context/auth-provider";
+import { Toaster } from "sonner";
+import ToastListener from "@/components/toast-listener";
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
@@ -25,7 +27,11 @@ export default function RootLayout({
     >
       <body>
         <AuthProvider>
-          <ThemeProvider>{children}</ThemeProvider>
+          <ThemeProvider>
+            <Toaster />
+            <ToastListener />
+            {children}
+          </ThemeProvider>
         </AuthProvider>
       </body>
     </html>

@@ -6,7 +6,6 @@ import moment from "moment"
 import { notFound } from "next/navigation"
 import { buttonVariants } from "@/components/ui/button"
 import Link from "next/link"
-import { Toaster } from "sonner"
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
@@ -77,7 +76,6 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 </div>
             </div>
             <ListContainerReadonly list={listItems || []} showAmounts={hasAmounts} showChecks={hasChecks} />
-            <Toaster />
         </>
     )
 }

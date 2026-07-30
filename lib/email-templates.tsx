@@ -3,7 +3,7 @@ export function InviteEmailTemplate({ senderName, listName, inviteUrl }: { sende
         <div>
             <h1>{senderName} shared a list</h1>
             <p>{senderName} has invited you to collaborrate on the following list <br />{listName}</p>
-            <a href={inviteUrl}>Accept Invite</a>
+            <a href={inviteUrl}>Join</a>
         </div>
     )
 }

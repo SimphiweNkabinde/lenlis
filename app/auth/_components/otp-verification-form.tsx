@@ -1,15 +1,24 @@
+"use client";
 import Spinner from "@/components/spinner";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldError, FieldTitle } from "@/components/ui/field";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { verifyOtp } from "@/lib/actions/verify-otp";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useActionState } from "react";
 
 export default function OtpVerificationForm({ email, convertAnonToEmail }: { email: string, convertAnonToEmail: boolean }) {
+    const router = useRouter()
+    const searchParams = useSearchParams()
+    const redirectPath = searchParams.get("next") || "/lists"
+
 
     const verifyOtpValue = async (state: { success: boolean, message: string }, formData: FormData) => {
         const response = await verifyOtp(formData.get("otp") as string, email, convertAnonToEmail)
-        if (response.success) window.location.href = "/"
+        if (response.success) {
+            router.push(redirectPath)
+            router.refresh()
+        }
         return response
     }
     const [state, formAction, isPending] = useActionState(verifyOtpValue, { success: false, message: "" })

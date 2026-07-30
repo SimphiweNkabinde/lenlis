@@ -40,8 +40,6 @@ export async function sendInvite(listId: string, inviteeEmail: string): Promise<
         }
     }
 
-    let newInvteId: string | null = null
-
     try {
         const supabase = await createClient()
         const { data: userData } = await supabase.auth.getUser()
@@ -53,9 +51,8 @@ export async function sendInvite(listId: string, inviteeEmail: string): Promise<
                 sender_id: userData.user?.id,
                 invitee_role: "editor",
                 invitee_email: validatedData.inviteeEmail,
-            }).select("id").single()
+            })
         if (error) throw error
-        newInvteId = invteData.id
 
         // PROCESS EMAIL
         const resend = new Resend(process.env.RESEND_API_KEY)
@@ -68,7 +65,7 @@ export async function sendInvite(listId: string, inviteeEmail: string): Promise<
         if (profileError) throw profileError
 
         const emailContent = InviteEmailTemplate({
-            inviteUrl: `${origin}/lists/${validatedData.listId}/invites/accept`,
+            inviteUrl: `${origin}/lists/${validatedData.listId}/edit`,
             listName: listName?.name,
             senderName: profileData?.username
         })
@@ -85,7 +82,6 @@ export async function sendInvite(listId: string, inviteeEmail: string): Promise<
         return {
             success: true,
             message: 'Invite sent to recepient',
-            data: { id: newInvteId! }
         }
 
     } catch (error) {
