@@ -13,20 +13,14 @@ export default function Loading() {
                 <h1>User Profile</h1>
                 <div className="w-11"></div>
             </div>
-            <div className="flex flex-col gap-10 animate-pulse">
-                <Avatar className="size-30 mx-auto !border-0 bg-muted">
-                </Avatar>
+            <div className="flex flex-col gap-7 animate-pulse">
+                <Avatar className="size-20 mx-auto !border-0 bg-muted" />
+                <div className="w-50 h-6 bg-muted mx-auto" />
                 <FieldGroup>
                     <Field>
                         <FieldLabel className="max-w-12 h-5 bg-muted rounded"></FieldLabel>
-                        <div className="w-full h-8 bg-muted rounded"></div>
+                        <div className="w-full h-10 bg-muted rounded-lg"></div>
                     </Field>
-                    <Field>
-                        <FieldLabel className="max-w-14 h-5 bg-muted rounded"></FieldLabel>
-                        <div className="w-full h-8 bg-muted rounded"></div>
-                        <FieldDescription className="max-w-1/2 h-5 bg-muted rounded"></FieldDescription>
-                    </Field>
-                    <div className="w-28 h-9 bg-muted rounded-full"></div>
                 </FieldGroup>
             </div>
         </>

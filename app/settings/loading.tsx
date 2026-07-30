@@ -22,15 +22,6 @@ export default function Loading() {
                         <ItemDescription className="w-40 h-4 bg-muted rounded"></ItemDescription>
                     </ItemContent>
                 </Item>
-                <Item variant="muted" size="default" className="h-18">
-                    <ItemMedia className="h-full">
-                        <div className="size-5 rounded bg-muted"></div>
-                    </ItemMedia>
-                    <ItemContent>
-                        <ItemTitle className="w-25 h-4 bg-muted rounded mb-1"></ItemTitle>
-                        <ItemDescription className="w-40 h-4 bg-muted rounded"></ItemDescription>
-                    </ItemContent>
-                </Item>
                 <div className="text-muted-foreground mt-5">Help & Support</div>
                 <Item variant="muted" size="default" className="h-18">
                     <ItemMedia className="h-full">

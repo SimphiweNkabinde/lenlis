@@ -1,8 +1,10 @@
 import Header from "@/components/header"
 import { createClient } from "@/lib/supabase/server";
-import { ListIcon } from "lucide-react";
+import { ListIcon, SquarePenIcon } from "lucide-react";
 import Link from "next/link";
 import moment from "moment";
+import { twMerge } from "tailwind-merge";
+import { buttonVariants } from "@/components/ui/button";
 
 export default async function Page() {
 
@@ -30,7 +32,7 @@ export default async function Page() {
       <Header />
       <div className="py-4 h-full">
         <ul>
-          {lists.map(list => (<>
+          {lists.map(list => (
             <div key={list.id} className="px-4 py-1 hover:bg-muted/50">
               <Link href={`/lists/${list.id}/edit`} className="flex items-center gap-3">
                 <div className="bg-muted rounded-lg size-10 flex justify-center items-center">
@@ -44,10 +46,10 @@ export default async function Page() {
                 </div>
               </Link>
             </div>
-          </>
           ))}
         </ul>
       </div>
+      <Link href="/new" className={twMerge(buttonVariants({ variant: "default" }), "rounded-full mx-auto sticky p-5 left-4/6 bottom-10 text-lg")}><SquarePenIcon className="size-5" /> New</Link>
     </div>
   )
 }

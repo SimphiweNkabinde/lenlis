@@ -22,25 +22,22 @@ export default async function Page() {
                 <div className="w-11"></div>
             </div>
             <div className="flex flex-col gap-7">
-                <Avatar className="size-30 mx-auto border-4 border-muted">
+                <Avatar className="size-20 mx-auto border-4 border-muted">
                     <AvatarImage src={profile?.avatarUrl} alt="@shadcn" />
                     <AvatarFallback className="text-3xl">{profile?.name?.charAt(0)}</AvatarFallback>
-                    <AvatarBadge className="!size-7"><CameraIcon className="!size-5" /></AvatarBadge>
                 </Avatar>
-                <div className="flex gap-2 justify-center text-muted-foreground">
+                <div className="flex gap-2 justify-center items-center text-muted-foreground">
                     <MailIcon className="size-5" />
                     <div>{userData.user.email}</div>
                 </div>
                 <Form>
-                    <FieldGroup>
-                        <Field>
-                            <FieldLabel htmlFor="fieldgroup-name">Name</FieldLabel>
-                            <Input defaultValue={profile?.name} id="fieldgroup-name" />
-                        </Field>
-                        <Field orientation="horizontal">
-                            <Button type="submit" className="" size="lg">Save profile</Button>
-                        </Field>
-                    </FieldGroup>
+                    <Field>
+                        <FieldLabel htmlFor="fieldgroup-name">Name</FieldLabel>
+                        <div className="flex gap-2">
+                            <Input defaultValue={profile?.name} className="rounded-lg h-10" id="fieldgroup-name" />
+                            <Button disabled type="submit" className="rounded-lg h-10 text-lg">save</Button>
+                        </div>
+                    </Field>
                 </Form>
             </div>
         </>

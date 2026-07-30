@@ -1,14 +1,12 @@
 import { buttonVariants } from "@/components/ui/button"
 import { Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item"
-import { ArrowLeftIcon, BellIcon, BugIcon, ChevronRightIcon, CircleQuestionMarkIcon, GemIcon, InfoIcon } from "lucide-react"
+import { ArrowLeftIcon, BugIcon, ChevronRightIcon, InfoIcon } from "lucide-react"
 import Link from "next/link"
 import LogoutItem from "./_components/logout-item"
-import EmailItem from "./_components/email-item"
 import clsx from "clsx"
 import ProfileItem from "./_components/profile-item"
 
 export default async function Page() {
-    await new Promise((resolve) => setTimeout(resolve, 5000))
     return (
         <>
             <div className="justify-between w-full flex items-center mb-5">
@@ -18,7 +16,6 @@ export default async function Page() {
             <div className="flex w-full flex-col gap-3">
                 <div className="text-muted-foreground">Account</div>
                 <ProfileItem />
-                <EmailItem />
                 <div className="text-muted-foreground mt-5">Help & Support</div>
                 <Item variant="muted" size="default" className="" render={
                     <Link href="/settings/notifications">
