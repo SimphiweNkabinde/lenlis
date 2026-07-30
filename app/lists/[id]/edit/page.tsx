@@ -24,11 +24,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     if (!isMember) {
         // check if invited
         const { data: hasInvite } = await hasPendingListInvite(id)
-        console.log({ hasInvite })
         if (!hasInvite) redirect("/?message=You don't have access to this list. Make sure you're logged in to the right account.")
 
         const { data: rpcData, error: rpcError } = await supabase.rpc("accept_list_invite", { input_list_id: id })
-        console.log({ rpcError, rpcData })
         if (rpcError || !rpcData.success) {
             console.error({ rpcError, rpcData });
             redirect("/?message=Something went wrong. We couldn't verify your access to this list")

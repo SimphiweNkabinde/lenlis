@@ -36,8 +36,6 @@ export async function hasPendingListInvite(listId: string): Promise<ResponseType
             .eq("status", "pending")
             .limit(1)
 
-        console.log({ listId: validateId.data, inviteeEmail: userData?.user?.email, count })
-
         if (error) throw error
 
         if (!count) {
