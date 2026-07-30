@@ -43,7 +43,7 @@ export function EditListPageDropdownMenu() {
     const [deleteDialgOpen, setDeleteDialgOpen] = useState(false)
     const { user } = useAuth()
 
-    const { id: listId, name: listName, hasChecks, hasAmounts, updateListAttributes } = useListStore(state => state)
+    const { id: listId, name: listName, hasChecks, hasAmounts, updateListAttributes, userRole } = useListStore(state => state)
 
     async function handleDelete() {
         setDeleteDialgOpen(false)
@@ -84,13 +84,15 @@ export function EditListPageDropdownMenu() {
                         <div className="text-[8px] border-[1.5px] border-black dark:border-white flex font-bold items-center justify-center text-black dark:text-white rounded h-4 px-0.5">1.23</div>
                         {hasAmounts ? "Hide" : "Show"} Amounts
                     </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                        onClick={() => setDeleteDialgOpen(true)}
-                        className="text-lg"
-                        variant="destructive">
-                        <Trash2Icon /> Delete
-                    </DropdownMenuItem>
+                    {userRole == "owner" && <>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                            onClick={() => setDeleteDialgOpen(true)}
+                            className="text-lg"
+                            variant="destructive">
+                            <Trash2Icon /> Delete
+                        </DropdownMenuItem>
+                    </>}
                 </DropdownMenuContent>
             </DropdownMenu>
 
