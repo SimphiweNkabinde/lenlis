@@ -47,7 +47,7 @@ export function EditListPageDropdownMenu() {
 
     async function handleDelete() {
         setDeleteDialgOpen(false)
-        const response = await deleteList(listId, { redirect: "/lists" })
+        const response = await deleteList(listId, { redirect: "/" })
         if (!response.success) toast("Could'nt delete list", { description: "Something went wrong" })
         toast("list deleted")
     }

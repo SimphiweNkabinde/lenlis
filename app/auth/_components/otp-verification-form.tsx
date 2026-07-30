@@ -10,7 +10,7 @@ import { useActionState } from "react";
 export default function OtpVerificationForm({ email, convertAnonToEmail }: { email: string, convertAnonToEmail: boolean }) {
     const router = useRouter()
     const searchParams = useSearchParams()
-    const redirectPath = searchParams.get("next") || "/lists"
+    const redirectPath = searchParams.get("next") || "/"
 
 
     const verifyOtpValue = async (state: { success: boolean, message: string }, formData: FormData) => {

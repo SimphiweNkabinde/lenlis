@@ -54,7 +54,7 @@ export async function sendInvite(listId: string, inviteeEmail: string): Promise<
 
         // PROCESS EMAIL
         const resend = new Resend(process.env.RESEND_API_KEY)
-        const origin = process.env.NODE_ENV == "production" ? "https://lenlis.online" : "http://localhost:3000"
+        const origin = process.env.NODE_ENV == "production" ? "https://lenlis.vercel.app" : "http://localhost:3000"
         // get list
         const { data: listName, error: listError } = await supabase.from("lists").select("name").eq("id", validatedData.listId).single()
         if (listError) throw listError

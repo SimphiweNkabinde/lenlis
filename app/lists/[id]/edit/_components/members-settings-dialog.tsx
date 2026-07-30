@@ -31,17 +31,15 @@ export function MemberSettingsDiaolog({ isOpen, setIsOpen }: { isOpen: boolean, 
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogContent className="sm:max-w-sm">
                 <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2"> <UsersRoundIcon className="size-4" /> Add members</DialogTitle>
+                    <DialogTitle className="flex items-center gap-2">
+                        <UsersRoundIcon className="size-4" />{userRole == "owner" ? "Add members" : "Members"}
+                    </DialogTitle>
                     <DialogDescription>
-                        Invite others to collaborate on your list.
+                        {userRole == "owner" ? "Invite others to collaborate on your list." : "List members can make changes to this list"}
                     </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-5">
-                    <FieldGroup className="">
-                        <Field>
-                            <UserSearchCombobox />
-                        </Field>
-                    </FieldGroup>
+                    {userRole == "owner" && <UserSearchCombobox />}
                     <div>
                         <div className="text-muted-foreground">Who has access</div>
                         {members.map(member => (
@@ -80,9 +78,9 @@ export function MemberSettingsDiaolog({ isOpen, setIsOpen }: { isOpen: boolean, 
                         ))}
                     </div>
                 </div>
-                <DialogFooter>
+                {userRole == "owner" && <DialogFooter>
                     <Button onClick={() => handleShare()}><Share2Icon /> Share link</Button>
-                </DialogFooter>
+                </DialogFooter>}
             </DialogContent>
         </Dialog>
     )
