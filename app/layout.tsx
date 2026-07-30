@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { AuthProvider } from "@/context/auth-provider";
 import { Toaster } from "sonner";
 import ToastListener from "@/components/toast-listener";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
@@ -29,7 +30,7 @@ export default function RootLayout({
         <AuthProvider>
           <ThemeProvider>
             <Toaster />
-            <ToastListener />
+            <Suspense><ToastListener /></Suspense>
             {children}
           </ThemeProvider>
         </AuthProvider>
