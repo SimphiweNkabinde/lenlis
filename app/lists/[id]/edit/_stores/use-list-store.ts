@@ -18,6 +18,7 @@ type ListStoreState = {
     visibility: "public" | "private",
     members: { name: string, avatarUrl: string, role: "owner" | "editor" | "viewer" }[]
     pendingInvites: { email: string, role: "editor" | "viewer" }[]
+    userRole: "owner" | "editor" | null
 }
 type ReorderedListData = { newList: ListItemState[], movedItemId?: string }
 type ListStoreActions = {
@@ -29,7 +30,7 @@ type ListStoreActions = {
     updateListAttributes: (listAttributes: { hasChecks?: boolean, hasAmounts?: boolean, visibility?: "public" | "private" }) => void
     setListItems: (setStateCb: (listItems: ListItemState[]) => ReorderedListData) => void
     addInvite: (inviteeEmail: string) => void
-    removeInvite: (listId: string, email: string) => void
+    removeInvite: (email: string) => void
 }
 type ListStore = ListStoreState & ListStoreActions
 export const useListStore = create<ListStore>()((set, get) => ({
@@ -39,6 +40,7 @@ export const useListStore = create<ListStore>()((set, get) => ({
     visibility: "public",
     members: [],
     pendingInvites: [],
+    userRole: null,
     initializeStore: (storeState) => set((state) => ({ ...storeState })),
     setName: (name) => set(() => ({ name })),
     updateListAttributes: async (listAttributes) => {

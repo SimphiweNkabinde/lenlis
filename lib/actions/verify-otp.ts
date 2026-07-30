@@ -1,6 +1,5 @@
 "use server"
 
-import { redirect } from "next/navigation";
 import z from "zod";
 import { ServerActionResponse } from "../definitions";
 import { createClient } from "../supabase/server";
@@ -29,6 +28,11 @@ export async function verifyOtp(otp: string, email: string, convertAnonToEmail =
         })
 
         if (OtpError) throw OtpError
+
+        return {
+            success: true,
+            message: "verified"
+        }
     } catch (error) {
         console.error(error)
         const { code } = error! as { code: string }
@@ -43,6 +47,4 @@ export async function verifyOtp(otp: string, email: string, convertAnonToEmail =
             message: 'Database Error: Failed to verify OTP.',
         };
     }
-
-    redirect("/")
 }

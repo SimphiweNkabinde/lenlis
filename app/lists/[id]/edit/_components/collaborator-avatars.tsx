@@ -26,7 +26,7 @@ export function CollaboratorAvatars() {
                     <AvatarFallback className="text-lg"><UserRoundIcon className="size-5" /> </AvatarFallback>
                 </Avatar>}
                 {!user?.is_anonymous && members.map(member => (
-                    <Avatar size="default">
+                    <Avatar key={member.name} size="default">
                         <AvatarImage src={member.avatarUrl} alt={`@${member.name}`} />
                         <AvatarFallback className="text-lg">{member.name.charAt(0)}</AvatarFallback>
                     </Avatar>

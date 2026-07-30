@@ -19,6 +19,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         notFound()
     }
 
+    const { data: userData, error: userErr } = await supabase.auth.getUser()
+    if (userData?.user?.is_anonymous || !userData.user?.email) {
+        redirect(`/auth/login?next=/lists/${id}/edit`)
+    }
+
     const { data: isMember } = await isListMemberWithRoles(id, ["owner", "editor"])
 
     if (!isMember) {
@@ -31,8 +36,6 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             console.error({ rpcError, rpcData });
             redirect("/?message=Something went wrong. We couldn't verify your access to this list")
         }
-        // const { success } = await acceptPendingListInvite(id)
-        // if (!success) redirect("/?message=Something went wrong. We couldn't verify your access to this list")
     }
 
     const { data, error } = await supabase.from('lists')
@@ -55,7 +58,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
     return (
         <>
-            <ListWrapper listData={{ ...data! }} defaultListItems={data?.listItems || []} members={memberProfiles} pendingInvites={pendingInvites || []} />
+            <ListWrapper userRole={data?.list_members.find(i => i.user_id == userData.user.id)?.role} listData={{ ...data! }} defaultListItems={data?.listItems || []} members={memberProfiles} pendingInvites={pendingInvites || []} />
             <Toaster position="bottom-center" />
         </>
     )

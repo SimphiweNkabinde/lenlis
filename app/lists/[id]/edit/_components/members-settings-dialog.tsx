@@ -1,23 +1,13 @@
 
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import {
     Dialog,
-    DialogClose,
     DialogContent,
     DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle
 } from "@/components/ui/dialog"
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
 import { Field, FieldGroup } from "@/components/ui/field"
 import { Share2Icon, UsersRoundIcon } from "lucide-react"
 import { useListStore } from "../_stores/use-list-store"
@@ -25,20 +15,18 @@ import { Item, ItemActions, ItemContent, ItemMedia, ItemTitle } from "@/componen
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { UserSearchCombobox } from "./user-search-combobox"
 import { copyToClipboard, nativeShare } from "@/lib/utils"
-import { removeInvite } from "@/lib/actions/remove-invite"
-import { toast } from "sonner"
+import { twMerge } from "tailwind-merge"
 
 export function MemberSettingsDiaolog({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (isOpen: boolean) => void }) {
-    const { members, pendingInvites, id, removeInvite } = useListStore(state => state)
+    const { members, pendingInvites, id, removeInvite, userRole } = useListStore(state => state)
 
     async function handleShare() {
-        nativeShare({ title: "Lenlis - invite link", url: `${window.location.origin}/lists/${id}/invites/accept` })
+        nativeShare({ title: "Lenlis - invite link", url: `${window.location.origin}/lists/${id}/edit` })
             .then(res => {
-                if (!res.success) copyToClipboard(`${window.location.origin}/lists/${id}/invites/accept`)
+                if (!res.success) copyToClipboard(`${window.location.origin}/lists/${id}/edit`)
             })
     }
 
-    const roles: { label: string, value: string }[] = [{ label: "Editor", value: "editor" }, { label: "Viewer", value: "viewer" }, { label: "Owner", value: "owner" }]
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogContent className="sm:max-w-sm">
@@ -57,7 +45,7 @@ export function MemberSettingsDiaolog({ isOpen, setIsOpen }: { isOpen: boolean, 
                     <div>
                         <div className="text-muted-foreground">Who has access</div>
                         {members.map(member => (
-                            <Item key={member.name} className="px-0">
+                            <Item key={member.name} className="px-0 py-1 flex-nowrap">
                                 <ItemMedia>
                                     <Avatar>
                                         <AvatarImage src={member.avatarUrl} />
@@ -65,24 +53,13 @@ export function MemberSettingsDiaolog({ isOpen, setIsOpen }: { isOpen: boolean, 
                                     </Avatar>
                                 </ItemMedia>
                                 <ItemContent>
-                                    <ItemTitle>{member.name}</ItemTitle>
+                                    <ItemTitle className="break-all">{member.name}</ItemTitle>
                                 </ItemContent>
                                 <ItemActions>
-                                    <Select items={roles} disabled={member.role == "owner"} defaultValue={member.role}>
-                                        <SelectTrigger className="w-full max-w-48">
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectGroup>
-                                                <SelectLabel>Role</SelectLabel>
-                                                {roles.map((item) => (
-                                                    <SelectItem key={item.value} value={item.value}>
-                                                        {item.label}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectGroup>
-                                        </SelectContent>
-                                    </Select>
+                                    <ItemActions onClick={() => { }}>
+                                        {member.role == "owner" && <div className={twMerge(buttonVariants({ variant: "ghost", size: "sm" }), "text-muted-foreground")}>owner</div>}
+                                        {(userRole == "owner" && member.role !== "owner") && <Button size="sm" variant="destructive">remove</Button>}
+                                    </ItemActions>
                                 </ItemActions>
                             </Item>
                         ))}
@@ -96,9 +73,9 @@ export function MemberSettingsDiaolog({ isOpen, setIsOpen }: { isOpen: boolean, 
                                 <ItemContent>
                                     <ItemTitle className="break-all text-muted-foreground">{invitee.email}</ItemTitle>
                                 </ItemContent>
-                                <ItemActions onClick={() => removeInvite(invitee.id)}>
-                                    <Button variant="destructive">remove</Button>
-                                </ItemActions>
+                                {userRole !== "owner" && <ItemActions onClick={() => removeInvite(invitee.email)}>
+                                    <Button size="sm" variant="destructive">remove</Button>
+                                </ItemActions>}
                             </Item>
                         ))}
                     </div>
