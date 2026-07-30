@@ -32,7 +32,7 @@ export default async function Page() {
     <div className="flex h-dvh relative flex flex-col overflow-hidden">
       <Header />
       <div className="py-4 h-full">
-        <ul>
+        <ul className="mt-10">
           {lists.map(list => (
             <div key={list.id} className="px-4 py-1 hover:bg-muted/50">
               <Link href={`/lists/${list.id}/edit`} className="flex items-center gap-3">
