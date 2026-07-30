@@ -18,8 +18,6 @@ import { twMerge } from "tailwind-merge";
 export function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (isOpen: boolean) => void }) {
 
     const { user, loading } = useAuth()
-
-    const [isAuthDialogOpen, setIsAuthDialogOpen] = useState<boolean>(false)
     const pathname = usePathname();
 
     return (
@@ -34,22 +32,6 @@ export function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (is
                     <Link href="/new" onClick={() => pathname === "/" && setIsOpen(false)} className="flex items-center gap-3 font-medium">
                         <SquarePenIcon className="size-4" /><span>New List</span>
                     </Link>
-                    <div>
-                        <Link href="/lists" onClick={() => pathname === "/lists" && setIsOpen(false)} className="flex items-center gap-3 font-medium mb-3">
-                            <ListIcon className="size-4" /><span>Lists</span>
-                        </Link>
-                        <div className="text-base pl-7 flex flex-col gap-2">
-                            <Link href="/lists?tab=owned" onClick={() => pathname === "/lists" && setIsOpen(false)} className="flex items-center gap-3">
-                                My lists
-                            </Link>
-                            <Link href="/lists?tab=saved" onClick={() => pathname === "/lists" && setIsOpen(false)} className="flex items-center gap-4">
-                                Saved
-                            </Link>
-                            <Link href="/lists?tab=shared" onClick={() => pathname === "/lists" && setIsOpen(false)} className="flex items-center gap-3">
-                                Shared with me
-                            </Link>
-                        </div>
-                    </div>
                 </div>
                 <SheetFooter className="px-0">
                     <Separator />

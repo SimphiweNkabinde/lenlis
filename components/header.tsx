@@ -1,5 +1,5 @@
 "use client";
-import { TextAlignStartIcon } from "lucide-react";
+import { ArrowLeftIcon, TextAlignStartIcon } from "lucide-react";
 import { Button, buttonVariants } from "./ui/button";
 import { Sidebar } from "./sidebar";
 import { ReactNode, useEffect, useState } from "react";
@@ -11,7 +11,7 @@ import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { twMerge } from "tailwind-merge";
 
-export default function Header() {
+export default function Header({ backToHomeBtn = false }: { backToHomeBtn?: boolean }) {
     const pathname = usePathname()
     const params = useParams()
 
@@ -30,7 +30,11 @@ export default function Header() {
 
     return (
         <div className="pb-2 justify-between w-full flex items-center py-4 px-4">
-            <Button onClick={() => setIsSidebarOpen(true)} variant="secondary" className="rounded-full size-11"><TextAlignStartIcon strokeWidth={2} /></Button>
+            {backToHomeBtn ?
+                <Link href="/" className={twMerge(buttonVariants({ variant: "secondary" }), "rounded-full size-11")}>
+                    <ArrowLeftIcon strokeWidth={2} />
+                </Link> : <div />}
+            {/* <Button variant="secondary" className="rounded-full size-11"><TextAlignStartIcon strokeWidth={2} /></Button> */}
             <Sidebar isOpen={isSidebarOpen} setIsOpen={(isOpen) => setIsSidebarOpen(isOpen)} />
             <div className="font-semibold text-xl">lenlis</div>
             <div className="flex items-center gap-3">

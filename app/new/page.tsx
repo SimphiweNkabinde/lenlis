@@ -8,7 +8,7 @@ export default function Page() {
   const selectedPair = listPairs[randomIndex];
   return (
     <div className="h-dvh relative flex flex-col overflow-hidden">
-      <Header />
+      <Header backToHomeBtn />
       <div className="px-4 flex flex-col justify-around h-5/8">
         <p className="text-muted-foreground text-sm text-center">
           From {selectedPair[0]} to {selectedPair[1]}. <br /> Every list starts here.
