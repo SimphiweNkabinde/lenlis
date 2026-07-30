@@ -25,6 +25,7 @@ export default async function Page() {
           <div className="text-current/50 text-lg text-center">All your lists will appear here</div>
         </div>
       </div>
+      <Link href="/new" className={twMerge(buttonVariants({ variant: "default" }), "rounded-full mx-auto sticky p-5 left-4/6 bottom-10 text-lg")}><SquarePenIcon className="size-5" /> New</Link>
     </div>
   )
   return (
