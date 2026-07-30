@@ -52,7 +52,7 @@ export function ReadOnlyListPageDropdownMenu({ listId }: { listId: string }) {
   }
 
   async function handleShare() {
-    nativeShare({ title: "lenslis - Shared lists, simplified", url: `${window.location.origin}/lists/${listId}` })
+    nativeShare({ title: "lenlis - Shared lists, simplified", url: `${window.location.origin}/lists/${listId}` })
       .then(res => {
         if (!res.success) {
           copyToClipboard(`${window.location.origin}/lists/${listId}`)

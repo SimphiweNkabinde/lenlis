@@ -1,28 +1,53 @@
 import Header from "@/components/header"
 import { createClient } from "@/lib/supabase/server";
-import { ListTabs } from "./lists/_components/list-tabs";
+import { ListIcon } from "lucide-react";
+import Link from "next/link";
+import moment from "moment";
 
 export default async function Page() {
 
   const supabase = await createClient()
   const { data: userData } = await supabase.auth.getUser()
-  const { data: ownedLists, error: ownedListsError } = await supabase.from("lists")
+
+  const { data: lists, error: listsError } = await supabase.from("lists")
     .select("id, name, list_members!inner (user_id, role), updatedAt:updated_at")
     .eq("list_members.user_id", userData?.user?.id)
-    .eq("list_members.role", "owner")
-  const { data: memberLists, error: memberListsError } = await supabase.from("lists")
-    .select("id, name, updatedAt:updated_at")
-    .eq("list_members.user_id", userData?.user?.id)
-    .neq("list_members.role", "owner")
-  const { data: _savedLists } = await supabase.from("saved_lists")
-    .select("lists (id, name, updatedAt:updated_at)")
-    .eq("user_id", userData?.user?.id)
 
-  const savedLists = _savedLists as unknown as { lists: { id: string, name: string, updatedAt: string } }[]
+  if (!lists || !lists.length) return (
+    <div className="flex h-dvh relative flex flex-col overflow-hidden">
+      <Header />
+      <div className="h-full flex flex-col items-center justify-center">
+        <div className="flex flex-col items-center gap-2">
+          <ListIcon className="bg-muted rounded-xl p-2 size-8" />
+          <div className="font-semibold text-xl">No lists yet</div>
+          <div className="text-current/50 text-lg text-center">All your lists will appear here</div>
+        </div>
+      </div>
+    </div>
+  )
   return (
     <div className="flex h-dvh relative flex flex-col overflow-hidden">
       <Header />
-      <ListTabs owned={ownedLists || []} saved={savedLists?.map(i => i.lists) || []} member={memberLists || []} />
+      <div className="py-4 h-full">
+        <ul>
+          {lists.map(list => (<>
+            <div key={list.id} className="px-4 py-1 hover:bg-muted/50">
+              <Link href={`/lists/${list.id}/edit`} className="flex items-center gap-3">
+                <div className="bg-muted rounded-lg size-10 flex justify-center items-center">
+                  <ListIcon className="size-4" />
+                </div>
+                <div className="flex flex-col">
+                  <div className="text-base"> {list.name}</div>
+                  <div className="flex items-center gap-1 text-current/60 text-xs">
+                    <span>created {moment(list.updatedAt).format("MMM D")}</span>
+                  </div>
+                </div>
+              </Link>
+            </div>
+          </>
+          ))}
+        </ul>
+      </div>
     </div>
   )
 }
