@@ -1,23 +1,28 @@
-import NewListForm from "@/components/forms/new-list-form"
 import Header from "@/components/header"
-import { listPairs } from "@/lib/data";
+import { createClient } from "@/lib/supabase/server";
+import { ListTabs } from "./lists/_components/list-tabs";
 
-export default function Page() {
+export default async function Page() {
 
-  const randomIndex = Math.floor(Math.random() * listPairs.length);
-  const selectedPair = listPairs[randomIndex];
+  const supabase = await createClient()
+  const { data: userData } = await supabase.auth.getUser()
+  const { data: ownedLists, error: ownedListsError } = await supabase.from("lists")
+    .select("id, name, list_members!inner (user_id, role), updatedAt:updated_at")
+    .eq("list_members.user_id", userData?.user?.id)
+    .eq("list_members.role", "owner")
+  const { data: memberLists, error: memberListsError } = await supabase.from("lists")
+    .select("id, name, updatedAt:updated_at")
+    .eq("list_members.user_id", userData?.user?.id)
+    .neq("list_members.role", "owner")
+  const { data: _savedLists } = await supabase.from("saved_lists")
+    .select("lists (id, name, updatedAt:updated_at)")
+    .eq("user_id", userData?.user?.id)
+
+  const savedLists = _savedLists as unknown as { lists: { id: string, name: string, updatedAt: string } }[]
   return (
-    <div className="h-dvh relative flex flex-col overflow-hidden">
+    <div className="flex h-dvh relative flex flex-col overflow-hidden">
       <Header />
-      <div className="px-4 flex flex-col justify-around h-5/8">
-        <p className="text-muted-foreground text-sm text-center">
-          From {selectedPair[0]} to {selectedPair[1]}. <br /> Every list starts here.
-        </p>
-        <div>
-          <h1 className="text-2xl text-center mb-5">Start a new list</h1>
-          <NewListForm />
-        </div>
-      </div>
+      <ListTabs owned={ownedLists || []} saved={savedLists?.map(i => i.lists) || []} member={memberLists || []} />
     </div>
   )
 }

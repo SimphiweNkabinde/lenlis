@@ -31,7 +31,7 @@ export function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (is
                     </SheetTitle>
                 </SheetHeader>
                 <div className="px-6 pt-10 flex flex-col gap-7 text-lg">
-                    <Link href="/" onClick={() => pathname === "/" && setIsOpen(false)} className="flex items-center gap-3 font-medium">
+                    <Link href="/new" onClick={() => pathname === "/" && setIsOpen(false)} className="flex items-center gap-3 font-medium">
                         <SquarePenIcon className="size-4" /><span>New List</span>
                     </Link>
                     <div>
