@@ -18,7 +18,7 @@ export default async function Page() {
                 <ProfileItem />
                 <div className="text-muted-foreground mt-5">Help & Support</div>
                 <Item variant="muted" size="default" className="" render={
-                    <Link href="/settings/notifications">
+                    <Link href="/settings/feedback">
                         <ItemMedia className="h-full">
                             <BugIcon className="size-5" />
                         </ItemMedia>

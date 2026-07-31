@@ -8,7 +8,7 @@ export default function ListContainerReadonly({ list = [], showAmounts, showChec
     if (!list.length) return <EmptyList />
 
     return (
-        <ul className="list-outside px-5 flex flex-col gap-3 overflow-y-scroll pt-5 pb-10">
+        <ul className="list-outside px-5 flex flex-col gap-3 overflow-y-scroll pt-5 pb-10 lg:w-full lg:max-w-3xl lg:mx-auto">
             {list.map(item => (
                 <li key={item.id}>
                     <ListItem item={item} showAmounts={showAmounts} showChecks={showChecks} />
@@ -46,7 +46,7 @@ function ListItem({ item, showAmounts, showChecks }: { item: ListItemType, showC
 
 function EmptyList() {
     return (
-        <div className="flex items-center justify-center h-full px-4">
+        <div className="flex items-center justify-center h-full px-4 lg:w-full lg:max-w-3xllg:mx-auto">
             <div className="text-current/75 flex gap-2 items-center">
                 <ListIcon className="w-4" /><span>Start a new list</span>
             </div>

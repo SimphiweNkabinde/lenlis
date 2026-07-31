@@ -59,7 +59,6 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     return (
         <>
             <ListWrapper userRole={data?.list_members.find(i => i.user_id == userData.user.id)?.role} listData={{ ...data! }} defaultListItems={data?.listItems || []} members={memberProfiles} pendingInvites={pendingInvites || []} />
-            <Toaster position="bottom-center" />
         </>
     )
 }

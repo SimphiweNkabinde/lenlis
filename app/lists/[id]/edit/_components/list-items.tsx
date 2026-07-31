@@ -24,7 +24,7 @@ export default function ListItems() {
                 setListItems((items) => ({ newList: move(items, event), movedItemId: String(event.operation.source?.id) }))
             }}
         >
-            <ul className="h-full pl-4 pr-4 flex flex-col gap-3 overflow-y-scroll pt-5 pb-10">
+            <ul className="h-full pl-4 pr-4 flex flex-col gap-3 overflow-y-scroll pt-5 pb-10 lg:w-3xl lg:max-w-4/6 lg:mx-auto">
                 {list.map((item, index) => (
                     <ListItem key={item.id} item={item} index={index} />
                 ))}
@@ -35,7 +35,7 @@ export default function ListItems() {
 
 function EmptyList() {
     return (
-        <div className="flex items-center justify-center h-full px-4">
+        <div className="flex items-center justify-center h-full px-4 lg:w-full lg:max-w-3xl lg:mx-auto">
             <div className="text-current/75 flex gap-2 items-center">
                 <ListIcon className="w-4" /><span>Empty list</span>
             </div>

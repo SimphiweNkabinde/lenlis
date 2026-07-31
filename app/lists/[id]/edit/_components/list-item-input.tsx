@@ -17,7 +17,7 @@ export default function ListItemInput() {
     }
 
     return (
-        <div className={"sticky bottom-5 w-full px-4"}>
+        <div className={"sticky bottom-5 w-full px-4 lg:w-full lg:max-w-3xl lg:mx-auto"}>
             <InputGroup className="h-12 rounded-full pl-2 pr-1 bg-muted" >
                 <InputGroupInput value={value} onChange={(event) => setValue(event.target.value)} placeholder={isEmpty ? "Add the first item" : "Add an item"} />
                 <InputGroupAddon align="inline-end">

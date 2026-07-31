@@ -33,7 +33,7 @@ export default function ListName({ defaultName }: { defaultName: string }) {
             <Input
                 defaultValue={defaultName}
                 onChange={(e) => handleUpdate(e.target.value)}
-                className={clsx("text-2xl rounded-none border-0 bg-transparent focus-visible:ring-0 px-0", { "animate-pulse": isPending })}
+                className={clsx("!text-2xl rounded-none border-0 bg-transparent focus-visible:ring-0 px-0", { "animate-pulse": isPending })}
                 placeholder="New list" />
         </>
     )

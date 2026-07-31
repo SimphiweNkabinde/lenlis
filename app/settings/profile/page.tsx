@@ -18,7 +18,7 @@ export default async function Page() {
         <>
             <div className="justify-between w-full flex items-center mb-5">
                 <Link href="/settings" className={clsx(buttonVariants({ variant: "secondary" }), "rounded-full w-11 h-11")}><ArrowLeftIcon strokeWidth={2} /></Link>
-                <h1>User Profile</h1>
+                <h1>Profile</h1>
                 <div className="w-11"></div>
             </div>
             <div className="flex flex-col gap-7">

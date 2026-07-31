@@ -11,14 +11,14 @@ export default function ListOptionToggles() {
             <Button
                 onClick={() => updateListAttributes({ hasChecks: !hasChecks })}
                 variant={hasChecks ? "default" : "outline"}
-                className="rounded size-6">
-                <CheckIcon />
+                className="rounded size-6 lg:rounded-lg lg:w-auto lg:h-auto lg:py-1">
+                <CheckIcon /> <span className="hidden lg:block text-xs">Checkboxes</span>
             </Button>
             <Button
                 onClick={() => updateListAttributes({ hasAmounts: !hasAmounts })}
                 variant={hasAmounts ? "default" : "outline"}
-                className="rounded size-6 text-[9px]">
-                1.23
+                className="rounded size-6 lg:rounded-lg lg:w-auto lg:h-auto lg:py-1">
+                <span className="text-[9px]">1.23</span> <span className="hidden lg:block text-xs">Amounts</span>
             </Button>
         </div>
     )

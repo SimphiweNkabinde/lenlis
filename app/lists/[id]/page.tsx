@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server"
 import { DotIcon, UserRoundIcon } from "lucide-react"
 import moment from "moment"
 import { notFound } from "next/navigation"
+import { ListActionButtonsReadOnly } from "./_components/list-action-buttons"
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
@@ -27,9 +28,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const checkedSum = typedListItem.filter(i => i.checked).map(i => i.amount || 0).reduce((accumulator, currentValue) => accumulator + currentValue, 0);
     return (
         <>
-            <div className="border-b-1 pt-4 pb-2 px-5 flex flex-col gap-3 h-32">
-                <div>
+            <div className="border-b-1 pt-4 pb-2 px-5 flex flex-col gap-3 h-32 lg:px-[10%] lg:px-[15%]">
+                <div className="lg:flex justify-between">
                     <h1 className="text-2xl rounded-none border-0 bg-transparent focus-visible:ring-0 px-0">{name}</h1>
+                    <div className="hidden lg:block"><ListActionButtonsReadOnly listId={id} /></div>
                 </div>
                 <div className="flex items-center gap-1">
                     <div className="text-current/50 text-sm flex items-center gap-1">
@@ -43,7 +45,6 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     {ownerProfile && <div>{ownerProfile.name}</div>}
                     <DotIcon className="text-current/50" />
                     <div className="text-current/50 text-xs flex items-center gap-1">
-                        {/* <HistoryIcon className="w-4" /> */}
                         <span>updated {moment(latestUpdateTimestamp).fromNow()}</span>
                     </div>
                 </div>

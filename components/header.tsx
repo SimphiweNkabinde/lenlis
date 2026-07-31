@@ -28,9 +28,9 @@ export default function Header({ backToHomeBtn = false }: { backToHomeBtn?: bool
 
 
     return (
-        <div className="pb-2 justify-between w-full flex items-center py-4 px-4">
+        <div className="pb-2 justify-between w-full flex items-center py-4 px-4 h-17">
             {backToHomeBtn ?
-                <Link href="/" className={twMerge(buttonVariants({ variant: "secondary" }), "rounded-full size-11")}>
+                <Link href="/" className={twMerge(buttonVariants({ variant: "secondary" }), "rounded-full size-11 lg:hidden")}>
                     <ArrowLeftIcon strokeWidth={2} />
                 </Link> : <div />}
             <div className="flex items-center justify-center gap-2">
@@ -56,7 +56,7 @@ export default function Header({ backToHomeBtn = false }: { backToHomeBtn?: bool
                     </Link>}
 
                 {/* dropdown option menu */}
-                {DropDownMenu}
+                <div className="lg:hidden">{DropDownMenu}</div>
             </div>
         </div>
     )
