@@ -22,7 +22,7 @@ export function ReadOnlyListPageDropdownMenu({ listId }: { listId: string }) {
     toast.info("Copying list...")
     const response = await cloneList(listId)
     if (!response.success) toast.error("Couldn't copy list", { description: response.message })
-    else toast.success(response.message, { description: "Go to My Lists to see your copied list" })
+    else toast.success(response.message)
   }
 
   async function handleShare() {
