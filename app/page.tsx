@@ -18,7 +18,7 @@ export default async function Page() {
   if (!lists || !lists.length) return (
     <div className="flex h-dvh relative flex flex-col overflow-hidden">
       <Header />
-      <div className="h-full flex flex-col items-center justify-center">
+      <div className="h-full flex flex-col items-center justify-center flex-1">
         <div className="flex flex-col items-center gap-2">
           <ListIcon className="bg-muted rounded-xl p-2 size-8" />
           <div className="font-semibold text-xl">No lists yet</div>
@@ -31,7 +31,7 @@ export default async function Page() {
   return (
     <div className="flex h-dvh relative flex flex-col overflow-hidden">
       <Header />
-      <ul className="flex flex-col gap-3 overflow-y-scroll mt-10 pt-5 pb-10">
+      <ul className="flex flex-col gap-3 overflow-y-scroll mt-10 pt-5 pb-10 flex-1">
         {lists.map(list => (
           <li key={list.id} className="px-4 py-1 hover:bg-muted/50">
             <Link href={`/lists/${list.id}/edit`} className="flex items-center gap-3">
