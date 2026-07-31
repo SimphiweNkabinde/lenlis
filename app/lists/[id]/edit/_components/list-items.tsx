@@ -24,7 +24,7 @@ export default function ListItems() {
                 setListItems((items) => ({ newList: move(items, event), movedItemId: String(event.operation.source?.id) }))
             }}
         >
-            <ul className="h-full pl-4 pr-4 flex flex-col gap-3 overflow-y-scroll pt-5 pb-10 lg:w-3xl lg:max-w-4/6 lg:mx-auto">
+            <ul className="h-full pl-4 pr-4 flex flex-col gap-3 overflow-y-scroll pt-5 pb-20 lg:w-3xl lg:max-w-4/6 lg:mx-auto">
                 {list.map((item, index) => (
                     <ListItem key={item.id} item={item} index={index} />
                 ))}
