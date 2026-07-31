@@ -24,10 +24,10 @@ export default function OtpVerificationForm({ email, convertAnonToEmail }: { ema
     const [state, formAction, isPending] = useActionState(verifyOtpValue, { success: false, message: "" })
     return (
         <form action={formAction} className="flex flex-col gap-4 items-center justify-center">
-            <Field className="justify-center text-center">
+            <Field className="justify-center text-center [&_[data-input-otp-container=true]]:justify-center">
                 <FieldTitle className="text-lg block">Check your inbox</FieldTitle>
-                <FieldDescription className="text-center"><span className="text-white">Enter the verification code</span> we just sent to {email}.</FieldDescription>
-                <InputOTP maxLength={6} minLength={6} name="otp" className="" required autoFocus>
+                <FieldDescription className="text-center"><span className="dark:text-white text-black">Enter the verification code</span> we just sent to {email}.</FieldDescription>
+                <InputOTP maxLength={6} minLength={6} name="otp" className="data-[input-otp-container=true]:*:border-red-500 data-[input-otp-container=true]:*:border" required autoFocus>
                     <InputOTPGroup className="*:data-[slot=input-otp-slot]:h-9 *:data-[slot=input-otp-slot]:w-9 *:data-[slot=input-otp-slot]:text-lg">
                         <InputOTPSlot index={0} />
                         <InputOTPSlot index={1} />
