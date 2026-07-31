@@ -1,13 +1,11 @@
-import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { buttonVariants } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
-import { Form } from "@base-ui/react";
 import clsx from "clsx";
-import { ArrowLeftIcon, CameraIcon, MailIcon } from "lucide-react";
+import { ArrowLeftIcon, MailIcon } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import NameForm from "./_components/name-form";
 
 export default async function Page() {
     const supabase = await createClient()
@@ -30,15 +28,7 @@ export default async function Page() {
                     <MailIcon className="size-5" />
                     <div>{userData.user.email}</div>
                 </div>
-                <Form>
-                    <Field>
-                        <FieldLabel htmlFor="fieldgroup-name">Name</FieldLabel>
-                        <div className="flex gap-2">
-                            <Input defaultValue={profile?.name} className="rounded-lg h-10" id="fieldgroup-name" />
-                            <Button disabled type="submit" className="rounded-lg h-10 text-lg">save</Button>
-                        </div>
-                    </Field>
-                </Form>
+                <NameForm defaultName={profile?.name} />
             </div>
         </>
     )
