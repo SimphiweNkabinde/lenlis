@@ -71,7 +71,7 @@ export function MemberSettingsDiaolog({ isOpen, setIsOpen }: { isOpen: boolean, 
                                 <ItemContent>
                                     <ItemTitle className="break-all text-muted-foreground">{invitee.email}</ItemTitle>
                                 </ItemContent>
-                                {userRole !== "owner" && <ItemActions onClick={() => removeInvite(invitee.email)}>
+                                {userRole == "owner" && <ItemActions onClick={() => removeInvite(invitee.email)}>
                                     <Button size="sm" variant="destructive">remove</Button>
                                 </ItemActions>}
                             </Item>
