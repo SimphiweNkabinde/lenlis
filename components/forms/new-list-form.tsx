@@ -2,9 +2,10 @@
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group"
 import { createList } from "@/lib/actions/create-list"
 import clsx from "clsx"
-import { ArrowUpIcon } from "lucide-react"
+import { ArrowUpIcon, LoaderCircleIcon } from "lucide-react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
+import Spinner from "../spinner"
 
 export default function NewListForm() {
 
@@ -24,7 +25,7 @@ export default function NewListForm() {
                 <InputGroupInput autoFocus disabled={isSubmitting} {...register("name", { required: true })} placeholder="Give it a name" />
                 <InputGroupAddon align="inline-end">
                     <InputGroupButton type="submit" disabled={!dirtyFields.name || isSubmitting} variant="default" className="rounded-full size-9">
-                        <ArrowUpIcon className="size-5" />
+                        {(isSubmitting) ? <Spinner /> : <ArrowUpIcon className="size-5" />}
                     </InputGroupButton>
                 </InputGroupAddon>
             </InputGroup>
