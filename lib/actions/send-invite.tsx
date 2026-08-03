@@ -69,7 +69,7 @@ export async function sendInvite(listId: string, inviteeEmail: string): Promise<
         })
 
         const { data: emailData, error: emailError } = await resend.emails.send({
-            from: 'Lenlis <notifications@lenlis.online>',
+            from: `Lenlis <${process.env.RESEND_FROM_EMAIL}>`,
             to: [validatedData.inviteeEmail],
             subject: `${profileData?.name} invited you to the list ${listName?.name}`,
             react: emailContent
