@@ -26,10 +26,10 @@ export function ReadOnlyListPageDropdownMenu({ listId }: { listId: string }) {
   }
 
   async function handleShare() {
-    nativeShare({ title: "lenlis - Shared lists, simplified", url: `${window.location.origin}/lists/${listId}` })
+    nativeShare({ title: "lenlis - Shared lists, simplified", url: `${process.env.NEXT_PUBLIC_ORIGIN}/lists/${listId}` })
       .then(res => {
         if (!res.success) {
-          copyToClipboard(`${window.location.origin}/lists/${listId}`)
+          copyToClipboard(`${process.env.NEXT_PUBLIC_ORIGIN}/lists/${listId}`)
             .then(() => toast("copied to clipboard"))
         }
       })

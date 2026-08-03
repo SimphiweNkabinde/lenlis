@@ -53,9 +53,9 @@ export function EditListPageDropdownMenu() {
     }
 
     async function handleShare() {
-        nativeShare({ title: listName, url: `${window.location.origin}/lists/${listId}` })
+        nativeShare({ title: listName, url: `${process.env.NEXT_PUBLIC_ORIGIN}/lists/${listId}` })
             .then(res => {
-                if (!res.success) copyToClipboard(`${window.location.origin}/lists/${listId}`)
+                if (!res.success) copyToClipboard(`${process.env.NEXT_PUBLIC_ORIGIN}/lists/${listId}`)
             })
     }
 
