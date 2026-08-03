@@ -5,7 +5,7 @@ import React, { Suspense } from "react";
 export default function Layout({ children }: { children: React.ReactNode }) {
     return (
         <div className="flex h-dvh relative flex flex-col overflow-hidden lg:flex-row ">
-            <div className="lg:w-75 lg:min-w-75 lg:border-r lg:h-dvh lg:flex lg:flex-col">
+            <div className="lg:w-85 lg:min-w-85 lg:border-r lg:h-dvh lg:flex lg:flex-col">
                 <Header backToHomeBtn />
                 <div className="hidden lg:block lg:flex-1">
                     <Suspense>

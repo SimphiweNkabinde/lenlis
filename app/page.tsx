@@ -22,7 +22,7 @@ export default async function Page() {
 
   return (
     <div className="flex h-dvh relative flex flex-col overflow-hidden lg:flex-row">
-      <div className="h-dvh flex flex-col lg:w-75 lg:min-w-75 lg:border-r">
+      <div className="h-dvh flex flex-col lg:w-85 lg:min-w-85 lg:border-r">
         <Header />
         {(!lists || !lists.length) &&
           <div className="h-full flex flex-col items-center justify-center flex-1">
