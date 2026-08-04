@@ -21,9 +21,9 @@ export function MemberSettingsDiaolog({ isOpen, setIsOpen }: { isOpen: boolean, 
     const { members, pendingInvites, id, removeInvite, userRole } = useListStore(state => state)
 
     async function handleShare() {
-        nativeShare({ title: "Lenlis - invite link", url: `${process.env.NEXT_PUBLIC_ORIGIN}/lists/${id}/edit` })
+        nativeShare({ title: "Lenlis - invite link", url: `${process.env.NEXT_PUBLIC_ORIGIN}/list/${id}/edit` })
             .then(res => {
-                if (!res.success) copyToClipboard(`${process.env.NEXT_PUBLIC_ORIGIN}/lists/${id}/edit`)
+                if (!res.success) copyToClipboard(`${process.env.NEXT_PUBLIC_ORIGIN}/list/${id}/edit`)
             })
     }
 

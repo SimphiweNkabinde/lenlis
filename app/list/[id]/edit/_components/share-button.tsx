@@ -12,7 +12,7 @@ export default function ShareButton() {
         const shareData = {
             title: listName,
             text: 'Lenlis - Shared Lists, Simplified',
-            url: `${process.env.NEXT_PUBLIC_ORIGIN}/lists/${listId}`
+            url: `${process.env.NEXT_PUBLIC_ORIGIN}/list/${listId}`
         };
 
         if (navigator.share)

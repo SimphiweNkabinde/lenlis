@@ -1,4 +1,4 @@
-import ListContainerReadonly from "@/app/lists/[id]/_components/list-container-readonly"
+import ListContainerReadonly from "@/app/list/[id]/_components/list-container-readonly"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { createClient } from "@/lib/supabase/server"
 import { DotIcon, UserRoundIcon } from "lucide-react"

@@ -28,7 +28,7 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { useState } from "react"
-import { useListStore } from "@/app/lists/[id]/edit/_stores/use-list-store"
+import { useListStore } from "@/app/list/[id]/edit/_stores/use-list-store"
 import { deleteList } from "@/lib/actions/delete-list"
 import { toast } from "sonner"
 import { LoginDialog } from "@/components/login-dialog"
@@ -53,9 +53,9 @@ export function EditListPageDropdownMenu() {
     }
 
     async function handleShare() {
-        nativeShare({ title: listName, url: `${process.env.NEXT_PUBLIC_ORIGIN}/lists/${listId}` })
+        nativeShare({ title: listName, url: `${process.env.NEXT_PUBLIC_ORIGIN}/list/${listId}` })
             .then(res => {
-                if (!res.success) copyToClipboard(`${process.env.NEXT_PUBLIC_ORIGIN}/lists/${listId}`)
+                if (!res.success) copyToClipboard(`${process.env.NEXT_PUBLIC_ORIGIN}/list/${listId}`)
             })
     }
 

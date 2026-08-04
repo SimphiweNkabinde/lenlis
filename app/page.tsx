@@ -37,7 +37,7 @@ export default async function Page() {
           <ul className="flex flex-col gap-3 overflow-y-scroll mt-10 pt-5 pb-10 flex-1">
             {lists.map(list => (
               <li key={list.id} className="px-4 py-1 hover:bg-muted/50">
-                <Link href={`/lists/${list.id}/edit`} className="flex items-center gap-3">
+                <Link href={`/list/${list.id}/edit`} className="flex items-center gap-3">
                   <div className="bg-muted rounded-lg size-10 flex justify-center items-center">
                     <ListIcon className="size-4" />
                   </div>

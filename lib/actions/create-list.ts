@@ -39,5 +39,5 @@ export async function createList(name: string): Promise<ServerActionResponse> {
         };
     }
 
-    redirect(`/lists/${newListId}/edit`)
+    redirect(`/list/${newListId}/edit`)
 }

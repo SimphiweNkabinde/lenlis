@@ -5,7 +5,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { useAuth } from "@/context/auth-provider";
 import { useParams, usePathname } from "next/navigation";
 import { ReadOnlyListPageDropdownMenu } from "./page-dropdown-menus/read-only-list-page-dropdown-menu";
-import { EditListPageDropdownMenu } from "@/app/lists/[id]/edit/_components/edit-list-page-dropdown-menu";
+import { EditListPageDropdownMenu } from "@/app/list/[id]/edit/_components/edit-list-page-dropdown-menu";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { twMerge } from "tailwind-merge";
@@ -19,9 +19,9 @@ export default function Header({ backToHomeBtn = false }: { backToHomeBtn?: bool
     const [DropDownMenu, setDropDownMenu] = useState<ReactNode | null>(null)
 
     useEffect(() => {
-        if (pathname.includes("/lists/") && pathname.includes("/edit") && typeof params.id == "string") {
+        if (pathname.includes("/list/") && pathname.includes("/edit") && typeof params.id == "string") {
             setDropDownMenu(<EditListPageDropdownMenu />)
-        } else if (pathname.includes("/lists/") && typeof params.id == "string") {
+        } else if (pathname.includes("/list/") && typeof params.id == "string") {
             setDropDownMenu(<ReadOnlyListPageDropdownMenu listId={params.id} />)
         }
     }, [pathname])

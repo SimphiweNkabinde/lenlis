@@ -16,7 +16,7 @@ import { useAuth } from "@/context/auth-provider"
 
 export function ListActionButtonsReadOnly({ listId }: { listId: string }) {
     async function handleShare() {
-        copyToClipboard(`${process.env.NEXT_PUBLIC_ORIGIN}/lists/${listId}`).then(res => {
+        copyToClipboard(`${process.env.NEXT_PUBLIC_ORIGIN}/list/${listId}`).then(res => {
             toast("Public link copied to your clipboard", { description: "Anyone with this link can see this list", position: "top-center" })
         })
     }
@@ -42,7 +42,7 @@ export function ListActionButtonsEdit() {
     const router = useRouter()
 
     async function handleShare() {
-        copyToClipboard(`${process.env.NEXT_PUBLIC_ORIGIN}/lists/${id}`).then(res => {
+        copyToClipboard(`${process.env.NEXT_PUBLIC_ORIGIN}/list/${id}`).then(res => {
             toast("Public link copied to your clipboard", { description: "Anyone with this link can see this list", position: "top-center" })
         })
     }

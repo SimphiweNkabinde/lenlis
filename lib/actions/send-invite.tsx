@@ -63,7 +63,7 @@ export async function sendInvite(listId: string, inviteeEmail: string): Promise<
         if (profileError) throw profileError
 
         const emailContent = InviteEmailTemplate({
-            inviteUrl: `${process.env.NEXT_PUBLIC_ORIGIN}/lists/${validatedData.listId}/edit`,
+            inviteUrl: `${process.env.NEXT_PUBLIC_ORIGIN}/list/${validatedData.listId}/edit`,
             listName: listName?.name,
             senderName: profileData?.name
         })
