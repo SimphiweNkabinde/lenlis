@@ -20,9 +20,6 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     }
 
     const { data: userData, error: userErr } = await supabase.auth.getUser()
-    if (userData?.user?.is_anonymous || !userData.user?.email) {
-        redirect(`/auth/login?next=/lists/${id}/edit`)
-    }
 
     const { data: isMember } = await isListMemberWithRoles(id, ["owner", "editor"])
 
@@ -58,7 +55,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
     return (
         <>
-            <ListWrapper userRole={data?.list_members.find(i => i.user_id == userData.user.id)?.role} listData={{ ...data! }} defaultListItems={data?.listItems || []} members={memberProfiles} pendingInvites={pendingInvites || []} />
+            <ListWrapper userRole={data?.list_members.find(i => i.user_id == userData.user?.id)?.role} listData={{ ...data! }} defaultListItems={data?.listItems || []} members={memberProfiles} pendingInvites={pendingInvites || []} />
         </>
     )
 }
