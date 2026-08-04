@@ -18,9 +18,10 @@ import {
 } from "@/components/ui/drawer"
 import Link from "next/link"
 import { twMerge } from "tailwind-merge"
+import { useMediaQuery } from 'usehooks-ts'
 
 export function LoginDialog({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (isOpen: boolean) => void }) {
-    const isDesktop = false //useMediaQuery("(min-width: 768px)")
+    const isDesktop = useMediaQuery("(min-width: 768px)")
 
     const title = "Log in or Sign up"
     const description = "Access your lists instantly on any device. Collaborate with others in real-time"
