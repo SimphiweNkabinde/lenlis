@@ -15,7 +15,7 @@ export default function Header({ backToHomeBtn = false }: { backToHomeBtn?: bool
     const pathname = usePathname()
     const params = useParams()
 
-    const { user, loading } = useAuth()
+    const { user, loading, profile } = useAuth()
     const [DropDownMenu, setDropDownMenu] = useState<ReactNode | null>(null)
 
     useEffect(() => {
@@ -50,8 +50,8 @@ export default function Header({ backToHomeBtn = false }: { backToHomeBtn?: bool
                 {(user && !user.is_anonymous) &&
                     <Link href="/settings">
                         <Avatar className="size-11">
-                            <AvatarImage src={user?.avatarUrl} alt="@shadcn" />
-                            <AvatarFallback className="text-xl">{user?.name?.charAt(0)}</AvatarFallback>
+                            <AvatarImage src={profile?.avatarUrl} alt="@shadcn" />
+                            <AvatarFallback className="text-xl">{profile?.name?.charAt(0)}</AvatarFallback>
                         </Avatar>
                     </Link>}
 

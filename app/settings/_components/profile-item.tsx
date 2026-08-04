@@ -7,19 +7,19 @@ import { ChevronRightIcon } from 'lucide-react'
 import Link from 'next/link'
 
 export default function ProfileItem() {
-    const { user, loading } = useAuth()
+    const { user, loading, profile } = useAuth()
     return (
 
         <Item variant="muted" size="default" render={
             <Link href="/settings/profile">
                 <ItemMedia className="h-full">
                     <Avatar className={clsx("size-10", { "animate-pulse": loading })}>
-                        <AvatarImage src={user?.avatarUrl} alt={user?.name} />
-                        <AvatarFallback className="text-xl">{user?.name?.charAt(0)}</AvatarFallback>
+                        <AvatarImage src={profile?.avatarUrl} alt={profile?.name} />
+                        <AvatarFallback className="text-xl">{profile?.name?.charAt(0)}</AvatarFallback>
                     </Avatar>
                 </ItemMedia>
                 <ItemContent>
-                    <ItemTitle className={clsx({ "w-25 h-4 bg-muted rounded mb-1": loading })}>{user?.name}</ItemTitle>
+                    <ItemTitle className={clsx({ "w-25 h-4 bg-muted rounded mb-1": loading })}>{profile?.name}</ItemTitle>
                     <ItemDescription className={clsx({ "w-40 h-4 bg-muted rounded": loading })}>{user?.email && user?.email}</ItemDescription>
                 </ItemContent>
                 <ItemActions>

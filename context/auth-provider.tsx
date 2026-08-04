@@ -1,39 +1,50 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
-import { User as user, Session, AuthChangeEvent } from '@supabase/supabase-js'
+import { createContext, useCallback, useContext, useEffect, useState } from 'react'
+import { User, Session, AuthChangeEvent } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/client'
 
-interface User extends user {
-    avatarUrl?: string,
-    name?: string,
+interface Profile {
+    name?: string
+    avatarUrl?: string
 }
 type AuthContextType = {
     user: User | null
     session: Session | null
     loading: boolean
+    profile: Profile | null
 }
 
 const AuthContext = createContext<AuthContextType>({
     user: null,
     session: null,
     loading: true,
+    profile: null
 })
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null)
+    const [profile, setProfile] = useState<Profile | null>(null)
     const [session, setSession] = useState<Session | null>(null)
     const [loading, setLoading] = useState(true)
     const supabase = createClient()
 
-    useEffect(() => {
-        if (user?.id) {
-            supabase.from("profiles").select("name, avatarUrl:avatar_url").eq("id", user.id).single()
-                .then(({ data, error }) => setUser(
-                    (currVal) => currVal ? ({ ...currVal, avatarUrl: data?.avatarUrl, name: data?.name }) : currVal)
-                )
+    // Memoized profile fetcher
+    const fetchProfile = useCallback(async (userId: string) => {
+        try {
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('name, avatarUrl:avatar_url')
+                .eq('id', userId)
+                .maybeSingle()
+
+            if (error) throw error
+            setProfile(data)
+        } catch (err) {
+            console.error('Error fetching user profile:', err)
+            setProfile(null)
         }
-    }, [user?.id])
+    }, [supabase])
 
     useEffect(() => {
         // Get initial session safely on the client
@@ -41,6 +52,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             const { data: { session } } = await supabase.auth.getSession()
             setSession(session)
             setUser(session?.user ?? null)
+            if (session?.user) {
+                await fetchProfile(session.user.id)
+            }
             setLoading(false)
         }
 
@@ -58,10 +72,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return () => {
             subscription.unsubscribe()
         }
-    }, [supabase])
+    }, [supabase, fetchProfile])
 
     return (
-        <AuthContext.Provider value={{ user, session, loading }}>
+        <AuthContext.Provider value={{ user, session, loading, profile }}>
             {children}
         </AuthContext.Provider>
     )

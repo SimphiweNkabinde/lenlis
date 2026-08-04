@@ -13,14 +13,17 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         .select("id, name, listItems:list_items (id, text, checked:is_checked, amount, position, updated_at), hasChecks:has_checks, hasAmounts:has_amounts, listMembers:list_members(user_id, role), updated_at")
         .order("position", { referencedTable: "list_items" })
         .eq("id", id).single()
+
+    if (!data || error) {
+        console.log(error)
+        notFound()
+    }
     const ownerId = data?.listMembers.filter((i) => i.role == "owner").map(i => i.user_id) || []
-    const { data: ownerProfile } = ownerId.length ? await supabase.from("profiles").select("name, avatarUrl:avatar_url").eq("id", ownerId[0]).single() : {}
+    const { data: ownerProfile } = ownerId.length ? await supabase.from("profiles").select("name, avatarUrl:avatar_url").eq("id", ownerId[0]).maybeSingle() : {}
 
     const updateDates = [...data?.listItems.map((i: { updated_at: string }) => i.updated_at)!, data?.updated_at]
     const latestUpdateTimestamp = Math.max(...updateDates.map(date => Date.parse(date)));
-    if (!data) {
-        notFound()
-    }
+
 
     const { name, listItems, hasAmounts, hasChecks } = data
     const typedListItem = listItems as { amount: number, checked: boolean }[]
