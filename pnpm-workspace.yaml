@@ -1,6 +1,7 @@
 packages: []
 
 allowBuilds:
-  sharp: true
-  unrs-resolver: true
   msw: false
+  sharp: true
+  supabase: true
+  unrs-resolver: true
